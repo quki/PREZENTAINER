@@ -1,8 +1,8 @@
-#SAP_Gear
+#PREZENTAINER Tizen Side Code
 ***  
-This is **Gear side code**.  
+This is **Tizen side code**.  
 Part of the our ongoing project by using the __*Samsung Accessory Protocol*__ and __*Accessory File Transfer*__.  
-You can also see the **Android side code**, [SAP_Android](https://github.com/quki/PREZENTAINER/Android/PreZenTainer).
+You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android/PreZenTainer).
 
 ## Usage
 1. Connect
