@@ -1,0 +1,61 @@
+
+* {
+    font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0px auto;
+    background-color:#222;
+}
+
+.contents {
+	display: flex;
+	display: -webkit-flex;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	height:320px;
+}
+
+.content-padding {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.content_text {
+	font-weight:bold;
+	font-size:5em;
+	color:#fff;
+}
+.text-centered {
+	text-align:center;
+}
+
+
+.progress {
+	margin: 10px;
+	padding: 0;
+	background: #333;
+	top: 16px;
+	left: 16px;
+	right: 16px;
+	height: 8px;
+	border-radius: 4px;
+}
+
+.progress-val {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: #FFAB1B;
+	height: 8px;
+	width: 0;
+	border-radius: 4px;
+}
+
+.main-button {
+	width: 50%;
+	height: 60px;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
