@@ -1,4 +1,4 @@
-#SAP_Android
+#PREZENTAINER Android Side Code
 ***  
 This is **Android side code**.  
 Part of the our ongoing project by using the __*Samsung Accessory Protocol*__ and __*Accessory File Transfer*__.  
