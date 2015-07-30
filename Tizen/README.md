@@ -2,7 +2,7 @@
 ***  
 This is **Tizen side code**.  
 Part of the our ongoing project by using the __*Samsung Accessory Protocol*__ and __*Accessory File Transfer*__.  
-You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android/PreZenTainer).
+You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android).
 
 ## Usage
 1. Connect
