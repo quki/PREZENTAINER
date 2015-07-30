@@ -44,6 +44,8 @@ define({
               try {
                 SASocket.close();
                 SASocket = null;
+                isConnect=false;
+                updateContents();
                 console.log('Success to close the socket');
               } catch (e) {
                 console.error(e+'Cannot close the socket');
@@ -225,7 +227,6 @@ define({
          */
         function onAudioRecordingStopSuccess() {
             busy = false;
-            alert("onAudioRecordingStopSuccess");
             e.fire('recording.done', {path: audioPath});
             audioRecordingTime = 0;
             

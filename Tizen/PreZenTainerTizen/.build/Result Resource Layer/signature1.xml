@@ -4,7 +4,7 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>K1LNBuGxQq7n0bUftWgBjisHe+r+qwT5lIWySIs05PQ=</DigestValue>
+<DigestValue>YYtq+UCpMB9pvbsAP/qOX6q4mRGjy5gXr5H1Q+Wvt/k=</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -20,7 +20,7 @@
 </Reference>
 <Reference URI="index.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>4j72lAMUEt4MKuFDXho3ieBnKQp0WLkziQtzuw/lFak=</DigestValue>
+<DigestValue>PewSWzu+oze3C+sRq7HcKBvVEh9MFgeoExQ2ytbxB4U=</DigestValue>
 </Reference>
 <Reference URI="js%2Fapp.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -28,7 +28,7 @@
 </Reference>
 <Reference URI="js%2Faudiohelpers%2Faudio.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>vtxWS9OuIdZcM+JsDvyjcnw2BDBsPSICPI6w6bSKemw=</DigestValue>
+<DigestValue>eNlYa3ChgQ15esb9GRlLDvHVpfKBamXHRn+4eT6xswE=</DigestValue>
 </Reference>
 <Reference URI="js%2Faudiohelpers%2Fstream.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -72,7 +72,11 @@
 </Reference>
 <Reference URI="js%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>YviXQsbM7TS/X2SGX8QZ8s4SKG6y/64z/As8uk7iwTE=</DigestValue>
+<DigestValue>bMcuXhj8nWZI5ugkD/7mQBMAZoiYXrPDOKFx7FmdOjU=</DigestValue>
+</Reference>
+<Reference URI="js%2Fsap.js">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>grgIn6XwZMyvftkMkiivyrsEJJHoJ3m6r/O5gbvCQ6o=</DigestValue>
 </Reference>
 <Reference URI="js%2Fviews%2Finit.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -80,7 +84,7 @@
 </Reference>
 <Reference URI="js%2Fviews%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>wDLdbj5p0m+Fgp7BdJ+2XvbHm0LVQDbt61jIfMMk/dE=</DigestValue>
+<DigestValue>cjxLxEIiReMZ0HXkYqgPMj1XjDZec9w//RwXbwkZhZ4=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -987,11 +991,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-eWw25R84quyc+df/btH+5quwW1d6aPcy0QG8rSi/GrRiMml12cofSQoD6AqzVfPpP7YwX5AJO/0A
-KaR0gtfkriztp8/aMaosC6H+zwXcbYTwNQWV4g3MpK5d6ZFebZ6rNkoHXhsJT8g4/fTdVEUPNC0R
-d1Kfo308ts7XyY+z6E8OB8WeQFl12FqgAuj9yu5Dgq4zQnY+vhTEaRP2BnWBG6QgseruCzc4l72L
-5MCgevDiObRmIDpvzsjC38RHw7CSolnD6364TZE6MHnu6NXUMPkh+XWLwM1kQz4SZ/Ad30roQi5G
-qF3HkbuvNG+oyhdP9sma0JJsoqW8uWik3Ru/Tg==
+MATDa/OsXipqWSXWeA4GARmIK/29RzL4PsUt+svncdeNt7YpHZ7ETnu/RXPs1rD9IxT7FFF6ZrkW
+setBx/iqweCS+O/KmysVgmwst5eFhJ54mL3esmlzyYoyVrR2LwjBYd02T1AByOmeP1MfVYwXGxeT
+OVckBXWuZ/ZHW6g7byV71gIZnR48HkKl202k9/pIDZ4i3taaOCXIZGifSk/+ecJPWeo1kVc3iGmV
+GQViKuuONPXsANT45j0LG1P3jZrSPnZTPFIgbd8RNYJUqWzYWtIdE4ItQrkZ6H3mA+5I3UzzH8ER
+Muwol4uT+Kgy3NkGLw3KYjuu/i7dkgZiRv0mrw==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

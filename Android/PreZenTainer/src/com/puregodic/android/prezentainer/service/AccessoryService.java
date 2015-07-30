@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connectpchelper.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.network.MyAsyncTask;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
 import com.samsung.android.sdk.accessory.SAAgent;
@@ -33,9 +34,7 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	ConnecToPcHelper mConnecToPcHelper;
-	ArrayList<String> al = new ArrayList<String>();
-	
-
+	public ArrayList<String> al = new ArrayList<String>();
 	
 
 	// ???????????????????
@@ -196,11 +195,11 @@ public class AccessoryService extends SAAgent {
 					for (int i = 0; i < al.size(); i++) {
 						Log.v(TAG, al.get(i));
 					}
-					/*Serverside asyncTask = new Serverside(al);
+					MyAsyncTask asyncTask = new MyAsyncTask(al);
 					asyncTask
-							.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });*/
-					// al.clear();
-					// Log.v(TAG, "Initialize the ArrayList");
+							.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });
+					//al.clear();
+					//Log.v(TAG, "Initialize the ArrayList");
 				} else {
 					Log.v(TAG, "HR was not transfered");
 				}
@@ -238,7 +237,6 @@ public class AccessoryService extends SAAgent {
 				if (mConnectionsMap == null) {
 					mConnectionsMap = new HashMap<Integer, AccessoryServiceConnection>();
 				}
-
 				// Connection ID 생성
 				mConnectionHandler.mConnectionId = (int) (System.currentTimeMillis() & 255);
 
@@ -248,6 +246,7 @@ public class AccessoryService extends SAAgent {
 				mConnectionsMap.put(mConnectionHandler.mConnectionId, mConnectionHandler);
 				Log.e(TAG, "===Service Connection Success===");
 				Toast.makeText(getApplicationContext(), "Connection완료 !!", Toast.LENGTH_SHORT).show();
+				
 			} else {
 				Log.e(TAG, "===SASocket object is null===");
 			}

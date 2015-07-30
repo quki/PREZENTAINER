@@ -58,7 +58,6 @@ public class SettingActivity extends AppCompatActivity {
 		switch (v.getId()) {
 		// 시작하기
 		case R.id.connectToGearBtn: {
-
 			startConnection();
 			break;
 		}
@@ -88,7 +87,6 @@ public class SettingActivity extends AppCompatActivity {
 
 	private void startConnection() {
 		if (isBound == true && mAccessoryService != null) {
-			// mTextView.setText("startConnection");
 			mAccessoryService.findPeers();
 		}
 	}
