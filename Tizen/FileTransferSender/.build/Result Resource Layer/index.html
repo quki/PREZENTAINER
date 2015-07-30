@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<title>Gear UI</title>
+<link rel="stylesheet" href="lib/tau/wearable/theme/default/tau.min.css">
+<link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)" href="lib/tau/wearable/theme/default/tau.circle.min.css">
+<!-- load theme file for your application -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="ui-page ui-page-active" id="main">
+    <div class="ui-content">
+      <ul class="ui-listview">
+      </ul>
+      <div id="record-progress" class="progress">
+        <div id="record-progress-val" class="progress-val"></div>
+      </div>
+
+      <div class="main-button">
+        <input type="button" id="connectbtn" value="Connect!" >
+        <input type="button" id="startbtn" value="Start!">
+        <input type="button" id="evnetbtn" value="Event to PC!" onClick="eventtopc();">
+        <input type="button" id="stopbtn" value="Stop!"> 
+      </div>
+    </div>
+  </div>
+  <div class="ui-page" id="sendPage">
+    <header class="ui-header">
+      <h2 class="ui-title">Send file ...</h2>
+    </header>
+    <div class="ui-content content-padding text-centered">
+      <progress class="ui-circle-progress" id="circleprogress" max="100" value="0"></progress>
+    </div>
+    <footer class="ui-footer ui-bottom-button">
+      <button class="ui-btn" onclick="cancelFile();">Cancel</button>
+    </footer>
+  </div>
+  <div id="popupToast" class="ui-popup ui-popup-toast">
+    <div id="popupToastMsg" class="ui-popup-content" style="overflow-y: scroll;"></div>
+  </div>
+  <div id="resultBoard"></div>
+</body>
+<script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
+<script type="text/javascript" src="js/circle-helper.js"></script>
+<!-- load javascript file for your application -->
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script src="./js/core/core.js" data-main="./js/app.js"></script>
+</html>
