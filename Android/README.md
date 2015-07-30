@@ -2,7 +2,7 @@
 ***  
 This is **Android side code**.  
 Part of the our ongoing project by using the __*Samsung Accessory Protocol*__ and __*Accessory File Transfer*__.  
-You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen/FileTransferSender).
+You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen).
 
 ## Usage
 1. Pairing a PC by SPP, a kind of Bluetooth Protocol.
