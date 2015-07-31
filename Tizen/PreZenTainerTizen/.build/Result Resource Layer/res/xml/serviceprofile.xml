@@ -13,6 +13,12 @@
                 <transport type="TRANSPORT_WIFI"/>
             </supportedTransports>
             <serviceChannel
+                id="100"
+                dataRate="low"
+                priority="medium"
+                reliability= "enable">
+            </serviceChannel>
+            <serviceChannel
                 id="104"
                 dataRate="low"
                 priority="high"

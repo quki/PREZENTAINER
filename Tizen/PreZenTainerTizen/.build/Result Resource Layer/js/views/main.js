@@ -114,6 +114,7 @@ define({
       if (!isRecording) {
         startRecording();
         startHR();
+        startTimer();
         alert("Heart Rate Start !");
         isRecording = true;
       } else {
@@ -133,6 +134,7 @@ define({
       if (isRecording) {
         stopRecording();
         stopHR();
+        stopTimer();
       }
     }
 

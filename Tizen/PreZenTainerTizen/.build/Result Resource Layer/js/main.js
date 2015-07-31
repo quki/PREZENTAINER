@@ -57,6 +57,18 @@ function stopHR() {
   window.webapis.motion.stop("HRM");
   clearInterval(sendingInterval);
 }
+
+function vibrator(){
+  navigator.vibrate(2000);
+}
+
+function startTimer(){
+ vibInterval = setInterval(vibrator, mTimeInterval*1000*60);
+}
+
+function stopTimer(){
+  clearInterval(vibInterval);
+}
 // 화면구성변화
 function updateContents() {
   if(isConnect){

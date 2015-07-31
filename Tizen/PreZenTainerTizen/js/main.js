@@ -32,8 +32,6 @@ function showMain(message) {
   transferId = 0;
 }
 
-
-
 // Heart Rate
 function sendHR() {
   try {
@@ -56,6 +54,24 @@ function startHR() {
 function stopHR() {
   window.webapis.motion.stop("HRM");
   clearInterval(sendingInterval);
+}
+// On Timer for 2 sec
+function vibrator(){
+  navigator.vibrate(2000);
+}
+
+// Start Timer by given interval time
+function startTimer(){
+  try {
+    min = mTimeInterval*60*1000;
+    vibratingInterval = setInterval(vibrator, min);
+  } catch (e) {
+    console.error("Timer Error : "+e);
+  }
+}
+// Stop Timer
+function stopTimer(){
+  clearInterval(vibratingInterval);
 }
 // 화면구성변화
 function updateContents() {

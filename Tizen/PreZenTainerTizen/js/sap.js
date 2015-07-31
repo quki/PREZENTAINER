@@ -4,6 +4,7 @@ var mSAAgent,
     mSAFiletransfer,
     mSARemotePeerAgent,
     transferId = 0;
+var mTimeInterval = 0;
 
 //Initialize File Transfer 
 function ftInit(successCb, errorCb) {
@@ -154,6 +155,15 @@ connectionListener = {
                  dataOnReceive;
              mSASocket = socket;
              console.log('SASocket is initialize');
+             
+             dataOnReceive = function dataOnReceive(channelId,data){
+               
+               mTimeInterval = Number(data);
+               console.log('channel ID : '+channelId);
+               console.log('data : '+ data);
+             }
+             
+             mSASocket.setDataReceiveListener(dataOnReceive);
          },
          onerror: function (errorCode) {
            console.log(errorCode);

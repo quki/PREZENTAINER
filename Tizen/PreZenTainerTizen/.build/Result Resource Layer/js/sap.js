@@ -4,7 +4,7 @@ var mSAAgent,
     mSAFiletransfer,
     mSARemotePeerAgent,
     transferId = 0;
-
+var mTimeInterval = 0;
 
 //Initialize File Transfer 
 function ftInit(successCb, errorCb) {
@@ -61,9 +61,6 @@ function ftSend(path, successCb, errorCb) {
     }, 0);
   }
 }
-
-
-
 
 // Cancel sending File
 function ftCancel(id, successCb, errorCb) {
@@ -126,17 +123,8 @@ function disconnectSAP(){
     } catch (e) {
       console.error(e+' Cannot close the socket');
     }
-    
-    try {
-      mSAFiletransfer.close();
-      mSAFiletransfer =null;
-      console.log('Success to close the FT socket');
-    } catch (e) {
-      console.error(e+' Cannot close the FT socket');
-    }
   }
 }
-
 
 
 /**
@@ -167,6 +155,15 @@ connectionListener = {
                  dataOnReceive;
              mSASocket = socket;
              console.log('SASocket is initialize');
+             
+             dataOnReceive = function dataOnReceive(channelId,data){
+               
+               mTimeInterval = Number(data);
+               console.log('channel ID : '+channelId);
+               console.log('data : '+ data);
+             }
+             
+             mSASocket.setDataReceiveListener(dataOnReceive);
          },
          onerror: function (errorCode) {
            console.log(errorCode);

@@ -1,5 +1,6 @@
 package com.puregodic.android.prezentainer.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,7 +31,8 @@ public class AccessoryService extends SAAgent {
 	private EventListener ftEventCallBack;
 	private FileAction mFileAction;
 	HashMap<Integer, AccessoryServiceConnection> mConnectionsMap = null;
-	private AccessoryServiceConnection mConnectionHandler;
+	public AccessoryServiceConnection mConnectionHandler;
+	public static final int CHANNEL_ID_SETTING = 100;
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	ConnecToPcHelper mConnecToPcHelper;
@@ -68,6 +70,29 @@ public class AccessoryService extends SAAgent {
 			} else {
 				mSAFileTransfer.reject(transId);
 			}
+		}
+	}
+	
+	public void sendDataToGear(String mData) {
+		final String message = new String(mData);
+		if(mConnectionHandler!= null){
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						mConnectionHandler.send(CHANNEL_ID_SETTING, message.getBytes());
+						Log.e(TAG, message);
+					} catch (IOException e) {
+						Log.e(TAG, "==Cannot Send data to Gear==");
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			
+		}else{
+			
+			Log.e(TAG, "mConnectionHandler null");
 		}
 	}
 	// Cancel File Transfer
@@ -233,7 +258,7 @@ public class AccessoryService extends SAAgent {
 			Toast.makeText(getApplicationContext(), "연결완료", Toast.LENGTH_SHORT).show();
 			
 			if (socket != null) {
-				AccessoryServiceConnection mConnectionHandler = (AccessoryServiceConnection) socket;
+				mConnectionHandler = (AccessoryServiceConnection) socket;
 				if (mConnectionsMap == null) {
 					mConnectionsMap = new HashMap<Integer, AccessoryServiceConnection>();
 				}
@@ -304,7 +329,6 @@ public class AccessoryService extends SAAgent {
 		public void onReceive(int channelId, byte[] data) {
 			String fromGearMessage = "";
 			// MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
-			
 			if (channelId == CHANNEL_ID_EVENT) {
 
 				new Thread(new Runnable() {
