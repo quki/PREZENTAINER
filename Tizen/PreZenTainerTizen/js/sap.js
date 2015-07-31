@@ -1,14 +1,13 @@
-var SAAgent,
+var mSAAgent,
     connectionListener,
-    SASocket,
-    SAFiletransfer,
-    SARemotePeerAgent,
+    mSASocket,
+    mSAFiletransfer,
+    mSARemotePeerAgent,
     transferId = 0;
-
 
 //Initialize File Transfer 
 function ftInit(successCb, errorCb) {
-  if (SAAgent == null) {
+  if (mSAAgent == null) {
     errorCb({
         name : 'NetworkError',
         message : 'Connection failed'
@@ -25,8 +24,8 @@ function ftInit(successCb, errorCb) {
   
   try {
     //Get the SAFileTransfer From SAAgent
-    SAFiletransfer = SAAgent.getSAFileTransfer();
-    SAFiletransfer.setFileSendListener(filesendcallback);
+    mSAFiletransfer = mSAAgent.getSAFileTransfer();
+    mSAFiletransfer.setFileSendListener(filesendcallback);
   } catch (err) {
     console.log('getSAFileTransfer exception <' + err.name + '> : ' + err.message);
     window.setTimeout(function() {
@@ -39,7 +38,7 @@ function ftInit(successCb, errorCb) {
 }
 // Send File by given path
 function ftSend(path, successCb, errorCb) {
-  if (SAAgent === null || SAFiletransfer === null || SARemotePeerAgent === null) {
+  if (mSAAgent === null || mSAFiletransfer === null || mSARemotePeerAgent === null) {
     errorCb({
       name : 'NotConnectedError',
         message : 'SAP is not connected'
@@ -49,7 +48,7 @@ function ftSend(path, successCb, errorCb) {
   
   try {
     //재귀 호출
-    transferId = SAFiletransfer.sendFile(SARemotePeerAgent, path);
+    transferId = mSAFiletransfer.sendFile(mSARemotePeerAgent, path);
     successCb(transferId);
   } catch (err) {
     console.log('sendFile exception <' + err.name + '> : ' + err.message);
@@ -61,9 +60,10 @@ function ftSend(path, successCb, errorCb) {
     }, 0);
   }
 }
+
 // Cancel sending File
 function ftCancel(id, successCb, errorCb) {
-  if (SAAgent === null || SAFiletransfer === null || SARemotePeerAgent === null) {
+  if (mSAAgent === null || mSAFiletransfer === null || mSARemotePeerAgent === null) {
     errorCb({
       name : 'NotConnectedError',
         message : 'SAP is not connected'
@@ -72,7 +72,7 @@ function ftCancel(id, successCb, errorCb) {
   }
 
   try {
-    SAFiletransfer.cancelFile(id);
+    mSAFiletransfer.cancelFile(id);
     successCb();
   } catch (err) {
     console.log('cancelFile exception <' + err.name + '> : ' + err.message);
@@ -111,6 +111,21 @@ var ftSuccessCb = {
 };
 
 
+function disconnectSAP(){
+  if(mSASocket !== null){
+    try {
+      mSASocket.close();
+      mSASocket = null;
+      isConnect=false;
+      updateContents();
+      console.log('Success to close the socket');
+    } catch (e) {
+      console.error(e+' Cannot close the socket');
+    }
+  }
+}
+
+
 /**
  * Initialize SAAgent,
  * Accept requested Service Connection,
@@ -122,8 +137,8 @@ var ftSuccessCb = {
 connectionListener = {
         //Remote peer agent (Consumer) requests a service (Provider) connection
          onrequest: function (peerAgent) {
-                 SAAgent.acceptServiceConnectionRequest(peerAgent);
-                 SARemotePeerAgent = peerAgent;
+                 mSAAgent.acceptServiceConnectionRequest(peerAgent);
+                 mSARemotePeerAgent = peerAgent;
                  toastAlert('ACCEPT!');
                  
                  // Initialize File transfer
@@ -137,7 +152,7 @@ connectionListener = {
              updateContents();
              var onConnectionLost,
                  dataOnReceive;
-             SASocket = socket;
+             mSASocket = socket;
              console.log('SASocket is initialize');
          },
          onerror: function (errorCode) {
@@ -151,12 +166,12 @@ function onSAAgentRequested (agents) {
   console.log('===my SAAgent===');
   for (i; i < agents.length; i += 1) {
       if (agents[i].role === "PROVIDER") { 
-          SAAgent = agents[i]; // get the SAAgent 
+          mSAAgent = agents[i]; // get the SAAgent 
           break;
       }
   }
   
-  SAAgent.setServiceConnectionListener(connectionListener);
+  mSAAgent.setServiceConnectionListener(connectionListener);
 }
 
 //onServiceConnectionRequested Error Call Back

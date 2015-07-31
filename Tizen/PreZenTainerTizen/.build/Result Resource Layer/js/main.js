@@ -9,7 +9,7 @@ var isConnect =false;
 // Event btn clicked
 function eventtopc() {
   try {
-    SASocket.sendData(CHANNELID_EVENT, "Hello Android");
+    mSASocket.sendData(CHANNELID_EVENT, "Hello Android");
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
@@ -37,7 +37,7 @@ function showMain(message) {
 // Heart Rate
 function sendHR() {
   try {
-    SASocket.sendData(CHANNELID_HR,HR);
+    mSASocket.sendData(CHANNELID_HR,HR);
     console.log("Heart Rate sent : "+HR);
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");

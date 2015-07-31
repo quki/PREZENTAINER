@@ -23,7 +23,6 @@ define({
     recordProgressVal = null,
     startbtn = null,
     stopbtn = null,
-    pceventbtn = null,
     stream = null,
     RECORDING_INTERVAL_STEP = 100,
     recordingInterval = null, isRecording = false, recordingTime = 0, exitInProgress = false;
@@ -136,11 +135,6 @@ define({
         stopHR();
       }
     }
-    function onPcEventBtnClick(){
-      
-      eventtopc();
-      
-    }
 
     /**
      * Registers event listeners.
@@ -148,7 +142,6 @@ define({
     function bindEvents() {
       startbtn.addEventListener('click', onStartBtnClick);
       stopbtn.addEventListener('click', onStopBtnClick);
-      pceventbtn.addEventListener('click',onPcEventBtnClick);
 
     }
 
@@ -257,7 +250,6 @@ define({
     function init() {
       startbtn = document.getElementById('startbtn');
       stopbtn = document.getElementById('stopbtn');
-      pceventbtn = document.getElementById('pceventbtn');
       recordProgress = document.getElementById('record-progress');
       recordProgressVal = document.getElementById('record-progress-val');
       bindEvents();

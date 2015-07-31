@@ -40,17 +40,7 @@ define({
             progressBarWidget = new tau.widget.CircleProgressBar(progressBar);
             progressBarWidget.value('0');
             
-            if(SASocket != null){
-              try {
-                SASocket.close();
-                SASocket = null;
-                isConnect=false;
-                updateContents();
-                console.log('Success to close the socket');
-              } catch (e) {
-                console.error(e+'Cannot close the socket');
-              }
-            }
+            disconnectSAP();
            
           }, function(err) {
             showMain('Failed to send File');

@@ -7,22 +7,66 @@
 
     <Button
         android:id="@+id/connectToGearBtn"
-        android:onClick="myOnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="myOnClick"
         android:text="Gear와 연결하기" />
+
     <Button
         android:id="@+id/connectToPcBtn"
-        android:onClick="myOnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="myOnClick"
         android:text="PC와 연결하기" />
+
     <Button
         android:id="@+id/startBtn"
-        android:onClick="myOnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="myOnClick"
         android:text="시작하기" />
-        
 
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    
+    <CheckBox
+        android:id="@+id/timerCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="타이머설정" />
+
+    <RadioGroup
+        android:id="@+id/timerRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" >
+
+        <RadioButton
+            android:id="@+id/timerRadio5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="5분마다" />
+
+        <RadioButton
+            android:id="@+id/timerRadio10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10분마다" />
+
+        <RadioButton
+            android:id="@+id/timerRadio15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15분마다" />
+        <RadioButton
+            android:id="@+id/timerRadioDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인설정" />
+    </RadioGroup>
+</LinearLayout>
 </LinearLayout>

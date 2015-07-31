@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.puregodic.android.prezentainer.connectpchelper.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.service.AccessoryService;
@@ -21,16 +22,19 @@ public class SettingActivity extends AppCompatActivity {
 	private Boolean isBound = false;
 	ConnecToPcHelper mConnecToPcHelper;
 	Button startBtn;
+	CheckBox timerCheckBox;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		
-		startBtn = (Button)findViewById(R.id.startBtn);
-		startBtn.setEnabled(false);
 		// Bind Service
 		doBindService();
+		
+		startBtn = (Button)findViewById(R.id.startBtn);
+		timerCheckBox = (CheckBox)findViewById(R.id.timerCheckBox);
+		startBtn.setEnabled(false);
+		
 
 	}
 
