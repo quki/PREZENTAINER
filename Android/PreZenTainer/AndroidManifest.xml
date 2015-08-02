@@ -75,6 +75,14 @@
             android:name=".StartActivity"
             android:label="@string/title_activity_start" >
         </activity>
+        <activity
+            android:name=".DetailSettingActivity"
+            android:label="@string/title_activity_detail_setting" >
+        </activity>
+        <activity
+            android:name=".SettingBluetoothActivity"
+            android:label="@string/title_activity_setting_bluetooth" >
+        </activity>
     </application>
 
 </manifest>

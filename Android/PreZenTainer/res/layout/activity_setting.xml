@@ -26,46 +26,47 @@
         android:onClick="myOnClick"
         android:text="시작하기" />
 
-    
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    
-    <CheckBox
-        android:id="@+id/timerCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="타이머설정" />
+        android:orientation="horizontal" >
 
-    <RadioGroup
-        android:id="@+id/timerRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible" >
-
-        <RadioButton
-            android:id="@+id/timerRadio5"
+        <CheckBox
+            android:id="@+id/timerCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5분마다" />
+            android:text="타이머설정" />
 
-        <RadioButton
-            android:id="@+id/timerRadio10"
+        <RadioGroup
+            android:id="@+id/timerRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10분마다" />
+            android:visibility="invisible" >
 
-        <RadioButton
-            android:id="@+id/timerRadio15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15분마다" />
-        <RadioButton
-            android:id="@+id/timerRadioDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="개인설정" />
-    </RadioGroup>
-</LinearLayout>
+            <RadioButton
+                android:id="@+id/timerRadio5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5분마다" />
+
+            <RadioButton
+                android:id="@+id/timerRadio10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10분마다" />
+
+            <RadioButton
+                android:id="@+id/timerRadio15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15분마다" />
+
+            <RadioButton
+                android:id="@+id/timerRadioDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="개인설정" />
+        </RadioGroup>
+    </LinearLayout>
+
 </LinearLayout>

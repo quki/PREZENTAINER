@@ -3,6 +3,9 @@ package com.puregodic.android.prezentainer;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,44 +23,63 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.puregodic.android.prezentainer.connectpchelper.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.connecthelper.ConnectionActionPc;
 import com.puregodic.android.prezentainer.service.AccessoryService;
+import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 
 public class SettingActivity extends AppCompatActivity {
 
     private AccessoryService mAccessoryService = null;
 
     private Boolean isBound = false;
+    private Boolean isGearConnect = false;
+    private Boolean isPcConnect = false;
+    private BluetoothAdapter mBluetoothAdapter;
 
-    ConnecToPcHelper mConnecToPcHelper;
+    private ConnecToPcHelper mConnecToPcHelper;
 
     // 수정 - 타이머 설정값 저장하는 배열
-    private ArrayList<String> timeInterval ;
-
-    Button startBtn;
-
+    private ArrayList<String> timeInterval;
+    
+    Button connectToGearBtn,connectToPcBtn,startBtn;
     CheckBox timerCheckBox;
-
     RadioGroup timerRadioGroup;
+    
+    private static final String TAG_BLUETOOTH = "==Bluetooth==";
+    private static final  int REQUEST_ENABLE_BT = 1;
+    //private static final  int PDIALOG_TIMEOUT_ID = 444;
 
+    private BroadcastReceiver mBroadcastReceiver;
+    private ProgressDialog pDialog;
+    
+   // private final IncomingHandler mHandler = new IncomingHandler(this);
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         // Bind Service
         doBindService();
-        
+
         startBtn = (Button)findViewById(R.id.startBtn);
         timerCheckBox = (CheckBox)findViewById(R.id.timerCheckBox);
-        // 수정 - 라디오그룹추가
         timerRadioGroup = (RadioGroup)findViewById(R.id.timerRadioGroup);
-        // startBtn.setEnabled(false);
+        connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
+        connectToPcBtn = (Button)findViewById(R.id.connectToPcBtn);
+        
+        startBtn.setEnabled(false);
+        
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("기어측 어플을 실행하세요...");
+        pDialog.setCancelable(true);
+        //mHandler.sendEmptyMessageDelayed(PDIALOG_TIMEOUT_ID, 5000);
+        
 
         // 수정 - 타이머설정 라디오박스 보이게 하기
         timerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // TODO Auto-generated method stub
                 if (isChecked) {
                     timerRadioGroup.setVisibility(timerRadioGroup.VISIBLE);
                 } else {
@@ -102,6 +124,34 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        isEnabledAdapter();
+        super.onPostCreate(savedInstanceState);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        if(mAccessoryService != null)
+        mAccessoryService.closeConnection();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        
+        if(requestCode == REQUEST_ENABLE_BT){
+            
+            //OK 버튼을 눌렀을때
+            if(resultCode == RESULT_OK){
+                Toast.makeText(getApplicationContext(), "블루투스를 켰습니다.", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "블루투스를 안켤래요.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.setting, menu);
@@ -130,17 +180,21 @@ public class SettingActivity extends AppCompatActivity {
             }
             case R.id.connectToPcBtn: {
 
-                mConnecToPcHelper = new ConnecToPcHelper();
-                mConnecToPcHelper.enabledBluetoothAdapter();
+                /*mConnecToPcHelper = new ConnecToPcHelper();
+                mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
+                mConnecToPcHelper.transferToPc();*/
+                Intent i = new Intent(SettingActivity.this,SettingBluetoothActivity.class);
+                startActivity(i);
                 break;
             }
             case R.id.startBtn: {
-                
-                if(timeInterval != null){
-                    sendDataToService(timeInterval.get(0));
-                }else{
-                    sendDataToService("0");
-                }
+                    if (timeInterval != null) {
+                        sendDataToService(timeInterval.get(0));
+                    } else {
+                        sendDataToService("0");
+                    }
+                    Intent intent = new Intent(SettingActivity.this,StartActivity.class);
+                    startActivity(intent);
                 break;
             }
         }
@@ -168,12 +222,124 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    private void isEnabledAdapter() {
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter.isEnabled()) {
+            Toast.makeText(getApplicationContext(), "블루투스가 이미 켜져있습니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+    
+    
+ // AccessoryService와의 인터페이스 메소드 정의하기
+    private ConnectionActionGear getConnectionActionGear(){
+        return new ConnectionActionGear() {
+            
+           
+
+            @Override
+            public void onConnectionActionRequest() {
+                
+                
+                
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        showpDialog();
+                        connectToGearBtn.setText("연결을 요청하였습니다.");
+                        
+                    }
+                });
+            }
+            
+            @Override
+            public void onConnectionActionNoResponse() {
+                
+                
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        hidepDialog();
+                        connectToGearBtn.setText("연결을 다시 확인하세요.");
+                        
+                    }
+                });
+            }
+
+            @Override
+            public void onConnectionActionComplete() {
+                
+                isGearConnect = true;
+                
+                runOnUiThread( new Runnable() {
+                    public void run() {
+                        hidepDialog();
+                        connectToGearBtn.setText("기어와 연결되었습니다.");
+                        setEnabledStartBtn();
+                    }
+                });
+                
+            }
+        };
+        
+    }
+    
+    // ConnecToPcHelper와의 인터페이스 메소드 정의하기
+    private ConnectionActionPc getConnectionActionPc(){
+        return new ConnectionActionPc() {
+            
+            @Override
+            public void onConnectionActionRequest() {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void onConnectionActionComplete() {
+                isPcConnect = true;
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+
+                        connectToPcBtn.setText("PC와 연결되었습니다.");
+                        setEnabledStartBtn();
+                    }
+                });
+                
+            }
+        };
+    }
+    
+    private void showpDialog(){
+        if(!pDialog.isShowing())
+            pDialog.show();
+    }
+    
+    private void hidepDialog(){
+        if(pDialog != null)
+        pDialog.dismiss();
+    }
+    
+    private void setEnabledStartBtn(){
+        if(isGearConnect && isPcConnect){
+            startBtn.setEnabled(true);
+        }
+    }
+    
+
     // ServiceConnection Interface
     ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mAccessoryService = ((AccessoryService.MyBinder)service).getService();
+            mAccessoryService.registerConnectionAction(getConnectionActionGear());
             isBound = true;
         }
 
@@ -183,4 +349,21 @@ public class SettingActivity extends AppCompatActivity {
             isBound = false;
         }
     };
+    
+/*    //sub class 만들어서 메모리 누수를 막아줌
+static class IncomingHandler extends Handler{
+    private final WeakReference<SettingActivity> mActivity;
+    IncomingHandler(SettingActivity activity) {
+        mActivity = new WeakReference<SettingActivity>(activity);
+    }
+    
+    @Override
+    public void handleMessage(Message msg) {
+        if(msg.what == PDIALOG_TIMEOUT_ID){
+            SettingActivity activity = mActivity.get();
+            activity.pDialog.dismiss();
+        }
+        super.handleMessage(msg);
+        }
+    }*/
 }

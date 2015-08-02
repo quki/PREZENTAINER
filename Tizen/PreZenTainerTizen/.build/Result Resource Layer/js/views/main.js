@@ -115,10 +115,17 @@ define({
         startRecording();
         startHR();
         startTimer();
-        alert("Heart Rate Start !");
         isRecording = true;
+        toastAlert('Start !');
       } else {
         alert("StopButton을 이용해서 끄세요!");
+      }
+    }
+    function setStop(){
+      if (isRecording) {
+        stopRecording();
+        stopHR();
+        stopTimer();
       }
     }
 
@@ -126,16 +133,13 @@ define({
      * Handles click event on record button.
      */
     function onStartBtnClick() {
+      updateAfterStart();
       setStart();
     }
 
     function onStopBtnClick() {
-      alert("onStopBtnClick");
-      if (isRecording) {
-        stopRecording();
-        stopHR();
-        stopTimer();
-      }
+      setStop();
+      updateAfterStop();
     }
 
     /**

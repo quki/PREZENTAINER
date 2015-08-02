@@ -118,7 +118,7 @@ function disconnectSAP(){
       mSASocket.close();
       mSASocket = null;
       isConnect=false;
-      updateContents();
+      updateConnection();
       console.log('Success to close the socket');
     } catch (e) {
       console.error(e+' Cannot close the socket');
@@ -150,17 +150,23 @@ connectionListener = {
          // Connection between Provider and Consumer is established
          onconnect: function (socket) {
              isConnect = true;
-             updateContents();
+             updateConnection();
              var onConnectionLost,
                  dataOnReceive;
              mSASocket = socket;
              console.log('SASocket is initialize');
              
              dataOnReceive = function dataOnReceive(channelId,data){
+               if(data !== null){
+                 mTimeInterval = Number(data);
+                 console.log('data : '+ data);
+                 updateAfterOnReceivce();
+               }else{
+                 mTimeInterval = 0;
+                 console.log('data : '+ data);
+                 updateAfterOnReceivce();
+               }
                
-               mTimeInterval = Number(data);
-               console.log('channel ID : '+channelId);
-               console.log('data : '+ data);
              }
              
              mSASocket.setDataReceiveListener(dataOnReceive);

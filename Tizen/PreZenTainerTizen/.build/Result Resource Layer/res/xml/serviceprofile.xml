@@ -10,7 +10,7 @@
             serviceTimeout="10">
             <supportedTransports>
                 <transport type="TRANSPORT_BT" />
-                <transport type="TRANSPORT_WIFI"/>
+                <transport type="TRANSPORT_WIFI" />
             </supportedTransports>
             <serviceChannel
                 id="100"

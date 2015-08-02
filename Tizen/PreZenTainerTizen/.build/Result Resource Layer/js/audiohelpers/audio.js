@@ -187,7 +187,6 @@ define({
          */
         function startRecording() {
           
-            alert("Recording Start !");
             var settings = {},
                 fileName = '';
 

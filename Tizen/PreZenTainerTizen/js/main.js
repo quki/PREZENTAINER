@@ -1,5 +1,4 @@
-var progressBarWidget,
-    progressBar = document.getElementById("circleprogress");
+
 var CHANNELID_EVENT = 104,
     CHANNELID_HR = 110;
 
@@ -13,23 +12,6 @@ function eventtopc() {
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
-}
-
-
-// Popup toast of TAU
-function toastAlert(msg) {
-  var toastMsg = document.getElementById("popupToastMsg");
-  toastMsg.innerHTML = msg;
-  tau.openPopup('#popupToast');
-  console.log(msg);
-}
-// Show popup toast at 'main'
-function showMain(message) {
-  tau.changePage('#main');
-  if (message != undefined) {
-    toastAlert(message);
-  }
-  transferId = 0;
 }
 
 // Heart Rate
@@ -63,26 +45,26 @@ function vibrator(){
 // Start Timer by given interval time
 function startTimer(){
   try {
-    min = mTimeInterval*60*1000;
-    vibratingInterval = setInterval(vibrator, min);
+    if(mTimeInterval !== 0){
+      min = mTimeInterval*60*1000;
+      vibratingInterval = setInterval(vibrator, min);
+    }else{
+      console.log('Timer Off !');
+    }
   } catch (e) {
     console.error("Timer Error : "+e);
   }
 }
 // Stop Timer
 function stopTimer(){
-  clearInterval(vibratingInterval);
-}
-// 화면구성변화
-function updateContents() {
-  if(isConnect){
-    $('.ui-listview').empty();
-    $('.ui-listview').append('<li>연결됨</li>');
+  if(mTimeInterval !== 0){
+    clearInterval(vibratingInterval);
+    console.log('Timer Stop !');
   }else{
-    $('.ui-listview').empty();
-    $('.ui-listview').append('<li>연결하세요</li>');
+    console.log('Timer Already Off !');
   }
 }
+
 
 // Handler for flick down gesture
 function backkeyhandler(e) {

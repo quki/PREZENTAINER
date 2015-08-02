@@ -1,7 +1,12 @@
 package com.puregodic.android.prezentainer.network;
 
 import java.io.IOException;
+import java.net.URL;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -20,6 +25,7 @@ public class MyAsyncTask extends AsyncTask<String, Integer, Boolean>{
 	public static final String TAG = "==Async==";
 	AccessoryService accessoryService = new AccessoryService();
 	private ArrayList<String> fromServiceArray = new ArrayList<String>();
+	URL url;
 	
 	public MyAsyncTask() {
 	}
@@ -27,13 +33,55 @@ public class MyAsyncTask extends AsyncTask<String, Integer, Boolean>{
 	public MyAsyncTask(ArrayList<String> fromServiceArray) {
 		this.fromServiceArray = fromServiceArray;
 	}
-
+HttpsURLConnection huc = new HttpsURLConnection(url) {
+        
+        @Override
+        public void connect() throws IOException {
+            // TODO Auto-generated method stub
+            
+        }
+        
+        @Override
+        public boolean usingProxy() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+        
+        @Override
+        public void disconnect() {
+            // TODO Auto-generated method stub
+            
+        }
+        
+        @Override
+        public Certificate[] getServerCertificates() throws SSLPeerUnverifiedException {
+            // TODO Auto-generated method stub
+            return null;
+        }
+        
+        @Override
+        public Certificate[] getLocalCertificates() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+        
+        @Override
+        public String getCipherSuite() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+    };
+	
+	
 	@Override
 	protected Boolean doInBackground(String... urls) {
 
 		for (String url : urls) {
 
 			try {
+			    
+			    
+			    
 				ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
 				HttpClient client = new DefaultHttpClient();
 				client.getConnectionManager();
