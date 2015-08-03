@@ -23,12 +23,13 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.connecthelper.ConnectionActionPc;
 import com.puregodic.android.prezentainer.service.AccessoryService;
 import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements BluetoothHelper{
 
     private AccessoryService mAccessoryService = null;
 
@@ -42,23 +43,24 @@ public class SettingActivity extends AppCompatActivity {
     // 수정 - 타이머 설정값 저장하는 배열
     private ArrayList<String> timeInterval;
     
-    Button connectToGearBtn,connectToPcBtn,startBtn;
-    CheckBox timerCheckBox;
-    RadioGroup timerRadioGroup;
+    private Button connectToGearBtn,connectToPcBtn,startBtn;
+    private CheckBox timerCheckBox;
+    private RadioGroup timerRadioGroup;
     
     private static final String TAG_BLUETOOTH = "==Bluetooth==";
-    private static final  int REQUEST_ENABLE_BT = 1;
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
 
     private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog pDialog;
     
    // private final IncomingHandler mHandler = new IncomingHandler(this);
+    public String mDeviceName;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+       
         // Bind Service
         doBindService();
 
@@ -71,7 +73,7 @@ public class SettingActivity extends AppCompatActivity {
         startBtn.setEnabled(false);
         
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("기어측 어플을 실행하세요...");
+        pDialog.setMessage("기다려주세요...");
         pDialog.setCancelable(true);
         //mHandler.sendEmptyMessageDelayed(PDIALOG_TIMEOUT_ID, 5000);
         
@@ -130,7 +132,29 @@ public class SettingActivity extends AppCompatActivity {
     }
     
     @Override
+    protected void onRestart() {
+        Toast.makeText(getApplicationContext(), "onRestart()", Toast.LENGTH_SHORT).show();
+        
+        if(mDeviceName != null){
+            new Thread(new Runnable() {
+                
+                @Override
+                public void run() {
+                    mConnecToPcHelper = new ConnecToPcHelper();
+                    mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
+                    mConnecToPcHelper.connectToPc(mDeviceName);
+                }
+            }).start();
+        }
+        
+        
+        
+        super.onRestart();
+    }
+
+    @Override
     protected void onDestroy() {
+        Toast.makeText(getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
         if(mAccessoryService != null)
         mAccessoryService.closeConnection();
         super.onDestroy();
@@ -147,6 +171,12 @@ public class SettingActivity extends AppCompatActivity {
             }else{
                 Toast.makeText(getApplicationContext(), "블루투스를 안켤래요.", Toast.LENGTH_SHORT).show();
             }
+        }else if(requestCode == REQUEST_DEVICENAME){
+            
+            
+          mDeviceName =  intent.getStringExtra("DeviceName");
+          Toast.makeText(getApplicationContext(), mDeviceName, Toast.LENGTH_SHORT).show();
+            
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
@@ -180,21 +210,28 @@ public class SettingActivity extends AppCompatActivity {
             }
             case R.id.connectToPcBtn: {
 
-                /*mConnecToPcHelper = new ConnecToPcHelper();
-                mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
-                mConnecToPcHelper.transferToPc();*/
-                Intent i = new Intent(SettingActivity.this,SettingBluetoothActivity.class);
-                startActivity(i);
+                
+                // device name 요청
+                Intent requestDeviceNameIntent = new Intent(SettingActivity.this,SettingBluetoothActivity.class);
+                startActivityForResult(requestDeviceNameIntent,REQUEST_DEVICENAME);
+                
                 break;
             }
             case R.id.startBtn: {
+                
+                if(mAccessoryService != null){
+                    mAccessoryService.mDeviceName = this.mDeviceName;
                     if (timeInterval != null) {
                         sendDataToService(timeInterval.get(0));
                     } else {
                         sendDataToService("0");
                     }
-                    Intent intent = new Intent(SettingActivity.this,StartActivity.class);
-                    startActivity(intent);
+                    Intent startActivity = new Intent(SettingActivity.this,StartActivity.class);
+                    startActivity(startActivity);
+                    mDeviceName = null;
+                }
+                    
+                    
                 break;
             }
         }
@@ -222,7 +259,8 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    private void isEnabledAdapter() {
+    @Override
+    public void isEnabledAdapter() {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter.isEnabled()) {
@@ -232,45 +270,36 @@ public class SettingActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
     }
-    
+
     
  // AccessoryService와의 인터페이스 메소드 정의하기
     private ConnectionActionGear getConnectionActionGear(){
         return new ConnectionActionGear() {
-            
-           
 
             @Override
             public void onConnectionActionRequest() {
-                
-                
-                
                 runOnUiThread(new Runnable() {
                     
                     @Override
                     public void run() {
                         showpDialog();
-                        connectToGearBtn.setText("연결을 요청하였습니다.");
+                        connectToGearBtn.setText("기어에 연결을 요청하였습니다");
                         
                     }
                 });
             }
-            
             @Override
             public void onConnectionActionNoResponse() {
-                
-                
                 runOnUiThread(new Runnable() {
                     
                     @Override
                     public void run() {
                         hidepDialog();
-                        connectToGearBtn.setText("연결을 다시 확인하세요.");
+                        connectToGearBtn.setText("기어와의 연결을 다시 확인하세요");
                         
                     }
                 });
             }
-
             @Override
             public void onConnectionActionComplete() {
                 
@@ -279,14 +308,13 @@ public class SettingActivity extends AppCompatActivity {
                 runOnUiThread( new Runnable() {
                     public void run() {
                         hidepDialog();
-                        connectToGearBtn.setText("기어와 연결되었습니다.");
+                        connectToGearBtn.setText("기어와 연결되었습니다");
                         setEnabledStartBtn();
                     }
                 });
                 
             }
         };
-        
     }
     
     // ConnecToPcHelper와의 인터페이스 메소드 정의하기
@@ -295,8 +323,16 @@ public class SettingActivity extends AppCompatActivity {
             
             @Override
             public void onConnectionActionRequest() {
-                // TODO Auto-generated method stub
-                
+
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        showpDialog();
+                        connectToPcBtn.setText("PC에 연결을 요청하였습니다");
+                        
+                    }
+                });
             }
             
             @Override
@@ -306,13 +342,27 @@ public class SettingActivity extends AppCompatActivity {
                     
                     @Override
                     public void run() {
-
-                        connectToPcBtn.setText("PC와 연결되었습니다.");
+                        hidepDialog();
+                        connectToPcBtn.setText("PC와 연결되었습니다");
                         setEnabledStartBtn();
                     }
                 });
                 
             }
+
+            @Override
+            public void onConnectionActionError() {
+                 runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        hidepDialog();
+                        connectToPcBtn.setText("PC와의 연결을 다시 확인하세요");
+                    }
+                });
+                
+            }
+            
         };
     }
     

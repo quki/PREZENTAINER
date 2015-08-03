@@ -38,7 +38,7 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_HR = 110;
 	private ConnecToPcHelper mConnecToPcHelper;
 	public ArrayList<String> al = new ArrayList<String>();
-	
+	public String mDeviceName;
 	
 	
 	// ???????????????????
@@ -46,98 +46,23 @@ public class AccessoryService extends SAAgent {
 		super("AccessoryService", AccessoryServiceConnection.class);
 	}
 	
-	// Find PeerAgent
-	public void findPeers() {
-	    
-		findPeerAgents();
-		Log.e(TAG, "==Finding Peer==");
-	}
-
-	// PeerAgent Found
-	public void onPeerAgentFound(SAPeerAgent peerAgent) {
-		if (peerAgent != null) 
-			establishConnection(peerAgent);
-	}
-	
-	// Receive the File
-	public void receiveFile(int transId, String path, boolean bAccept) {
-		if (mSAFileTransfer != null) {
-			if (bAccept) {
-				mSAFileTransfer.receive(transId, path);
-				Log.e(TAG, "===Receive file PATH === : "+path);
-			} else {
-				mSAFileTransfer.reject(transId);
-			}
-		}
-	}
-	
-	public void sendDataToGear(String mData) {
-		final String message = new String(mData);
-		if(mConnectionHandler!= null){
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						mConnectionHandler.send(CHANNEL_ID_SETTING, message.getBytes());
-						Log.e(TAG, message);
-					} catch (IOException e) {
-						Log.e(TAG, "==Cannot Send data to Gear==");
-						e.printStackTrace();
-					}
-				}
-			}).start();
-			
-		}else{
-			
-			Log.e(TAG, "mConnectionHandler null");
-		}
-	}
-	// Cancel File Transfer
-	public void cancelFileTransfer(int transId) {
-		if (mSAFileTransfer != null) {
-			mSAFileTransfer.cancel(transId);
-		}
-	}
 	// File Action Interface Initialize
-	public void registerFileAction(FileAction mFileAction) {
-		this.mFileAction = mFileAction;
-	}
-	// Connection Action Interface Initailize
-	public void registerConnectionAction(ConnectionActionGear mConnectionAction){
-	    this.mConnectionAction = mConnectionAction;
-	}
-
-	public boolean establishConnection(SAPeerAgent peerAgent) {
-		if (peerAgent != null) {
-			// Request Service Connection
-			Toast.makeText(getApplicationContext(),
-					"기어에게 연결 요청을 보냈습니다.", Toast.LENGTH_SHORT).show();
-			mConnectionAction.onConnectionActionRequest();
-			requestServiceConnection(peerAgent);
-			return true;
-		}
-		return false;
-	}
-	
-	
-	// Socket Close
-	public boolean closeConnection() {
-        if (mConnectionHandler != null) {
-            mConnectionHandler.close();
-            mConnectionHandler = null;
-        }
-        return true;
+    public void registerFileAction(FileAction mFileAction) {
+        this.mFileAction = mFileAction;
     }
+    // Connection Action Interface Initailize
+    public void registerConnectionAction(ConnectionActionGear mConnectionAction){
+        this.mConnectionAction = mConnectionAction;
+    }
+	
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.e(TAG, "===onCreat()===");
 		mContext = getApplicationContext();
-		Toast.makeText(getApplicationContext(), "OnCreat()", Toast.LENGTH_SHORT)
+		Toast.makeText(mContext, "OnCreat()", Toast.LENGTH_SHORT)
 				.show();
-		
 		
 		
 		SA sa = new SA();
@@ -249,7 +174,7 @@ public class AccessoryService extends SAAgent {
 
 	@Override
 	public void onDestroy() {
-		Toast.makeText(getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, "onDestroy()", Toast.LENGTH_SHORT).show();
 		closeConnection();
 		super.onDestroy();
 	}
@@ -285,7 +210,7 @@ public class AccessoryService extends SAAgent {
 
 				mConnectionsMap.put(mConnectionHandler.mConnectionId, mConnectionHandler);
 				Log.e(TAG, "===Service Connection Success===");
-				Toast.makeText(getApplicationContext(), "Connection완료 !!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Connection완료 !!", Toast.LENGTH_SHORT).show();
 				
 				// Connection Success and Initialize Socket
 				
@@ -294,12 +219,12 @@ public class AccessoryService extends SAAgent {
 			}
 		}else if(result == SAAgent.CONNECTION_ALREADY_EXIST){
 			
-			Toast.makeText(getApplicationContext(), "이미 연결되있습니다.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "이미 연결되있습니다.", Toast.LENGTH_SHORT).show();
 			Log.e(TAG, "===CONNECTION_ALREADY_EXIST===");
 			mConnectionAction.onConnectionActionComplete();
 			
 		}else if(result == SAAgent.CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE){
-			Toast.makeText(getApplicationContext(), "기어측 어플로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "기어측 어플로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show();
 			Log.e(TAG, "===CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE===");
 			//mConnectionAction.onConnectionActionNoResponse();
 		}
@@ -353,7 +278,7 @@ public class AccessoryService extends SAAgent {
 						try {
 							// event 전달
 							mConnecToPcHelper = new ConnecToPcHelper();
-							mConnecToPcHelper.transferToPc();
+							mConnecToPcHelper.transferToPc(mDeviceName);
 						} catch (Exception e) {
 							Log.e(TAG, "Cannot transfer data to PC");
 						}
@@ -380,6 +305,83 @@ public class AccessoryService extends SAAgent {
 					+ reason);
 		}
 	}
+	
+	// Find PeerAgent
+    public void findPeers() {
+        
+        findPeerAgents();
+        Log.e(TAG, "==Finding Peer==");
+    }
+
+    // PeerAgent Found
+    public void onPeerAgentFound(SAPeerAgent peerAgent) {
+        if (peerAgent != null) 
+            establishConnection(peerAgent);
+    }
+    
+    // Receive the File
+    public void receiveFile(int transId, String path, boolean bAccept) {
+        if (mSAFileTransfer != null) {
+            if (bAccept) {
+                mSAFileTransfer.receive(transId, path);
+                Log.e(TAG, "===Receive file PATH === : "+path);
+            } else {
+                mSAFileTransfer.reject(transId);
+            }
+        }
+    }
+    
+    public void sendDataToGear(String mData) {
+        final String message = new String(mData);
+        if(mConnectionHandler!= null){
+            new Thread(new Runnable() {
+                
+                @Override
+                public void run() {
+                    try {
+                        mConnectionHandler.send(CHANNEL_ID_SETTING, message.getBytes());
+                        Log.e(TAG, message);
+                    } catch (IOException e) {
+                        Log.e(TAG, "==Cannot Send data to Gear==");
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            
+        }else{
+            
+            Log.e(TAG, "mConnectionHandler null");
+        }
+    }
+    // Cancel File Transfer
+    public void cancelFileTransfer(int transId) {
+        if (mSAFileTransfer != null) {
+            mSAFileTransfer.cancel(transId);
+        }
+    }
+    
+
+    public boolean establishConnection(SAPeerAgent peerAgent) {
+        if (peerAgent != null) {
+            // Request Service Connection
+            Toast.makeText(mContext,
+                    "기어에게 연결 요청을 보냈습니다.", Toast.LENGTH_SHORT).show();
+            mConnectionAction.onConnectionActionRequest();
+            requestServiceConnection(peerAgent);
+            return true;
+        }
+        return false;
+    }
+    
+    
+    // Socket Close
+    public boolean closeConnection() {
+        if (mConnectionHandler != null) {
+            mConnectionHandler.close();
+            mConnectionHandler = null;
+        }
+        return true;
+    }
 	
 	
 }

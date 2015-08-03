@@ -5,5 +5,7 @@ public interface ConnectionActionPc {
     void onConnectionActionRequest();
     
     void onConnectionActionComplete();
+    
+    void onConnectionActionError();
 
 }
