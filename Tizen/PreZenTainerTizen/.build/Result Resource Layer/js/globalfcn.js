@@ -1,6 +1,7 @@
 
 var CHANNELID_EVENT = 104,
-    CHANNELID_HR = 110;
+    CHANNELID_HR = 110,
+    CHANNELID_EVENTTIME = 114;
 
 var isConnect = false;
 var heartRateArray ;
@@ -32,10 +33,10 @@ function makeJsonHR(){
 function sendJsonHR(){
   
   try {
-      jsonInfo = JSON.stringify(heartRateArray);
-      console.log(jsonInfo);
-      mSASocket.sendData(CHANNELID_HR, jsonInfo);
-      console.log("Heart Rate sent : " + jsonInfo);
+      jsonInfoHR = JSON.stringify(heartRateArray);
+      console.log(jsonInfoHR);
+      mSASocket.sendData(CHANNELID_HR, jsonInfoHR);
+      console.log("Heart Rate sent : " + jsonInfoHR);
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
@@ -57,6 +58,7 @@ function stopHR() {
   window.webapis.motion.stop("HRM");
   clearInterval(sendingInterval);
   heartRateArray = null;
+  console.log('HR Stop !');
 }
 
 // On Timer for 2 sec

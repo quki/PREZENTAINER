@@ -1,7 +1,9 @@
 #delete
+res/wgt/js/main.js
 #add
+res/wgt/js/globalfcn.js
 #modify
 res/wgt/author-signature.xml
-res/wgt/js/main.js
-res/wgt/js/views/main.js
+res/wgt/index.html
+res/wgt/js/audios/audio.js
 res/wgt/signature1.xml

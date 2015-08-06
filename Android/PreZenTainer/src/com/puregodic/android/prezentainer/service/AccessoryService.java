@@ -1,7 +1,6 @@
 package com.puregodic.android.prezentainer.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -11,8 +10,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.network.MyAsyncTask;
@@ -38,6 +35,7 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_SETTING = 100;
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
+	public static final int CHANNEL_ID_EVENTTIME = 114;
 	public String mDeviceName;
 	
 	
@@ -271,22 +269,18 @@ public class AccessoryService extends SAAgent {
 
 					}
 				}).start();
-			}
-			if (channelId == CHANNEL_ID_HR) {
+			}else if (channelId == CHANNEL_ID_HR) {
+			    
 				fromGearMessage = new String(data);
 				MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
 				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });
 				
-				try {
-				    // JSON Array to ArrayList
-	                ArrayList<String> al = new Gson().fromJson(fromGearMessage, new TypeToken<ArrayList<String>>(){}.getType());
-	                for(int i =0; i<al.size() ; i++){
-	                    Log.v("===JSON===",al.get(i));
-	                }
-				} catch (Exception e) {
-					Log.e(TAG, "Cannot add HR to ArrayList");
-				}
-
+			}else if (channelId == CHANNEL_ID_EVENTTIME){
+			    
+			        fromGearMessage = new String(data);
+                    // JSON Array to ArrayList
+                    //ArrayList<String> al = new Gson().fromJson(fromGearMessage, new TypeToken<ArrayList<String>>(){}.getType());
+			        Log.v(TAG, fromGearMessage);
 			}
 
 		}

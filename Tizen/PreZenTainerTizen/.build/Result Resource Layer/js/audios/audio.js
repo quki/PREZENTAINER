@@ -40,8 +40,6 @@ define({
             progressBarWidget = new tau.widget.CircleProgressBar(progressBar);
             progressBarWidget.value('0');
             
-            disconnectSAP();
-           
           }, function(err) {
             showMain('Failed to send File');
           });
@@ -241,7 +239,6 @@ define({
          */
         function stopRecording() {
             stopRequested = true;
-            alert("stopRecording");
             
             //만일 Recording 중이었다면..
             if (isRecording()) {

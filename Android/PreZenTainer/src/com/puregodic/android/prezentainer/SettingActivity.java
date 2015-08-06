@@ -12,7 +12,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +39,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private Boolean isPcConnect = false;
     private BluetoothAdapter mBluetoothAdapter;
     public static final int REQUEST_DETAIL = 3;
+    public static final int REQUEST_DISCOVERABLE_BT = 4;
     private static final String TAG = "==Setting==";
 
     // 수정 - 타이머 설정값 저장하는 배열
@@ -167,7 +167,6 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
     @Override
     protected void onDestroy() {
-        Toast.makeText(getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
         if(mAccessoryService != null)
         mAccessoryService.closeConnection();
         super.onDestroy();
@@ -197,6 +196,11 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 txtsendJson.setText(gsonString);
             }
 
+        }else if(requestCode == REQUEST_DISCOVERABLE_BT){
+            
+            
+            
+            
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }

@@ -4,6 +4,7 @@ var mSAAgent,
     mSAFiletransfer,
     mSARemotePeerAgent,
     transferId = 0;
+
 var mTimeInterval = 0;
 
 // Initialize File Transfer 

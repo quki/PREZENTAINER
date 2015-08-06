@@ -30,6 +30,12 @@
                 priority="low"
                 reliability= "enable">
             </serviceChannel>
+            <serviceChannel
+                id="114"
+                dataRate="low"
+                priority="low"
+                reliability= "enable">
+            </serviceChannel>
         </serviceProfile>
     </application>
 </resources>

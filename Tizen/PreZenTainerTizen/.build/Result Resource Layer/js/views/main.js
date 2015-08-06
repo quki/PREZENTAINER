@@ -1,28 +1,32 @@
-/* global define, console, document, window, tau, setInterval, clearInterval */
-/* jslint plusplus: true */
+  
 
-/**
- * Main page module
- */
+  /* *
+   *     < Main Page Module >
+   * 1. Recording 관련 함수를 정의한다. 
+   * 2. Stop watch 관련 함수를 정의한다.
+   * 3. 모든 메인페이지에서 일어나는 이벤트를 처리한다. 
+   * 
+   * */
 
 define({
   name: 'views/main',
-  requires: ['core/event', 'core/application', 'audios/stream', 'audios/audio','timers/timer','helpers/timer','core/template'],
+  requires: ['core/event', 'core/application', 'audios/stream', 'audios/audio','timers/timer','helpers/timer'],
   def: function viewsMain(req) {
     'use strict';
 
     var e = req.core.event,
         s = req.audios.stream,
         a = req.audios.audio,
-        
         Timer = req.timers.timer.Timer,
         Time = req.helpers.timer.Time,
-        tpl = req.core.template,
+        
         page = null,
         pageId = 'main',
         timer = null,
         initialised = false,
-
+        startbtn = null,
+        stopbtn = null,
+        pceventbtn = null,
 
     ERROR_FILE_WRITE = 'FILE_WRITE_ERR',
     NO_FREE_SPACE_MSG = 'No free space.',
@@ -30,18 +34,16 @@ define({
 
     recordProgress = null,
     recordProgressVal = null,
-    startbtn = null,
-    stopbtn = null,
-    lapbtn = null,
+    
     stream = null,
     RECORDING_INTERVAL_STEP = 100,
     recordingInterval = null, isRecording = false, recordingTime = 0, exitInProgress = false;
 
-    /**
-     * Toggles between recording/no recording state.
-     * 
-     */
-
+    var eventTimeArray = new Array(),
+        currentEventTime = null,
+        jsonInfoET =null;
+    //////////////////////////////////////////////////RECORDING////////////////////////////////////////////////////////////////////////
+    
     // 처음시작할때 recording 상태로 만들어준다. ----> toggleRecording();
     function toggleRecording(forceValue) {
       if (forceValue !== undefined) {
@@ -51,189 +53,90 @@ define({
       }
     }
 
-    /**
-     * Renders recording progress bar value.
-     * 
-     */
+    // Recording ProgressBar 렌더링 값 설정
     function renderRecordingProgressBarValue(value) {
       recordProgressVal.style.width = value + 'px';
     }
 
-    /**
-     * Renders recording progress bar.
-     */
+    // Recording ProgressBar 렌더링 작업
     function renderRecordingProgressBar() {
       var parentWidth = recordProgress.clientWidth, width = recordingTime
               / a.MAX_RECORDING_TIME * parentWidth;
       renderRecordingProgressBarValue(width);
     }
 
-    /**
-     * Resets recording progress.
-     */
+    // Reset Recording ProgressBar 
     function resetRecordingProgress() {
       recordingTime = 0;
       renderRecordingProgressBar();
     }
 
-    /**
-     * Removes recording interval.
-     */
+    // Remove Recording ProgressBar Interval 
     function removeRecordingInterval() {
       clearInterval(recordingInterval);
     }
 
-    /**
-     * Updates recording progress.
-     */
+    // Update Recording ProgressBar
     function updateRecordingProgress() {
       recordingTime = a.getRecordingTime();
 
       renderRecordingProgressBar();
     }
 
-    /**
-     * Sets recording interval.
-     */
+    // Sets recording interval
     function setRecordingInterval() {
       recordingInterval = setInterval(updateRecordingProgress,
               RECORDING_INTERVAL_STEP);
     }
 
-    /**
-     * Starts audio recording.
-     */
+    // Starts audio recording
     function startRecording() {
       a.startRecording();
       resetRecordingProgress();
     }
 
-    /**
-     * Stops audio recording.
-     */
+    // Stops audio recording
     function stopRecording() {
       a.stopRecording();
       resetRecordingProgress();
       isRecording = false;
     }
 
-    /**
-     * Starts or stops audio recording.
-     */
-    function setStart() {
-      if (!isRecording) {
-        startRecording();
-        startHR();
-        startTimer();
-        isRecording = true;
-        toastAlert('Start !');
-      } else {
-        alert("StopButton을 이용해서 끄세요!");
-      }
-    }
-    function setStop(){
-      if (isRecording) {
-        sendJsonHR();
-        stopRecording();
-        stopHR();
-        stopTimer();
-      }
-    }
-
-    /**
-     * Handles click event on record button.
-     */
-    function onStartBtnClick() {
-      startTimeWatch();
-      updateAfterStart();
-      setStart();
-    }
-
-    function onStopBtnClick() {
-      stopTimeWatch();
-      setStop();
-      updateAfterStop();
-    }
-    
-    function lap(){
-      try {
-        var currentLap = timer.lap(),
-        html,
-        tmptable = null,
-        newitem = null;
-        html = tpl.get('lapRow', {
-          no: currentLap.no > 9 ? currentLap.no : '0' + currentLap.no,
-          totalTime: new Time(timer.getTimeElapsed()),
-          lapTime: new Time(currentLap.time)
-      });
-        tmptable = document.createElement('table');
-        tmptable.innerHTML = html;
-      } catch (e) {
-        console.error(e);
-      }
-      
-    }
-
-    /**
-     * Registers event listeners.
-     */
-    function bindEvents() {
-      startbtn.addEventListener('click', onStartBtnClick);
-      stopbtn.addEventListener('click', onStopBtnClick);
-      lapbtn.addEventListener('click',lap);
-    }
-
-    /**
-     * Handles models.stream.ready event.
-     * 
-     */
+    // Handles models.stream.ready event
     function onStreamReady(ev) {
       stream = ev.detail.stream;
       a.registerStream(stream);
     }
 
-    /**
-     * Handles models.stream.cannot.access.audio event.
-     */
+    // Handles models.stream.cannot.access.audio event
     function onStreamCannotAccessAudio() {
       if (document.visibilityState === 'visible') {
-        showExitAlert(CANNOT_ACCESS_AUDIO_MSG);
+        alert(CANNOT_ACCESS_AUDIO_MSG);
       }
     }
 
-    /**
-     * Inits stream.
-     */
+    // Initialize Stream
     function initStream() {
       s.getStream();
     }
 
-    /**
-     * Handles audio.ready event.
-     */
+    // Handles audio.ready event
     function onAudioReady() {
       console.log('onAudioReady()');
     }
 
-    /**
-     * Handles audio.error event.
-     */
+    // Handles audio.error event
     function onAudioError() {
       console.error('onAudioError()');
     }
 
-    /**
-     * Handles audio.recording.start event.
-     */
+    // Handles audio.recording.start event
     function onRecordingStart() {
       setRecordingInterval();
       toggleRecording(true);
     }
 
-    /**
-     * Handles audio.recording.done event.
-     * 
-     */
+    // Handles audio.recording.done event
     function onRecordingDone(ev) {
       var path = ev.detail.path;
 
@@ -247,17 +150,12 @@ define({
       }
     }
 
-    /**
-     * Handles audio.recording.cancel event.
-     */
+    // Handles audio.recording.cancel event
     function onRecordingCancel() {
       toggleRecording(false);
     }
 
-    /**
-     * Handles audio.recording.error event.
-     * 
-     */
+    // Handles audio.recording.error event
     function onRecordingError(ev) {
       var error = ev.detail.error;
 
@@ -271,9 +169,7 @@ define({
       toggleRecording(false);
     }
 
-    /**
-     * Handles application exit event.
-     */
+    // Handles application exit event
     function onApplicationExit() {
       exitInProgress = true;
       if (a.isReady()) {
@@ -281,34 +177,8 @@ define({
         stream.stop();
       }
     }
-
-    /**
-     * Inits module.
-     */
-    function init() {
-      startbtn = document.getElementById('startbtn');
-      stopbtn = document.getElementById('stopbtn');
-      recordProgress = document.getElementById('record-progress');
-      recordProgressVal = document.getElementById('record-progress-val');
-      lapbtn = document.getElementById('lapbtn');
-      bindEvents();
-      initStream();
-      bindPageShow();
-    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    //////////////////////////////////////////////////STOP WATCH///////////////////////////////////////////////////////////////////////
     
     /**
      * Refresh timer digits.
@@ -346,17 +216,34 @@ define({
         return time;
     }
     
+    function makeJsonEventTime(){
+      
+      try {
+        currentEventTime = timer.getTimeElapsed();
+        eventTimeArray.push(currentEventTime);
+        console.log(eventTimeArray);
+      } catch (e) {
+        console.error('makeJsonEventTimeError : '+e);
+      }
+      
+    }
     
-    
-    
-    
-    
+  //time event JSON을 ANDROID로 보내기
+    function sendJsonEventTime(){
+      
+      try {
+          jsonInfoET = JSON.stringify(eventTimeArray);
+          mSASocket.sendData(CHANNELID_EVENTTIME, jsonInfoET);
+          console.log("Event Time sent : " + jsonInfoET);
+      } catch (err) {
+        console.log("exception [" + err.name + "] msg[" + err.message + "]");
+      }
+      
+    }
     
     function startTimeWatch(e){
       //e.preventDefault();
       timer.run();
-      
-      
     }
     
     function stopTimeWatch(e){
@@ -364,12 +251,11 @@ define({
       timer.reset();
       //window.scrollTo(0);
       refreshTimer();
-      
     }
 
 
     /**
-     * Initialise the stopwatch - timer and events.
+     * Initialize the stopwatch - timer and events.
      *
      * @return {boolean} True if any action was performed.
      */
@@ -386,23 +272,71 @@ define({
         return true;
     }
 
-    function pageShow() {
-        initStopWatch();
-        // scroll laps list to previous position
+    
+    //////////////////////////////////////////////////SETTINGS/////////////////////////////////////////////////////////////////////////    
+    
+    // 각종 Start 설정
+    function setStart() {
+      if (!isRecording) {
+        toastAlert('Start !');
+        startRecording();
+        startHR();
+        startTimer();
+        isRecording = true;
+      } else {
+        toastAlert('StopButton을 이용해서 끄세요 !');
+      }
+    }
+    
+    // 각종 Stop 설정
+    function setStop(){
+      if (isRecording) {
+        toastAlert('Stop !');
+        sendJsonHR();
+        sendJsonEventTime();
+        stopRecording();
+        stopHR();
+        stopTimer();
+        disconnectSAP();
+      }
     }
 
-    /**
-     * Bind the pageshow event.
-     */
-    function bindPageShow() {
-        page = page || document.getElementById(pageId);
+    // Button Click Event
+    function onStartBtnClick() {
+      startTimeWatch();
+      updateAfterStart();
+      setStart();
+    }
 
-        page.addEventListener('pageshow', pageShow);
+    function onStopBtnClick() {
+      stopTimeWatch();
+      setStop();
+      updateAfterStop();
+    }
+    
+    function onPcEventBtnClick(){
+      eventtopc();
+      makeJsonEventTime();
+      
+    }
 
-        if (page.classList.contains('ui-page')) {
-            // the page is already active and the handler didn't run
-            pageShow();
-        }
+    // Registers event listeners
+    function bindEvents() {
+      startbtn.addEventListener('click', onStartBtnClick);
+      stopbtn.addEventListener('click', onStopBtnClick);
+      pceventbtn.addEventListener('click', onPcEventBtnClick);
+    }
+    
+    // Initialize modules
+    function init() {
+      startbtn = document.getElementById('startbtn');
+      stopbtn = document.getElementById('stopbtn');
+      pceventbtn = document.getElementById('pceventbtn');
+      recordProgress = document.getElementById('record-progress');
+      recordProgressVal = document.getElementById('record-progress-val');
+      bindEvents();
+      initStream();
+      initStopWatch();
     }
     
     /** 

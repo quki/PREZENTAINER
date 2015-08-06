@@ -82,7 +82,6 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         IntentFilter deviveDiscoveryFinishedFilter = new IntentFilter(
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED); // 탐색을 끝냈을때
         IntentFilter stateChanged = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-
         // 리시버와 intentfilter를 등록한다. 이는 해당 이벤트를 BroadcastReceiver로 통보하도록 요구!
         registerReceiver(mBroadcastReceiver, deviceFoundFilter);
         registerReceiver(mBroadcastReceiver, deviveDiscoveryFinishedFilter);
@@ -110,6 +109,13 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
         };
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // unregister the BroadcastReceiver
+        unregisterReceiver(mBroadcastReceiver);
+        super.onDestroy();
     }
 
     @Override
