@@ -6,7 +6,7 @@
  */
 
 define({
-    name: 'audiohelpers/stream',
+    name: 'audios/stream',
     requires: [
         'core/event'
     ],

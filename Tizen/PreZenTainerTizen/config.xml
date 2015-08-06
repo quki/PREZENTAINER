@@ -6,6 +6,7 @@
 	<icon src="teamlogo.png" />
 	<tizen:metadata key="AccessoryServicesLocation" value="res/xml/serviceprofile.xml" />
 	<name>PreZenTainerTizen</name>
+	<tizen:privilege name="http://tizen.org/privilege/application.launch"/>
 	<tizen:privilege name="http://tizen.org/privilege/content.read" />
 	<tizen:privilege name="http://developer.samsung.com/privilege/accessoryprotocol" />
 	<tizen:privilege name="http://tizen.org/privilege/camera" />

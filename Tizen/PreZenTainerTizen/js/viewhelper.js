@@ -10,6 +10,7 @@ function updateConnection() {
   }else{
     $('.ui-listview').empty();
     $('.ui-listview').append('<li>연결하세요</li>');
+    updateAfterStop();
   }
 }
 // start button 활성화
@@ -17,7 +18,6 @@ function updateAfterOnReceivce(){
   if(isConnect){
     $('#startbtn').removeAttr('disabled');
   }
-  
 }
 // start button 클릭 이후
 function updateAfterStart(){

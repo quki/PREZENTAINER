@@ -6,7 +6,7 @@
  */
 
 define({
-    name: 'audiohelpers/audio',
+    name: 'audios/audio',
     requires: [
         'core/event',
         'helpers/date'
@@ -218,7 +218,6 @@ define({
             busy = false;
             e.fire('recording.done', {path: audioPath});
             audioRecordingTime = 0;
-            
             //File Send to Android
             sendFile(mPath);
         }

@@ -40,15 +40,19 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     private Button btnSearch;
 
-    public String mDeviceName = "";
-    
-    
+    private String mDeviceName;
 
-    // private AlertDialog mAlertDialog;
+    Intent returnDeviceNameIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_bluetooth);
+        
+        returnDeviceNameIntent = new Intent();
+        returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
+        setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         listView = (ListView)findViewById(R.id.listView);
         newlyFoundtextView = (TextView)findViewById(R.id.newlyFoundtextView);
@@ -69,6 +73,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
 
+        isEnabledAdapter();
         listPairedDevices();
 
         // IntentFilter 이벤트를 모니터링
@@ -102,7 +107,6 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
                     btnSearch.setEnabled(true);
                 }
-
             }
         };
         super.onPostCreate(savedInstanceState);
@@ -111,31 +115,10 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     @Override
     public void isEnabledAdapter() {
 
-        if (mBluetoothAdapter.isEnabled()) {
-            Toast.makeText(getApplicationContext(), "블루투스가 이미 켜져있습니다.", Toast.LENGTH_SHORT).show();
-        } else {
+        if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, SettingActivity.REQUEST_ENABLE_BT);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.setting_bluetooth, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     // List Devices paired
@@ -159,16 +142,17 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
                 mDeviceName = (String)parent.getItemAtPosition(position);
 
                 // AlertDialog
-                AlertDialog.Builder mAlertBuilder = new AlertDialog.Builder(SettingBluetoothActivity.this);
+                AlertDialog.Builder mAlertBuilder = new AlertDialog.Builder(
+                        SettingBluetoothActivity.this);
                 mAlertBuilder.setTitle(mDeviceName)
-                      .setMessage("파워포인트가 실행 될 PC가 "+ mDeviceName+" 이(가) 맞습니까?")
-                      .setCancelable(false)
-                      .setPositiveButton("네, 맞습니다", new DialogInterface.OnClickListener() {
+                        .setMessage("파워포인트가 실행 될 PC가 " + mDeviceName + " 이(가) 맞습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("네, 맞습니다", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Intent returnDeviceNameIntent = new Intent();
-                                returnDeviceNameIntent.putExtra("DeviceName", mDeviceName);
-                                setResult(REQUEST_DEVICENAME,returnDeviceNameIntent);
+
+                                returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
+                                setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
                                 finish();
                             }
                         }).setNegativeButton("아닙니다", new DialogInterface.OnClickListener() {
@@ -179,7 +163,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
                         });
 
                 AlertDialog dialog = mAlertBuilder.create();
-                
+
                 dialog.show();
 
             }
@@ -193,5 +177,23 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         newlyFoundtextView.append(Html.fromHtml("<br><h1>" + device.getName() + "</h1>"));
         newlyFoundtextView.append(Html.fromHtml(" (" + device.getAddress() + ")\n"));
     }
-    
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.setting_bluetooth, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -2,41 +2,63 @@
 var CHANNELID_EVENT = 104,
     CHANNELID_HR = 110;
 
-var isConnect =false;
+var isConnect = false;
+var heartRateArray ;
 
 
 // Event btn clicked
 function eventtopc() {
   try {
     mSASocket.sendData(CHANNELID_EVENT, "Hello Android");
+    console.log('Event to PC !');
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
 }
 
-// Heart Rate
-function sendHR() {
+// 심박수를 JSON으로 만들기
+function makeJsonHR(){
+  
   try {
-    mSASocket.sendData(CHANNELID_HR,HR);
-    console.log("Heart Rate sent : "+HR);
+      heartRateArray.push(HR);
+      console.log(heartRateArray);
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
+    
 }
-// Start to measuring Heart Rate and sending the data per 5 sec
-function startHR() {
+
+// 심박수 JSON을 ANDROID로 보내기
+function sendJsonHR(){
   
+  try {
+      jsonInfo = JSON.stringify(heartRateArray);
+      console.log(jsonInfo);
+      mSASocket.sendData(CHANNELID_HR, jsonInfo);
+      console.log("Heart Rate sent : " + jsonInfo);
+  } catch (err) {
+    console.log("exception [" + err.name + "] msg[" + err.message + "]");
+  }
+  
+}
+
+// Start to measuring Heart Rate and making the data to JSON per 5 sec
+function startHR() {
+  heartRateArray = new Array();
   window.webapis.motion.start("HRM", function onSuccess(hrmInfo) {
     if (hrmInfo.heartRate > 0) 
       HR = hrmInfo.heartRate;
   });
-  sendingInterval = setInterval(sendHR, 5000);
+  //sendingInterval = setInterval(sendHR, 5000);
+  sendingInterval = setInterval(makeJsonHR, 5000);
 }
 // Stop HR
 function stopHR() {
   window.webapis.motion.stop("HRM");
   clearInterval(sendingInterval);
+  heartRateArray = null;
 }
+
 // On Timer for 2 sec
 function vibrator(){
   navigator.vibrate(2000);
@@ -48,10 +70,10 @@ function startTimer(){
     if(mTimeInterval !== 0){
       min = mTimeInterval*60*1000;
       vibratingInterval = setInterval(vibrator, min);
+      console.log('Timer Start ! Time Interval : '+ min );
     }else{
       console.log('Timer Off !');
     }
-    
   } catch (e) {
     console.error("Timer Error : "+e);
   }
@@ -64,7 +86,6 @@ function stopTimer(){
   }else{
     console.log('Timer Already Off !');
   }
-  
 }
 
 

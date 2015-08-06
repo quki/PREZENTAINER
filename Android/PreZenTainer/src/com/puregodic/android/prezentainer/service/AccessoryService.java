@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.network.MyAsyncTask;
@@ -36,8 +38,6 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_SETTING = 100;
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
-	private ConnecToPcHelper mConnecToPcHelper;
-	public ArrayList<String> al = new ArrayList<String>();
 	public String mDeviceName;
 	
 	
@@ -50,7 +50,7 @@ public class AccessoryService extends SAAgent {
     public void registerFileAction(FileAction mFileAction) {
         this.mFileAction = mFileAction;
     }
-    // Connection Action Interface Initailize
+    // Connection Action (Gear) Interface Initailize
     public void registerConnectionAction(ConnectionActionGear mConnectionAction){
         this.mConnectionAction = mConnectionAction;
     }
@@ -131,7 +131,6 @@ public class AccessoryService extends SAAgent {
 			}
 			
 			
-			
 			//File Transfer Status changed
 			@Override
 			public void onProgressChanged(int transId, int progress) {
@@ -146,19 +145,6 @@ public class AccessoryService extends SAAgent {
 				
 				Log.e(TAG, "===onTransferCompleted: tr id : " + transId
 						+ " file name : " + fileName + " error : " + errCode);	
-				
-				if (al.size() != 0) {
-					for (int i = 0; i < al.size(); i++) {
-						Log.v(TAG, al.get(i));
-					}
-					MyAsyncTask asyncTask = new MyAsyncTask(al);
-					asyncTask
-							.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });
-					//al.clear();
-					//Log.v(TAG, "Initialize the ArrayList");
-				} else {
-					Log.v(TAG, "HR was not transfered");
-				}
 				
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
@@ -277,7 +263,7 @@ public class AccessoryService extends SAAgent {
 					public void run() {
 						try {
 							// event РќДо
-							mConnecToPcHelper = new ConnecToPcHelper();
+							ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
 							mConnecToPcHelper.transferToPc(mDeviceName);
 						} catch (Exception e) {
 							Log.e(TAG, "Cannot transfer data to PC");
@@ -288,8 +274,15 @@ public class AccessoryService extends SAAgent {
 			}
 			if (channelId == CHANNEL_ID_HR) {
 				fromGearMessage = new String(data);
+				MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
+				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });
+				
 				try {
-					al.add(fromGearMessage);
+				    // JSON Array to ArrayList
+	                ArrayList<String> al = new Gson().fromJson(fromGearMessage, new TypeToken<ArrayList<String>>(){}.getType());
+	                for(int i =0; i<al.size() ; i++){
+	                    Log.v("===JSON===",al.get(i));
+	                }
 				} catch (Exception e) {
 					Log.e(TAG, "Cannot add HR to ArrayList");
 				}
@@ -340,16 +333,15 @@ public class AccessoryService extends SAAgent {
                 public void run() {
                     try {
                         mConnectionHandler.send(CHANNEL_ID_SETTING, message.getBytes());
-                        Log.e(TAG, message);
+                        Log.v(TAG, message);
                     } catch (IOException e) {
-                        Log.e(TAG, "==Cannot Send data to Gear==");
+                        Log.e(TAG, "==Cannot Send time data to Gear==");
                         e.printStackTrace();
                     }
                 }
             }).start();
             
         }else{
-            
             Log.e(TAG, "mConnectionHandler null");
         }
     }

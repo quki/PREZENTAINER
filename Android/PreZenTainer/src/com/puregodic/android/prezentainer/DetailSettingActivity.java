@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +23,8 @@ public class DetailSettingActivity extends AppCompatActivity {
     public static int incrementID = 0;
     public static ArrayList<String> timeInterval = new ArrayList<String>();
     public static ArrayList<EditText> editTextArr = new ArrayList<EditText>();
+    public static final int REQUEST_DETAIL = 3;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
@@ -113,17 +116,24 @@ public class DetailSettingActivity extends AppCompatActivity {
        
        
        //최종 결정된 time interval들을 입력하는 최종확인 버튼
-       btnResult.setOnClickListener(new Button.OnClickListener() {
-          public void onClick(View v) {
-             for (int i = 0; i < editTextArr.size(); i++) {
-                //사용자가 입력한 슬라이드시간 timeInteval에 입력
-                timeInterval.add(editTextArr.get(i).getText().toString());
-                
-                Log.i("timeInterval", "tI size : " + timeInterval.size() +
-                      "  tIvalue : " + timeInterval.get(i));
-             }
-          }
-       });
+        btnResult.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                for (int i = 0; i < editTextArr.size(); i++) {
+                    // 사용자가 입력한 슬라이드시간 timeInteval에 입력
+                    timeInterval.add(editTextArr.get(i).getText().toString());
+
+                    Log.i("timeInterval", "tI size : " + timeInterval.size() + "  tIvalue : "
+                            + timeInterval.get(i));
+
+                }
+
+                //Intent intent = new Intent(DetailSettingActivity.this, SettingActivity.class);
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("timeInterval", timeInterval);
+                setResult(REQUEST_DETAIL, intent);
+                finish();
+            }
+        });
        
     }
     

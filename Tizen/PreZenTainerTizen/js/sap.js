@@ -6,7 +6,7 @@ var mSAAgent,
     transferId = 0;
 var mTimeInterval = 0;
 
-//Initialize File Transfer 
+// Initialize File Transfer 
 function ftInit(successCb, errorCb) {
   if (mSAAgent == null) {
     errorCb({
@@ -153,19 +153,27 @@ connectionListener = {
              updateConnection();
              var onConnectionLost,
                  dataOnReceive;
-             mSASocket = socket;
-             console.log('SASocket is initialize');
              
+             mSASocket = socket;
+             console.log('SASocket is initialized');
+             
+             // 연결이 끊겼을 때
+             onConnectionLost = function onConnectionLost (reason) {
+               isConnect = false;
+               updateConnection();
+               console.error("Service Connection disconnected due to following reason: " + reason);
+             };
+             mSASocket.setSocketStatusListener(onConnectionLost);
+             
+             // Data를 받을 때
              dataOnReceive = function dataOnReceive(channelId,data){
-               if(data !== null){
-                 mTimeInterval = Number(data);
-                 console.log('data : '+ data);
-                 updateAfterOnReceivce();
-               }else{
-                 mTimeInterval = 0;
-                 console.log('data : '+ data);
-                 updateAfterOnReceivce();
-               }
+             try {
+                   mTimeInterval = Number(data);
+                   console.log('data : '+ data);
+                   updateAfterOnReceivce();
+            } catch (e) {
+                   console.error('dataOnReceive Error reason : '+ e);
+            }
              }
              mSASocket.setDataReceiveListener(dataOnReceive);
          },

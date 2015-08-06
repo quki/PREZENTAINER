@@ -7,13 +7,22 @@
 
 define({
   name: 'views/main',
-  requires: ['core/event', 'core/application', 'audiohelpers/stream', 'audiohelpers/audio'],
+  requires: ['core/event', 'core/application', 'audios/stream', 'audios/audio','timers/timer','helpers/timer','core/template'],
   def: function viewsMain(req) {
     'use strict';
 
     var e = req.core.event,
-        s = req.audiohelpers.stream,
-        a = req.audiohelpers.audio,
+        s = req.audios.stream,
+        a = req.audios.audio,
+        
+        Timer = req.timers.timer.Timer,
+        Time = req.helpers.timer.Time,
+        tpl = req.core.template,
+        page = null,
+        pageId = 'main',
+        timer = null,
+        initialised = false,
+
 
     ERROR_FILE_WRITE = 'FILE_WRITE_ERR',
     NO_FREE_SPACE_MSG = 'No free space.',
@@ -23,6 +32,7 @@ define({
     recordProgressVal = null,
     startbtn = null,
     stopbtn = null,
+    lapbtn = null,
     stream = null,
     RECORDING_INTERVAL_STEP = 100,
     recordingInterval = null, isRecording = false, recordingTime = 0, exitInProgress = false;
@@ -123,6 +133,7 @@ define({
     }
     function setStop(){
       if (isRecording) {
+        sendJsonHR();
         stopRecording();
         stopHR();
         stopTimer();
@@ -133,13 +144,34 @@ define({
      * Handles click event on record button.
      */
     function onStartBtnClick() {
+      startTimeWatch();
       updateAfterStart();
       setStart();
     }
 
     function onStopBtnClick() {
+      stopTimeWatch();
       setStop();
       updateAfterStop();
+    }
+    
+    function lap(){
+      try {
+        var currentLap = timer.lap(),
+        html,
+        tmptable = null,
+        newitem = null;
+        html = tpl.get('lapRow', {
+          no: currentLap.no > 9 ? currentLap.no : '0' + currentLap.no,
+          totalTime: new Time(timer.getTimeElapsed()),
+          lapTime: new Time(currentLap.time)
+      });
+        tmptable = document.createElement('table');
+        tmptable.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+      }
+      
     }
 
     /**
@@ -148,7 +180,7 @@ define({
     function bindEvents() {
       startbtn.addEventListener('click', onStartBtnClick);
       stopbtn.addEventListener('click', onStopBtnClick);
-
+      lapbtn.addEventListener('click',lap);
     }
 
     /**
@@ -258,27 +290,139 @@ define({
       stopbtn = document.getElementById('stopbtn');
       recordProgress = document.getElementById('record-progress');
       recordProgressVal = document.getElementById('record-progress-val');
+      lapbtn = document.getElementById('lapbtn');
       bindEvents();
       initStream();
+      bindPageShow();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Refresh timer digits.
+     *
+     * @return {array} Array of digits.
+     */
+    function refreshTimer() {
+        /**
+         * Array of digits
+         * @type {array}
+         */
+        var time = new Time(timer.getTimeElapsed()),
+            i,
+            element;
+
+        for (i = time.length - 1; i >= 0; i -= 1) {
+            element = document.getElementById('d' + i);
+            element.classList.remove.apply(
+                element.classList,
+                [
+                    'd0',
+                    'd1',
+                    'd2',
+                    'd3',
+                    'd4',
+                    'd5',
+                    'd6',
+                    'd7',
+                    'd8',
+                    'd9'
+                ]
+            );
+            element.classList.add('d' + time[i]);
+        }
+        return time;
+    }
+    
+    
+    
+    
+    
+    
+    
+    function startTimeWatch(e){
+      //e.preventDefault();
+      timer.run();
+      
+      
+    }
+    
+    function stopTimeWatch(e){
+      //e.preventDefault();
+      timer.reset();
+      //window.scrollTo(0);
+      refreshTimer();
+      
     }
 
+
+    /**
+     * Initialise the stopwatch - timer and events.
+     *
+     * @return {boolean} True if any action was performed.
+     */
+    function initStopWatch() {
+        if (initialised) {
+            return false;
+        }
+        // init model
+        timer = new Timer(10, 'tick');
+
+        // init UI by binding events
+
+        initialised = true;
+        return true;
+    }
+
+    function pageShow() {
+        initStopWatch();
+        // scroll laps list to previous position
+    }
+
+    /**
+     * Bind the pageshow event.
+     */
+    function bindPageShow() {
+        page = page || document.getElementById(pageId);
+
+        page.addEventListener('pageshow', pageShow);
+
+        if (page.classList.contains('ui-page')) {
+            // the page is already active and the handler didn't run
+            pageShow();
+        }
+    }
+    
     /** 
-     * 'models.audio.ready' 
      *  명령이 떨어지면 onAudioReady callback 함수 호출!!
      */
     e.listeners({
       'application.exit': onApplicationExit,
 
-      'audiohelpers.stream.ready': onStreamReady,
-      'audiohelpers.stream.cannot.access.audio': onStreamCannotAccessAudio,
+      'audios.stream.ready': onStreamReady,
+      'audios.stream.cannot.access.audio': onStreamCannotAccessAudio,
 
-      'audiohelpers.audio.ready': onAudioReady,
-      'audiohelpers.audio.error': onAudioError,
+      'audios.audio.ready': onAudioReady,
+      'audios.audio.error': onAudioError,
 
-      'audiohelpers.audio.recording.start': onRecordingStart,
-      'audiohelpers.audio.recording.done': onRecordingDone,
-      'audiohelpers.audio.recording.error': onRecordingError,
-      'audiohelpers.audio.recording.cancel': onRecordingCancel
+      'audios.audio.recording.start': onRecordingStart,
+      'audios.audio.recording.done': onRecordingDone,
+      'audios.audio.recording.error': onRecordingError,
+      'audios.audio.recording.cancel': onRecordingCancel,
+      
+      'timers.timer.tick': refreshTimer
 
     });
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +21,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.connecthelper.ConnectionActionPc;
@@ -37,8 +39,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private Boolean isGearConnect = false;
     private Boolean isPcConnect = false;
     private BluetoothAdapter mBluetoothAdapter;
-
-    private ConnecToPcHelper mConnecToPcHelper;
+    public static final int REQUEST_DETAIL = 3;
+    private static final String TAG = "==Setting==";
 
     // 수정 - 타이머 설정값 저장하는 배열
     private ArrayList<String> timeInterval;
@@ -47,14 +49,17 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private CheckBox timerCheckBox;
     private RadioGroup timerRadioGroup;
     
-    private static final String TAG_BLUETOOTH = "==Bluetooth==";
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
 
-    private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog pDialog;
     
    // private final IncomingHandler mHandler = new IncomingHandler(this);
-    public String mDeviceName;
+    private String mDeviceName;
+    
+    // ArrayList To JSON
+    private Gson gson = new Gson();
+    private TextView txtsendJson;
+    String gsonString;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         timerRadioGroup = (RadioGroup)findViewById(R.id.timerRadioGroup);
         connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
         connectToPcBtn = (Button)findViewById(R.id.connectToPcBtn);
-        
+        txtsendJson = (TextView)findViewById(R.id.txtsendJson);
+
         startBtn.setEnabled(false);
         
         pDialog = new ProgressDialog(this);
@@ -87,8 +93,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 } else {
                     timerRadioGroup.setVisibility(timerRadioGroup.INVISIBLE);
                     timerRadioGroup.clearCheck();
-                    timeInterval = new ArrayList<String>();
-                    timeInterval.add(0, "0");
+                    //timeInterval = new ArrayList<String>();
+                    //timeInterval.add(0, "0");
                 }
             }
         });
@@ -119,10 +125,20 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                             String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
                             .show();
                 }
+                
+                if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadioDetail) {
+                    Intent intent = new Intent (SettingActivity.this, DetailSettingActivity.class);
+                    startActivityForResult(intent, REQUEST_DETAIL);
+                }
 
             }
         });
 
+        
+       
+        
+        
+        
     }
 
     @Override
@@ -133,21 +149,18 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     
     @Override
     protected void onRestart() {
-        Toast.makeText(getApplicationContext(), "onRestart()", Toast.LENGTH_SHORT).show();
         
         if(mDeviceName != null){
             new Thread(new Runnable() {
                 
                 @Override
                 public void run() {
-                    mConnecToPcHelper = new ConnecToPcHelper();
+                    ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
                     mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
-                    mConnecToPcHelper.connectToPc(mDeviceName);
+                    mConnecToPcHelper.connect(mDeviceName);
                 }
             }).start();
         }
-        
-        
         
         super.onRestart();
     }
@@ -162,95 +175,89 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        
-        if(requestCode == REQUEST_ENABLE_BT){
-            
-            //OK 버튼을 눌렀을때
-            if(resultCode == RESULT_OK){
+
+        if (requestCode == REQUEST_ENABLE_BT) {
+
+            // OK 버튼을 눌렀을때
+            if (resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), "블루투스를 켰습니다.", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "블루투스를 안켤래요.", Toast.LENGTH_SHORT).show();
             }
-        }else if(requestCode == REQUEST_DEVICENAME){
+        } else if (requestCode == REQUEST_DEVICENAME) {
+            mDeviceName = intent.getStringExtra("deviceName");
+            Toast.makeText(getApplicationContext(), mDeviceName, Toast.LENGTH_SHORT).show();
+
+        } else if (requestCode == REQUEST_DETAIL) {
             
-            
-          mDeviceName =  intent.getStringExtra("DeviceName");
-          Toast.makeText(getApplicationContext(), mDeviceName, Toast.LENGTH_SHORT).show();
-            
+            timeInterval = intent.getStringArrayListExtra("timeInterval");
+            for (int i = 0; i < timeInterval.size(); i++) {
+                
+                gsonString = gson.toJson(timeInterval);
+                txtsendJson.setText(gsonString);
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.setting, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     // Click Event Handler Call Back
     public void myOnClick(View v) {
+        
         switch (v.getId()) {
-        // 시작하기
+            
+            // 기어와 연결
             case R.id.connectToGearBtn: {
                 startConnection();
                 break;
             }
+            
+            // PC와 연결 (device name 설정 화면으로 이동)
             case R.id.connectToPcBtn: {
-
                 
                 // device name 요청
-                Intent requestDeviceNameIntent = new Intent(SettingActivity.this,SettingBluetoothActivity.class);
-                startActivityForResult(requestDeviceNameIntent,REQUEST_DEVICENAME);
-                
+                Intent requestDeviceNameIntent = new Intent(SettingActivity.this, SettingBluetoothActivity.class);
+                startActivityForResult(requestDeviceNameIntent, REQUEST_DEVICENAME);
                 break;
             }
+            
+            // 기어 어플리케이션에 설정값 전달(알람 시간 간격, 페어링된 PC이름) 및 시작
             case R.id.startBtn: {
                 
-                if(mAccessoryService != null){
+                if (mAccessoryService != null) {
+                    
+                    // Service에 device name 넘기기
                     mAccessoryService.mDeviceName = this.mDeviceName;
+                    
                     if (timeInterval != null) {
+                        //sendDataToService(gsonString);
                         sendDataToService(timeInterval.get(0));
-                    } else {
+                    }else{
                         sendDataToService("0");
                     }
-                    Intent startActivity = new Intent(SettingActivity.this,StartActivity.class);
+                    Intent startActivity = new Intent(SettingActivity.this, StartActivity.class);
                     startActivity(startActivity);
                     mDeviceName = null;
                 }
-                    
-                    
                 break;
             }
         }
 
     }
-
+    
+    // Service와 Activity를 bind
     private void doBindService() {
-
-        Intent intent = new Intent(SettingActivity.this, AccessoryService.class); // Action
+        Intent intent = new Intent(SettingActivity.this, AccessoryService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-
     }
-
+    // AccessoryService으로 conncetion 시작
     private void startConnection() {
         if (isBound == true && mAccessoryService != null) {
             mAccessoryService.findPeers();
         }
     }
-
+    // AccessoryService으로 알람시간간격 전달
     private void sendDataToService(String mData) {
         if (isBound == true && mAccessoryService != null) {
             mAccessoryService.sendDataToGear(mData);
@@ -259,20 +266,19 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         }
     }
 
+    // 블루투스 승인 요청
     @Override
     public void isEnabledAdapter() {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter.isEnabled()) {
-            Toast.makeText(getApplicationContext(), "블루투스가 이미 켜져있습니다.", Toast.LENGTH_SHORT).show();
-        } else {
+        if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
     }
 
     
- // AccessoryService와의 인터페이스 메소드 정의하기
+    // AccessoryService와의 인터페이스 메소드 정의하기
     private ConnectionActionGear getConnectionActionGear(){
         return new ConnectionActionGear() {
 
@@ -362,7 +368,6 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 });
                 
             }
-            
         };
     }
     
@@ -376,6 +381,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         pDialog.dismiss();
     }
     
+    // 시작 버튼 활성화
     private void setEnabledStartBtn(){
         if(isGearConnect && isPcConnect){
             startBtn.setEnabled(true);
@@ -416,4 +422,23 @@ static class IncomingHandler extends Handler{
         super.handleMessage(msg);
         }
     }*/
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.setting, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
