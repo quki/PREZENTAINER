@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
+	
+
+
+	// ÀÌ°Ç ±èÇü°ï
 
 	Button homeStartBtn, homeLoadBtn;
 
