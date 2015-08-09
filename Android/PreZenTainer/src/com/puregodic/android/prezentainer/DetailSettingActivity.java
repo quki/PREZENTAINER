@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 public class DetailSettingActivity extends AppCompatActivity {
     
+    // Detail Setting Activity
     public static int incrementID = 0;
     public static ArrayList<String> timeInterval = new ArrayList<String>();
     public static ArrayList<EditText> editTextArr = new ArrayList<EditText>();
