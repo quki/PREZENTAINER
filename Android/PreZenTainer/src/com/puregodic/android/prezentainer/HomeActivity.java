@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 
-		// i am darkstars77 kkkkkkkkkkkkkkk
 		// how are you?
                 // shut up
 	Button homeStartBtn, homeLoadBtn;
