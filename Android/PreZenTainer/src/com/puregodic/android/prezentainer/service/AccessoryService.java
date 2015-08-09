@@ -2,6 +2,7 @@ package com.puregodic.android.prezentainer.service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +11,14 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
-import com.puregodic.android.prezentainer.network.MyAsyncTask;
+import com.puregodic.android.prezentainer.network.AppController;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
 import com.samsung.android.sdk.accessory.SAAgent;
@@ -36,19 +42,21 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	public static final int CHANNEL_ID_EVENTTIME = 114;
-	public String mDeviceName;
+	public String mDeviceName,mPtTittle;
+	private String jsonHR;
+	private String jsonET;
 	
+	private Boolean isGearConnected =false;
 	
-	// ???????????????????
 	public AccessoryService() {
 		super("AccessoryService", AccessoryServiceConnection.class);
 	}
 	
-	// File Action Interface Initialize
+	// FileAction Interface Initialize
     public void registerFileAction(FileAction mFileAction) {
         this.mFileAction = mFileAction;
     }
-    // Connection Action (Gear) Interface Initailize
+    // ConnectionAction (Gear) Interface Initailize
     public void registerConnectionAction(ConnectionActionGear mConnectionAction){
         this.mConnectionAction = mConnectionAction;
     }
@@ -57,15 +65,11 @@ public class AccessoryService extends SAAgent {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.e(TAG, "===onCreat()===");
 		mContext = getApplicationContext();
-		Toast.makeText(mContext, "OnCreat()", Toast.LENGTH_SHORT)
-				.show();
 		
-		
+		// Initialize SAP and catch the error
 		SA sa = new SA();
 		try {
-			// Initialize Accessory
 			sa.initialize(this);
 		} catch (SsdkUnsupportedException e) {
 			if (e.getType() == SsdkUnsupportedException.DEVICE_NOT_SUPPORTED) {
@@ -103,15 +107,16 @@ public class AccessoryService extends SAAgent {
 					mFileAction.onFileActionTransferRequested(transId, fileName); 
 					//put data into FileAction Interface
 				} else {
-					Log.e(TAG, "Activity is not up, invoke activity");
+					Log.d(TAG, "Activity is not up, invoke activity");
 					mContext.startActivity(new Intent()
 							.setClass(mContext,
 									FileTransferRequestedActivity.class)
 							.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-							.setAction("incomingFT").putExtra("tx", transId)
+							.setAction("incomingFT")
+							.putExtra("tx", transId)
 							.putExtra("fileName", fileName));
 					
-					//??????????????????????????????????????????????????????
+					// 5초 이내에 응답을 해야한다
 					int counter = 0;
 					while (counter < 10) {
 						counter++;
@@ -141,12 +146,45 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
 				
-				Log.e(TAG, "===onTransferCompleted: tr id : " + transId
-						+ " file name : " + fileName + " error : " + errCode);	
-				
+				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
+					
+					
+					StringRequest str = new StringRequest(Method.POST,"http://cyh1704.dothome.co.kr/tizen/wow.php",
+                            new Response.Listener<String>() {
+
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, response.toString());
+                        }
+                    },      new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        }
+                    }){
+
+                        @Override
+                        protected Map<String, String> getParams() {
+                            // Posting params to register url
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("txtName", mPtTittle);
+                            params.put("txtName", jsonHR);
+                            params.put("txtTel", jsonET);
+                            return params;
+                        }
+                        
+                        
+                    };
+             
+                    // Adding request to request queue
+                    AppController.getInstance().addToRequestQueue(str, TAG);
+                    
+					
 				} else {
+				    Log.e(TAG, "Transfer error, errCode : "+errCode);
 					mFileAction.onFileActionError();
 				}
 			}
@@ -156,30 +194,25 @@ public class AccessoryService extends SAAgent {
 		mSAFileTransfer = new SAFileTransfer(AccessoryService.this, ftEventCallBack);
 	}
 
-	@Override
-	public void onDestroy() {
-		Toast.makeText(mContext, "onDestroy()", Toast.LENGTH_SHORT).show();
-		closeConnection();
-		super.onDestroy();
-	}
+	
+	// PeerAgent를 찾았을 때
 	@Override
     protected void onFindPeerAgentResponse(SAPeerAgent peerAgent, int result) {
-        //내가 찾는다 !!
                 if (result == PEER_AGENT_FOUND) {
-                    Log.e(TAG, "===onFindPeerAgentResponse=== : peerAgent = " + peerAgent);
+                    Log.d(TAG, "onFindPeerAgentResponse : peerAgent = " + peerAgent);
                     onPeerAgentFound(peerAgent);
                 }else{
-                    Log.e(TAG, "===onFindPeerAgentResponse=== : result = " + result);
+                    Log.e(TAG, "onFindPeerAgentResponse : result = " + result);
                 }
     }
 	
 	
-    // peer찾고 service connection request에 대한 대답(거절이나 승낙)
+    // PeerAgent찾고 service connection request에 대한 대답(거절이나 승낙)
 	@Override
-	public void onServiceConnectionResponse(SAPeerAgent peerAgent,
-			SASocket socket, int result) {
+	public void onServiceConnectionResponse(SAPeerAgent peerAgent, SASocket socket, int result) {
 		if (result == SAAgent.CONNECTION_SUCCESS) {
-			
+		    
+		    isGearConnected = true;
 			mConnectionAction.onConnectionActionComplete();
 			if (socket != null) {
 				mConnectionHandler = (AccessoryServiceConnection) socket;
@@ -189,34 +222,33 @@ public class AccessoryService extends SAAgent {
 				// Connection ID 생성
 				mConnectionHandler.mConnectionId = (int) (System.currentTimeMillis() & 255);
 
-				Log.e(TAG, "===onServiceConnection connectionID = "
-						+ mConnectionHandler.mConnectionId);
-
 				mConnectionsMap.put(mConnectionHandler.mConnectionId, mConnectionHandler);
-				Log.e(TAG, "===Service Connection Success===");
-				Toast.makeText(mContext, "Connection완료 !!", Toast.LENGTH_SHORT).show();
-				
-				// Connection Success and Initialize Socket
+				Log.d(TAG, "Connection  Success");
+				Toast.makeText(mContext, "Connection 완료 !!", Toast.LENGTH_SHORT).show();
 				
 			} else {
-				Log.e(TAG, "===SASocket object is null===");
+				Log.e(TAG, "SASocket object is null");
 			}
 		}else if(result == SAAgent.CONNECTION_ALREADY_EXIST){
-			
+		    
+		    mConnectionAction.onConnectionActionComplete();
 			Toast.makeText(mContext, "이미 연결되있습니다.", Toast.LENGTH_SHORT).show();
-			Log.e(TAG, "===CONNECTION_ALREADY_EXIST===");
-			mConnectionAction.onConnectionActionComplete();
+			Log.w(TAG, "CONNECTION_ALREADY_EXIST");
+			
 			
 		}else if(result == SAAgent.CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE){
-			Toast.makeText(mContext, "기어측 어플로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show();
-			Log.e(TAG, "===CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE===");
-			//mConnectionAction.onConnectionActionNoResponse();
+		    if( !isGearConnected ){
+		        Toast.makeText(mContext, "기어측 어플로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show();
+	            Log.w(TAG, "CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE");
+	            mConnectionAction.onConnectionActionNoResponse();
+		    }
+			
 		}
 	}
 	
 	@Override
     protected void onError(SAPeerAgent peerAgent, String str, int i) {
-        Log.e("==onError==", peerAgent +"==="+str+"==="+i);
+        Log.e(TAG, peerAgent +"==="+str+"==="+i);
         super.onError(peerAgent, str, i);
     }
 
@@ -239,7 +271,6 @@ public class AccessoryService extends SAAgent {
 	public class AccessoryServiceConnection extends SASocket {
 		private int mConnectionId;
 
-		// ???????????????????????
 		public AccessoryServiceConnection() {
 			super(AccessoryServiceConnection.class.getName());
 		}
@@ -253,8 +284,7 @@ public class AccessoryService extends SAAgent {
 
 		@Override
 		public void onReceive(int channelId, byte[] data) {
-			String fromGearMessage = "";
-			// MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
+		    
 			if (channelId == CHANNEL_ID_EVENT) {
 
 				new Thread(new Runnable() {
@@ -271,16 +301,15 @@ public class AccessoryService extends SAAgent {
 				}).start();
 			}else if (channelId == CHANNEL_ID_HR) {
 			    
-				fromGearMessage = new String(data);
-				MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
-				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });
+			    jsonHR = new String(data);
+			    
+				/*MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
+				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });*/
 				
 			}else if (channelId == CHANNEL_ID_EVENTTIME){
 			    
-			        fromGearMessage = new String(data);
-                    // JSON Array to ArrayList
-                    //ArrayList<String> al = new Gson().fromJson(fromGearMessage, new TypeToken<ArrayList<String>>(){}.getType());
-			        Log.v(TAG, fromGearMessage);
+			       jsonET = new String(data);
+			        
 			}
 
 		}
@@ -295,9 +324,9 @@ public class AccessoryService extends SAAgent {
 	
 	// Find PeerAgent
     public void findPeers() {
-        
         findPeerAgents();
-        Log.e(TAG, "==Finding Peer==");
+        Log.d(TAG, "findPeerAgents...");
+        mConnectionAction.onConnectionActionFindingPeerAgent();
     }
 
     // PeerAgent Found
@@ -311,7 +340,7 @@ public class AccessoryService extends SAAgent {
         if (mSAFileTransfer != null) {
             if (bAccept) {
                 mSAFileTransfer.receive(transId, path);
-                Log.e(TAG, "===Receive file PATH === : "+path);
+                Log.d(TAG, "Receive file PATH : "+path);
             } else {
                 mSAFileTransfer.reject(transId);
             }
@@ -329,7 +358,7 @@ public class AccessoryService extends SAAgent {
                         mConnectionHandler.send(CHANNEL_ID_SETTING, message.getBytes());
                         Log.v(TAG, message);
                     } catch (IOException e) {
-                        Log.e(TAG, "==Cannot Send time data to Gear==");
+                        Log.e(TAG, "Cannot Send time data to Gear");
                         e.printStackTrace();
                     }
                 }
@@ -363,11 +392,18 @@ public class AccessoryService extends SAAgent {
     // Socket Close
     public boolean closeConnection() {
         if (mConnectionHandler != null) {
+            isGearConnected = false;
+            Log.d(TAG, "Connection Close");
             mConnectionHandler.close();
             mConnectionHandler = null;
         }
         return true;
     }
-	
+    
+    @Override
+    public void onDestroy() {
+        closeConnection();
+        super.onDestroy();
+    }
 	
 }

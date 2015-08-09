@@ -21,7 +21,7 @@ public class ConnecToPcHelper {
     private BluetoothDevice targetDevice = null;
     private BluetoothSocket mBluetoothSocket = null;
 
-    private static final String TAG = "==EventToPc==";
+    private static final String TAG = "==EVENTOPC==";
 
     private ConnectionActionPc mConnectionActionPc;
 

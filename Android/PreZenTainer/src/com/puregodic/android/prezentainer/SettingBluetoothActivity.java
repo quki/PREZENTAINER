@@ -114,7 +114,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     @Override
     protected void onDestroy() {
         // unregister the BroadcastReceiver
-        unregisterReceiver(mBroadcastReceiver);
+        //unregisterReceiver(mBroadcastReceiver);
         super.onDestroy();
     }
 

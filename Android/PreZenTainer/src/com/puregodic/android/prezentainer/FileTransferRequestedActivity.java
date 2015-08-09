@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.service.AccessoryService;
@@ -35,6 +36,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 	    private String mFilePath;
 	    private AlertDialog mAlert;
 	    private ProgressBar progressBar;
+	    private TextView fileTransferStatus;
 	    private AccessoryService mAccessoryService;
 
 	@Override
@@ -45,6 +47,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 		isUp = true;
         mCtxt = getApplicationContext();
 
+        fileTransferStatus = (TextView)findViewById(R.id.fileTransferStatus);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(100);
         
@@ -123,7 +126,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                         if (mAlert != null && mAlert.isShowing()) {
                             mAlert.dismiss();
                         }
-                        Toast.makeText(mCtxt, "Transfer cancelled " + "Error", Toast.LENGTH_SHORT).show();
+                        fileTransferStatus.setText("전송 중 오류가 발생했습니다.");
                         progressBar.setProgress(0);
                     }
                 });
@@ -134,6 +137,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        fileTransferStatus.setText("전송 중 입니다... "+progress+" / 100");
                     	progressBar.setProgress((int) progress);
                     }
                 });
@@ -144,9 +148,9 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        fileTransferStatus.setText("전송 완료 !\n"+ DEST_DIRECTORY );
                         progressBar.setProgress(0);
                         mAlert.dismiss();
-                        Toast.makeText(mCtxt, "Receive Completed!", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
@@ -167,18 +171,20 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
         };
     }
     
+    
+    // ServiceConnection 객체 생성, interface를 통해서
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "===Service connected===");
+            Log.d(TAG, "Service connected");
             mAccessoryService = ((MyBinder) service).getService();
             mAccessoryService.registerFileAction(getFileAction());
         }
         
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.i(TAG, "===Service disconnected===");
+            Log.e(TAG, "Service disconnected");
             mAccessoryService = null;
         }
     };

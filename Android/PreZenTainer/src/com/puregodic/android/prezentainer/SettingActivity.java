@@ -7,18 +7,25 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +42,11 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private AccessoryService mAccessoryService = null;
 
     private Boolean isBound = false;
-    private Boolean isGearConnect = false;
-    private Boolean isPcConnect = false;
+    private Boolean isGearConnected = false;
+    private Boolean isPcConnected = false;
     private BluetoothAdapter mBluetoothAdapter;
     public static final int REQUEST_DETAIL = 3;
-    public static final int REQUEST_DISCOVERABLE_BT = 4;
-    private static final String TAG = "==Setting==";
+    private static final String TAG = "==SETTING ACTIVITY==";
 
     // 수정 - 타이머 설정값 저장하는 배열
     private ArrayList<String> timeInterval;
@@ -48,13 +54,15 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private Button connectToGearBtn,connectToPcBtn,startBtn;
     private CheckBox timerCheckBox;
     private RadioGroup timerRadioGroup;
+    private TextView ptTittle;
+    private LinearLayout rootView;
     
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
 
     private ProgressDialog pDialog;
     
    // private final IncomingHandler mHandler = new IncomingHandler(this);
-    private String mDeviceName;
+    private String mDeviceName ;
     
     // ArrayList To JSON
     private Gson gson = new Gson();
@@ -75,8 +83,23 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
         connectToPcBtn = (Button)findViewById(R.id.connectToPcBtn);
         txtsendJson = (TextView)findViewById(R.id.txtsendJson);
-
-        startBtn.setEnabled(false);
+        connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
+        ptTittle = (EditText)findViewById(R.id.ptTittle);
+        rootView = (LinearLayout)findViewById(R.id.rootView);
+        
+        // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ptTittle.clearFocus();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return false;
+            }
+        });
+        
+        //startBtn.setEnabled(false);
         
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("기다려주세요...");
@@ -103,7 +126,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         timerRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // TODO Auto-generated method stub
+
+                
+                // 5분마다
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio5) {
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("5");
@@ -111,6 +136,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                             String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
                             .show();
                 }
+                // 10분마다
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio10) {
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("10");
@@ -118,6 +144,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                             String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
                             .show();
                 }
+                // 15분마다
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio15) {
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("15");
@@ -125,7 +152,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                             String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
                             .show();
                 }
-                
+                // 개인 설정
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadioDetail) {
                     Intent intent = new Intent (SettingActivity.this, DetailSettingActivity.class);
                     startActivityForResult(intent, REQUEST_DETAIL);
@@ -134,11 +161,6 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             }
         });
 
-        
-       
-        
-        
-        
     }
 
     @Override
@@ -196,15 +218,11 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 txtsendJson.setText(gsonString);
             }
 
-        }else if(requestCode == REQUEST_DISCOVERABLE_BT){
-            
-            
-            
-            
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
+    
 
     // Click Event Handler Call Back
     public void myOnClick(View v) {
@@ -224,27 +242,66 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 Intent requestDeviceNameIntent = new Intent(SettingActivity.this, SettingBluetoothActivity.class);
                 startActivityForResult(requestDeviceNameIntent, REQUEST_DEVICENAME);
                 break;
+                
             }
             
             // 기어 어플리케이션에 설정값 전달(알람 시간 간격, 페어링된 PC이름) 및 시작
             case R.id.startBtn: {
+               final String mPtTittle =   ptTittle.getText().toString().trim();
                 
-                if (mAccessoryService != null) {
+                // 프레젠테이션 제목을 기입한 경우
+                if(!TextUtils.isEmpty(mPtTittle)){
                     
-                    // Service에 device name 넘기기
-                    mAccessoryService.mDeviceName = this.mDeviceName;
-                    
-                    if (timeInterval != null) {
-                        //sendDataToService(gsonString);
-                        sendDataToService(timeInterval.get(0));
-                    }else{
-                        sendDataToService("0");
-                    }
-                    Intent startActivity = new Intent(SettingActivity.this, StartActivity.class);
-                    startActivity(startActivity);
-                    mDeviceName = null;
+                    // AlertDialog
+                    AlertDialog.Builder mAlertBuilder = new AlertDialog.Builder(
+                            SettingActivity.this);
+                    mAlertBuilder.setTitle(mPtTittle)
+                            .setMessage( "발표를 시작하시겠습니까?")
+                            .setCancelable(false)
+                            .setPositiveButton("시작하기", new DialogInterface.OnClickListener() {
+                                // 시작하기 버튼 클릭시 설정
+                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                    if(mDeviceName != null && mAccessoryService != null){
+                                        
+                                        
+                                        // Service에 device name, ppt tittle 넘기기
+                                        mAccessoryService.mDeviceName = mDeviceName;
+                                        mAccessoryService.mPtTittle = mPtTittle;
+                                        
+                                        if (timeInterval != null) {
+                                            //sendDataToService(gsonString);
+                                            sendDataToService(timeInterval.get(0));
+                                        }else{
+                                            sendDataToService("0");
+                                        }
+                                        Intent startActivity = new Intent(SettingActivity.this, StartActivity.class);
+                                        startActivity(startActivity);
+                                        mDeviceName = null;
+                                        
+                                        
+                                    }else{
+                                        
+                                        finish();
+                                        Toast.makeText(SettingActivity.this, "설정을 다시 진행해주세요.",Toast.LENGTH_SHORT).show();
+                                    }
+                                    
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                // 취소 버튼 클릭시 설정
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog dialog = mAlertBuilder.create();
+
+                    dialog.show();
+                 
+                 // 프레젠테이션 제목을 기입하지 않은 경우
+                }else{
+                        Toast.makeText(SettingActivity.this, "프레젠테이션 제목을 반드시 기입하세요", Toast.LENGTH_SHORT).show();
                 }
-                break;
             }
         }
 
@@ -287,6 +344,17 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         return new ConnectionActionGear() {
 
             @Override
+            public void onConnectionActionFindingPeerAgent() {
+               runOnUiThread(new Runnable() {
+                
+                @Override
+                public void run() {
+                    connectToGearBtn.setText("기어와 폰의 블루투스 연결을 확인하세요");
+                }
+            });
+                
+            }
+            @Override
             public void onConnectionActionRequest() {
                 runOnUiThread(new Runnable() {
                     
@@ -305,7 +373,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     @Override
                     public void run() {
                         hidepDialog();
-                        connectToGearBtn.setText("기어와의 연결을 다시 확인하세요");
+                        connectToGearBtn.setText("기어 측 어플이 실행되었는지 확인하세요");
                         
                     }
                 });
@@ -313,7 +381,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             @Override
             public void onConnectionActionComplete() {
                 
-                isGearConnect = true;
+                isGearConnected = true;
                 
                 runOnUiThread( new Runnable() {
                     public void run() {
@@ -347,7 +415,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             @Override
             public void onConnectionActionComplete() {
-                isPcConnect = true;
+                isPcConnected = true;
                 runOnUiThread(new Runnable() {
                     
                     @Override
@@ -367,7 +435,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     @Override
                     public void run() {
                         hidepDialog();
-                        connectToPcBtn.setText("PC와의 연결을 다시 확인하세요");
+                        connectToPcBtn.setText("PC 측 프로그램이 실행되었는지 확인하세요");
                     }
                 });
                 
@@ -387,7 +455,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     
     // 시작 버튼 활성화
     private void setEnabledStartBtn(){
-        if(isGearConnect && isPcConnect){
+        if(isGearConnected && isPcConnected){
             startBtn.setEnabled(true);
         }
     }
