@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PreZenTainer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_file_transfer_requested">FileTransferRequestedActivity</string>
+    <string name="title_activity_detail_setting">DetailSettingActivity</string>
+    <string name="title_activity_setting_bluetooth">SettingBluetoothActivity</string>
+
+</resources>
