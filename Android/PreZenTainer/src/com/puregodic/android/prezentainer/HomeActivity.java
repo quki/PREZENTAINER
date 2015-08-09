@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 
-		// how are you?
-                // shut up
 	Button homeStartBtn, homeLoadBtn;
 
 	@Override
@@ -22,7 +20,6 @@ public class HomeActivity extends AppCompatActivity {
 
 	}
 
-	// I am quki
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
