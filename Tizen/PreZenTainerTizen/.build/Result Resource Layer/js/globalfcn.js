@@ -15,14 +15,13 @@ var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
 // Event btn clicked
 function eventtopc() {
   try {
-	//소스추가
+	//코드수정
 	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)
 	if (mTimeInterval.length !== 0 && mTimeInterval.length > 1 && currentSlide < mTimeInterval.length) {
 		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000));
 		//이전 슬라이드 타이머설정 제거
 		clearTimeout(vibratingIntervalArr[currentSlide-1]);
 	}
-	
 	++currentSlide; //슬라이드 +1
 	//  
     mSASocket.sendData(CHANNELID_EVENT, "Current Slide : " + currentSlide);
@@ -85,7 +84,7 @@ function vibrator(){
 // Start Timer by given interval time
 function startTimer(){
   try {
-	//코드추가
+	//코드수정
     if(mTimeInterval.length !== 0){
     	//일정한 진동간격 일 때
     	if (mTimeInterval.length == 1) {
@@ -111,7 +110,7 @@ function stopTimer(){
   if(mTimeInterval !== 0){
 	//일정간격 초기화
     clearInterval(vibratingInterval);
-    //소스추가
+    //코드수정
     //슬라이드 개별설정 초기화
     for (var i = 0; i < vibratingIntervalArr.length; i++) {
         clearTimeout(vibratingIntervalArr[i]);

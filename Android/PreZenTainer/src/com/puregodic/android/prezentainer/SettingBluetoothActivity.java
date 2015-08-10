@@ -107,11 +107,9 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         IntentFilter deviveDiscoveryFinishedFilter = new IntentFilter(
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED); // 탐색을 끝냈을때
-        IntentFilter stateChanged = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         // 리시버와 intentfilter를 등록한다. 이는 해당 이벤트를 BroadcastReceiver로 통보하도록 요구!
         registerReceiver(mBroadcastReceiver, deviceFoundFilter);
         registerReceiver(mBroadcastReceiver, deviveDiscoveryFinishedFilter);
-        registerReceiver(mBroadcastReceiver, stateChanged);
         
         super.onPostCreate(savedInstanceState);
     }
@@ -123,6 +121,22 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, SettingActivity.REQUEST_ENABLE_BT);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        if (requestCode == REQUEST_ENABLE_BT) {
+
+            // OK 버튼을 눌렀을때
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(SettingBluetoothActivity.this, "블루투스를 켰습니다", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(SettingBluetoothActivity.this, "블루투스를 꼭 켜주세요", Toast.LENGTH_SHORT).show();
+            }
+        }
+        
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     // List Devices paired
