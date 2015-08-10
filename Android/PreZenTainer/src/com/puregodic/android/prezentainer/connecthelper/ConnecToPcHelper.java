@@ -123,7 +123,7 @@ public class ConnecToPcHelper {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                     mBluetoothSocket.getOutputStream());
-            outputStreamWriter.write("trans");
+            outputStreamWriter.write("right");
             outputStreamWriter.flush();
             Log.e(TAG, "===Write===");
         } catch (IOException e) {

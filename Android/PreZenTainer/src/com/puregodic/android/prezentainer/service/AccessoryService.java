@@ -35,7 +35,7 @@ public class AccessoryService extends SAAgent {
 	private SAFileTransfer mSAFileTransfer = null;
 	private EventListener ftEventCallBack;
 	private FileAction mFileAction;
-	private ConnectionActionGear mConnectionAction;
+	private ConnectionActionGear mConnectionActionGear;
 	HashMap<Integer, AccessoryServiceConnection> mConnectionsMap = null;
 	public AccessoryServiceConnection mConnectionHandler;
 	public static final int CHANNEL_ID_SETTING = 100;
@@ -57,8 +57,8 @@ public class AccessoryService extends SAAgent {
         this.mFileAction = mFileAction;
     }
     // ConnectionAction (Gear) Interface Initailize
-    public void registerConnectionAction(ConnectionActionGear mConnectionAction){
-        this.mConnectionAction = mConnectionAction;
+    public void registerConnectionAction(ConnectionActionGear mConnectionActionGear){
+        this.mConnectionActionGear = mConnectionActionGear;
     }
 	
 
@@ -203,6 +203,7 @@ public class AccessoryService extends SAAgent {
                     onPeerAgentFound(peerAgent);
                 }else{
                     Log.e(TAG, "onFindPeerAgentResponse : result = " + result);
+                    mConnectionActionGear.onFindingPeerAgentError();
                 }
     }
 	
@@ -213,7 +214,7 @@ public class AccessoryService extends SAAgent {
 		if (result == SAAgent.CONNECTION_SUCCESS) {
 		    
 		    isGearConnected = true;
-			mConnectionAction.onConnectionActionComplete();
+		    mConnectionActionGear.onConnectionActionComplete();
 			if (socket != null) {
 				mConnectionHandler = (AccessoryServiceConnection) socket;
 				if (mConnectionsMap == null) {
@@ -231,7 +232,7 @@ public class AccessoryService extends SAAgent {
 			}
 		}else if(result == SAAgent.CONNECTION_ALREADY_EXIST){
 		    
-		    mConnectionAction.onConnectionActionComplete();
+		    mConnectionActionGear.onConnectionActionComplete();
 			Toast.makeText(mContext, "이미 연결되있습니다.", Toast.LENGTH_SHORT).show();
 			Log.w(TAG, "CONNECTION_ALREADY_EXIST");
 			
@@ -240,7 +241,7 @@ public class AccessoryService extends SAAgent {
 		    if( !isGearConnected ){
 		        Toast.makeText(mContext, "기어측 어플로부터 응답이 없습니다.", Toast.LENGTH_SHORT).show();
 	            Log.w(TAG, "CONNECTION_FAILURE_PEERAGENT_NO_RESPONSE");
-	            mConnectionAction.onConnectionActionNoResponse();
+	            mConnectionActionGear.onConnectionActionError();
 		    }
 			
 		}
@@ -324,9 +325,9 @@ public class AccessoryService extends SAAgent {
 	
 	// Find PeerAgent
     public void findPeers() {
+        mConnectionActionGear.onFindingPeerAgent();
         findPeerAgents();
         Log.d(TAG, "findPeerAgents...");
-        mConnectionAction.onConnectionActionFindingPeerAgent();
     }
 
     // PeerAgent Found
@@ -379,9 +380,7 @@ public class AccessoryService extends SAAgent {
     public boolean establishConnection(SAPeerAgent peerAgent) {
         if (peerAgent != null) {
             // Request Service Connection
-            Toast.makeText(mContext,
-                    "기어에게 연결 요청을 보냈습니다.", Toast.LENGTH_SHORT).show();
-            mConnectionAction.onConnectionActionRequest();
+            mConnectionActionGear.onConnectionActionRequest();
             requestServiceConnection(peerAgent);
             return true;
         }

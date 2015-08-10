@@ -99,7 +99,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             }
         });
         
-        //startBtn.setEnabled(false);
+        startBtn.setEnabled(false);
         
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("기다려주세요...");
@@ -201,9 +201,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
             // OK 버튼을 눌렀을때
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "블루투스를 켰습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this, "블루투스를 켰습니다", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "블루투스를 안켤래요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this, "블루투스를 꼭 켜주세요", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == REQUEST_DEVICENAME) {
             mDeviceName = intent.getStringExtra("deviceName");
@@ -270,8 +270,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                         mAccessoryService.mPtTittle = mPtTittle;
                                         
                                         if (timeInterval != null) {
-                                            //sendDataToService(gsonString);
-                                            sendDataToService(timeInterval.get(0));
+                                            String timeJson = gson.toJson(timeInterval);
+                                            sendDataToService(timeJson);
+                                            //sendDataToService(timeInterval.get(0));
                                         }else{
                                             sendDataToService("0");
                                         }
@@ -343,17 +344,38 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private ConnectionActionGear getConnectionActionGear(){
         return new ConnectionActionGear() {
 
+            
+            // PeerAgent 찾는 중일 때
             @Override
-            public void onConnectionActionFindingPeerAgent() {
-               runOnUiThread(new Runnable() {
-                
-                @Override
-                public void run() {
-                    connectToGearBtn.setText("기어와 폰의 블루투스 연결을 확인하세요");
-                }
-            });
+            public void onFindingPeerAgent() {
+                 runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        showpDialog();
+                        connectToGearBtn.setText("기어를 찾는 중 입니다");
+                    }
+                });
                 
             }
+            
+            // PeerAgent 못 찾았을  때
+            @Override
+            public void onFindingPeerAgentError() {
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+
+                        hidepDialog();
+                        connectToGearBtn.setText("기어와의 블루투스 연결을 확인하세요");
+                        
+                    }
+                });
+                
+            }
+           
+            // Service Connection 요청 할 때
             @Override
             public void onConnectionActionRequest() {
                 runOnUiThread(new Runnable() {
@@ -362,22 +384,10 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     public void run() {
                         showpDialog();
                         connectToGearBtn.setText("기어에 연결을 요청하였습니다");
-                        
                     }
                 });
             }
-            @Override
-            public void onConnectionActionNoResponse() {
-                runOnUiThread(new Runnable() {
-                    
-                    @Override
-                    public void run() {
-                        hidepDialog();
-                        connectToGearBtn.setText("기어 측 어플이 실행되었는지 확인하세요");
-                        
-                    }
-                });
-            }
+            // Service Connection 완료 됬을 때
             @Override
             public void onConnectionActionComplete() {
                 
@@ -391,6 +401,18 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     }
                 });
                 
+            }
+            // Service Connection 에러 났을 때
+            @Override
+            public void onConnectionActionError() {
+                runOnUiThread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        hidepDialog();
+                        connectToGearBtn.setText("기어 측 어플이 실행되었는지 확인하세요");
+                    }
+                });
             }
         };
     }

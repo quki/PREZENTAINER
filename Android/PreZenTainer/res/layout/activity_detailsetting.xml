@@ -1,47 +1,46 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.puregodic.android.prezentainer.DetailSettingActivity" >
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context="com.puregodic.android.prezentainer.DetailSettingActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="몇 개?"
-            android:inputType="number" />
+		<EditText
+			android:id="@+id/num"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:hint="몇 개?"
+			android:inputType="number" />
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="확인" />
+		<Button android:id="@+id/btn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="확인" />
 
-        <Button
-            android:id="@+id/btnResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="최종확인" />
-    </LinearLayout>
+		<Button android:id="@+id/btnResult"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="최종확인" />
+	</LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00ff0000" >
+	<ScrollView
+		android:id="@+id/scrollView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#00ff0000">
 
-        <LinearLayout
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </ScrollView>
+		<LinearLayout
+			android:id="@+id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+		</LinearLayout>
+	</ScrollView>
 
 </LinearLayout>

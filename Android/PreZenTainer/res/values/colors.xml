@@ -3,8 +3,13 @@
     
     <!-- actionbar -->
     <color name="indigo500">#3F51B5</color>
+    
+    <!-- button -->
     <color name="blue900">#0D47A1</color>
     <color name="lightblue500">#03A9F4</color>
+    <color name="lightblue300">#4FC3F7</color>
+    <color name="lightblue200">#81D4FA</color>
+    
     <!-- clickstate -->
     <color name="indigo100">#C5CAE9</color>
     

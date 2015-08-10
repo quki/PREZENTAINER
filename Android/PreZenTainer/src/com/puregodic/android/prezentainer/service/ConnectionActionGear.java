@@ -2,12 +2,14 @@ package com.puregodic.android.prezentainer.service;
 
 public interface ConnectionActionGear {
     
-    void onConnectionActionFindingPeerAgent();
+    void onFindingPeerAgent();
+    
+    void onFindingPeerAgentError();
     
     void onConnectionActionRequest();
     
     void onConnectionActionComplete();
     
-    void onConnectionActionNoResponse();
+    void onConnectionActionError();
 
 }
