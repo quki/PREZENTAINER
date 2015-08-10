@@ -354,6 +354,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     public void run() {
                         showpDialog();
                         connectToGearBtn.setText("기어를 찾는 중 입니다");
+                        setEnabledStartBtn();
                     }
                 });
                 
@@ -362,6 +363,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             // PeerAgent 못 찾았을  때
             @Override
             public void onFindingPeerAgentError() {
+                
+                isGearConnected =false;
+                
                 runOnUiThread(new Runnable() {
                     
                     @Override
@@ -369,6 +373,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
                         hidepDialog();
                         connectToGearBtn.setText("기어와의 블루투스 연결을 확인하세요");
+                        setEnabledStartBtn();
                         
                     }
                 });
@@ -378,12 +383,16 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             // Service Connection 요청 할 때
             @Override
             public void onConnectionActionRequest() {
+                
+                isGearConnected =false;
+                
                 runOnUiThread(new Runnable() {
                     
                     @Override
                     public void run() {
                         showpDialog();
                         connectToGearBtn.setText("기어에 연결을 요청하였습니다");
+                        setEnabledStartBtn();
                     }
                 });
             }
@@ -405,12 +414,16 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             // Service Connection 에러 났을 때
             @Override
             public void onConnectionActionError() {
+                
+                isGearConnected =false;
+                
                 runOnUiThread(new Runnable() {
                     
                     @Override
                     public void run() {
                         hidepDialog();
                         connectToGearBtn.setText("기어 측 어플이 실행되었는지 확인하세요");
+                        setEnabledStartBtn();
                     }
                 });
             }
@@ -423,6 +436,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             @Override
             public void onConnectionActionRequest() {
+                
+                isPcConnected=false;
 
                 runOnUiThread(new Runnable() {
                     
@@ -430,6 +445,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     public void run() {
                         showpDialog();
                         connectToPcBtn.setText("PC에 연결을 요청하였습니다");
+                        setEnabledStartBtn();
                         
                     }
                 });
@@ -437,7 +453,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             @Override
             public void onConnectionActionComplete() {
+                
                 isPcConnected = true;
+                
                 runOnUiThread(new Runnable() {
                     
                     @Override
@@ -452,12 +470,16 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
             @Override
             public void onConnectionActionError() {
+                
+                isPcConnected = false;
+                
                  runOnUiThread(new Runnable() {
                     
                     @Override
                     public void run() {
                         hidepDialog();
                         connectToPcBtn.setText("PC 측 프로그램이 실행되었는지 확인하세요");
+                        setEnabledStartBtn();
                     }
                 });
                 
@@ -479,7 +501,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private void setEnabledStartBtn(){
         if(isGearConnected && isPcConnected){
             startBtn.setEnabled(true);
-        }
+        }else
+            startBtn.setEnabled(false);
     }
     
 

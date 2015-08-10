@@ -203,7 +203,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String mmfoundDeviceName = (String)parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), mmfoundDeviceName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), mmfoundDeviceName, Toast.LENGTH_SHORT).show();
 
             }
 

@@ -146,17 +146,17 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
 				
-				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode);
+				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTittle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
 					
-					StringRequest str = new StringRequest(Method.POST,"http://cyh1704.dothome.co.kr/tizen/wow.php",
+					StringRequest str = new StringRequest(Method.POST,"http://cyh1704.dothome.co.kr/tizen/inserting.php",
                             new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String response) {
-                            Log.d(TAG, response.toString());
+                            Log.e(TAG, response.toString());
                         }
                     },      new Response.ErrorListener() {
 
@@ -170,9 +170,9 @@ public class AccessoryService extends SAAgent {
                         protected Map<String, String> getParams() {
                             // Posting params to register url
                             Map<String, String> params = new HashMap<String, String>();
-                            params.put("txtMajor", mPtTittle);
-                            params.put("txtName", jsonHR);
-                            params.put("txtTel", jsonET);
+                            params.put("title", mPtTittle);
+                            params.put("hbr", jsonHR);
+                            params.put("time", jsonET);
                             return params;
                         }
                         
@@ -303,6 +303,7 @@ public class AccessoryService extends SAAgent {
 			}else if (channelId == CHANNEL_ID_HR) {
 			    
 			    jsonHR = new String(data);
+			    Log.v(TAG, jsonHR);
 			    
 				/*MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
 				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });*/
@@ -310,6 +311,7 @@ public class AccessoryService extends SAAgent {
 			}else if (channelId == CHANNEL_ID_EVENTTIME){
 			    
 			       jsonET = new String(data);
+			       Log.v(TAG, jsonET);
 			        
 			}
 
