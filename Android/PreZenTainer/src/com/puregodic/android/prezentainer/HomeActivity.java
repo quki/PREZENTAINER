@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
-
+	// participate
 	Button homeStartBtn, homeLoadBtn;
 
 	@Override
