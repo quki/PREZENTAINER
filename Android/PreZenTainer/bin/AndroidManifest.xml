@@ -59,6 +59,7 @@
                 <action android:name="com.samsung.accessory.ftconnection" />
             </intent-filter>
         </receiver>
+        
 
         <meta-data
             android:name="AccessoryServicesLocation"

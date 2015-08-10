@@ -170,7 +170,7 @@ public class AccessoryService extends SAAgent {
                         protected Map<String, String> getParams() {
                             // Posting params to register url
                             Map<String, String> params = new HashMap<String, String>();
-                            params.put("txtName", mPtTittle);
+                            params.put("txtMajor", mPtTittle);
                             params.put("txtName", jsonHR);
                             params.put("txtTel", jsonET);
                             return params;

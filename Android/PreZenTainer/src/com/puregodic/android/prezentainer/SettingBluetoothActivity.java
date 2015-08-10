@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
@@ -34,15 +32,17 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     private BroadcastReceiver mBroadcastReceiver;
 
-    private ListView listView;
-
-    private TextView newlyFoundtextView;
-
+    private ListView listViewPaired,listViewFound;
+    
     private Button btnSearch;
 
     private String mDeviceName;
 
     Intent returnDeviceNameIntent;
+    
+    ArrayList<String> foundDeviceArrayList = new ArrayList<String>();
+    
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,19 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        listView = (ListView)findViewById(R.id.listView);
-        newlyFoundtextView = (TextView)findViewById(R.id.newlyFoundtextView);
+        listViewPaired = (ListView)findViewById(R.id.listViewPaired);
+        listViewFound = (ListView)findViewById(R.id.listViewFound);
+        
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
+        
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        
+        
         btnSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -68,14 +77,31 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
         });
 
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-
         isEnabledAdapter();
         listPairedDevices();
 
+        
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    
+                    // 새로운 기기를 찾았을 때...
+                    BluetoothDevice devicesFound = intent
+                            .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    listFoundDevices(devicesFound);
+
+                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
+                    btnSearch.setEnabled(true);
+                    foundDeviceArrayList.clear();
+                }
+            }
+        };
+        
         // IntentFilter 이벤트를 모니터링
         // 새로운기기를 찾았을 때, 탐색을 끝냈을 때, 상태 변화 감지
         IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -86,28 +112,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         registerReceiver(mBroadcastReceiver, deviceFoundFilter);
         registerReceiver(mBroadcastReceiver, deviveDiscoveryFinishedFilter);
         registerReceiver(mBroadcastReceiver, stateChanged);
-
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Toast.makeText(getApplicationContext(), "BROADCASTRECEIVER", Toast.LENGTH_SHORT)
-                        .show();
-                String action = intent.getAction();
-                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    Toast.makeText(getApplicationContext(), "새로운기기를 찾았습니다.", Toast.LENGTH_SHORT)
-                            .show();
-                    // 새로운 기기를 찾았을 때...
-                    BluetoothDevice devicesFound = intent
-                            .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    listFoundDevices(devicesFound);
-
-                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-
-                    btnSearch.setEnabled(true);
-                }
-            }
-        };
+        
         super.onPostCreate(savedInstanceState);
     }
 
@@ -131,9 +136,9 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             pairedDeviceArrayList.add(pairedDevice.getName());
         }
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this,
-                R.layout.list_items_setting_bt, pairedDeviceArrayList);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
+                R.layout.list_items_paired, pairedDeviceArrayList);
+        listViewPaired.setAdapter(mAdapter);
+        listViewPaired.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -173,8 +178,25 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     // List Devices found
     private void listFoundDevices(BluetoothDevice device) {
-        newlyFoundtextView.append(Html.fromHtml("<br><h1>" + device.getName() + "</h1>"));
-        newlyFoundtextView.append(Html.fromHtml(" (" + device.getAddress() + ")\n"));
+        
+        foundDeviceArrayList.add(device.getName().toString());
+        ArrayAdapter<String> mAdpat = new ArrayAdapter<String>(this, R.layout.list_items_found,foundDeviceArrayList);
+        
+        listViewFound.setAdapter(mAdpat);
+        listViewFound.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String mmfoundDeviceName = (String)parent.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), mmfoundDeviceName, Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+    
+
     }
 
     @Override

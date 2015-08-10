@@ -6,7 +6,7 @@
     tools:context="com.puregodic.android.prezentainer.SettingBluetoothActivity" >
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/listViewPaired"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -16,15 +16,9 @@
         android:layout_height="wrap_content"
         android:text="새로운 기기 찾기" />
     
-    <TextView
-        android:id="@+id/newlyFoundtextView"
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/listViewFound"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     
-    <Button
-        android:id="@+id/okBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ok!" />
-
 </LinearLayout>
