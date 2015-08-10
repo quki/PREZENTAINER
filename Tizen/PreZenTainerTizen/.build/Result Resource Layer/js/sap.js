@@ -5,7 +5,7 @@ var mSAAgent,
     mSARemotePeerAgent,
     transferId = 0;
 
-var mTimeInterval = 0;
+var mTimeInterval = null;
 
 // Initialize File Transfer 
 function ftInit(successCb, errorCb) {
@@ -169,8 +169,12 @@ connectionListener = {
              // Data를 받을 때
              dataOnReceive = function dataOnReceive(channelId,data){
              try {
-                   mTimeInterval = Number(data);
-                   console.log('data : '+ data);
+            	 //json으로 진동간격 입력받기
+                 //mTimeInterval = JSON.stringify(data);
+                 mTimeInterval = JSON.parse(data);  
+                 for (var i = 0; i < mTimeInterval.length; i++) {
+                	 console.log('data : '+ mTimeInterval[i]);
+                 }
                    updateAfterOnReceivce();
             } catch (e) {
                    console.error('dataOnReceive Error reason : '+ e);

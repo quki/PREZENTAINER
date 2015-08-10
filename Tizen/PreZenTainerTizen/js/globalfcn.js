@@ -6,12 +6,27 @@ var CHANNELID_EVENT = 104,
 var isConnect = false;
 var heartRateArray ;
 
+//전역변수 추가
+var totalTime = 0; //슬라이드 개별설정 처리해주기 위한 전역변수
+var currentSlide = 0 ; //현재 슬라이드 위치
+var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
+//
 
 // Event btn clicked
 function eventtopc() {
   try {
-    mSASocket.sendData(CHANNELID_EVENT, "Hello Android");
-    console.log('Event to PC !');
+	//코드수정
+	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)
+	if (mTimeInterval.length !== 0 && mTimeInterval.length > 1 && currentSlide < mTimeInterval.length) {
+		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000));
+		//이전 슬라이드 타이머설정 제거
+		clearTimeout(vibratingIntervalArr[currentSlide-1]);
+	}
+	++currentSlide; //슬라이드 +1
+	//  
+    mSASocket.sendData(CHANNELID_EVENT, "Current Slide : " + currentSlide);
+    console.log('Event to PC !' + currentSlide);
+    
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
@@ -69,10 +84,20 @@ function vibrator(){
 // Start Timer by given interval time
 function startTimer(){
   try {
-    if(mTimeInterval !== 0){
-      min = mTimeInterval*60*1000;
-      vibratingInterval = setInterval(vibrator, min);
-      console.log('Timer Start ! Time Interval : '+ min );
+	//코드수정
+    if(mTimeInterval.length !== 0){
+    	//일정한 진동간격 일 때
+    	if (mTimeInterval.length == 1) {
+    		vibratingInterval = setInterval(vibrator, mTimeInterval[0]*1000);
+    	}
+    	console.log('Timer Start ! Time Interval : '+ mTimeInterval[0] );
+    	
+    	//개별설정 일 때 첫번째 페이지 처리
+    	if (mTimeInterval.length > 1) {
+    		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000));
+    		++currentSlide;
+    	}
+    //
     }else{
       console.log('Timer Off !');
     }
@@ -83,7 +108,15 @@ function startTimer(){
 // Stop Timer
 function stopTimer(){
   if(mTimeInterval !== 0){
+	//일정간격 초기화
     clearInterval(vibratingInterval);
+    //코드수정
+    //슬라이드 개별설정 초기화
+    for (var i = 0; i < vibratingIntervalArr.length; i++) {
+        clearTimeout(vibratingIntervalArr[i]);
+    }
+    vibratingIntervalArr = [];
+    //
     console.log('Timer Stop !');
   }else{
     console.log('Timer Already Off !');
