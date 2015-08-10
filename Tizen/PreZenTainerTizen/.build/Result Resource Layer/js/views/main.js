@@ -298,6 +298,9 @@ define({
         stopHR();
         stopTimer();
         disconnectSAP();
+        //코드수정
+        currentSlide = 0; //현재슬라이드 0으로 초기화
+        //
       }
     }
 
