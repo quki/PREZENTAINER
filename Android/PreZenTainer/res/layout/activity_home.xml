@@ -33,5 +33,10 @@
         android:layout_below="@+id/textView"
         android:layout_marginTop="89dp"
         android:text="불러오기" />
+    
+    <TextView
+        android:id="@+id/mEmailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

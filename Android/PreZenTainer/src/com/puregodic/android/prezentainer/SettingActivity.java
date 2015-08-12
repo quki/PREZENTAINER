@@ -78,7 +78,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
        
         // Bind Service
         doBindService();
-
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
+        
         startBtn = (Button)findViewById(R.id.startBtn);
         timerCheckBox = (CheckBox)findViewById(R.id.timerCheckBox);
         timerRadioGroup = (RadioGroup)findViewById(R.id.timerRadioGroup);
