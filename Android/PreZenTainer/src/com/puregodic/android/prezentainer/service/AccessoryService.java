@@ -42,9 +42,8 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	public static final int CHANNEL_ID_EVENTTIME = 114;
-	public String mDeviceName,mPtTittle;
-	private String jsonHR;
-	private String jsonET;
+	public String mDeviceName,mPtTitle,email;
+	private String jsonHR,jsonET;
 	
 	private Boolean isGearConnected =false;
 	
@@ -146,7 +145,7 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
 				
-				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTittle);
+				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
@@ -170,7 +169,8 @@ public class AccessoryService extends SAAgent {
                         protected Map<String, String> getParams() {
                             // Posting params to register url
                             Map<String, String> params = new HashMap<String, String>();
-                            params.put("title", mPtTittle);
+                            params.put("email", email);
+                            params.put("title", mPtTitle);
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;
