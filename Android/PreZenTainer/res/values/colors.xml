@@ -13,4 +13,10 @@
     <!-- clickstate -->
     <color name="indigo100">#C5CAE9</color>
     
+    <!-- swipe -->
+    <color name="color1">#ff92ff2f</color>
+    <color name="color2">#ffffbc00</color>
+    <color name="color3">#ff12ffa0</color>
+    <color name="color4">#ffff6724</color>
+    
 </resources>
