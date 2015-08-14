@@ -29,7 +29,6 @@ public class TestActivity extends AppCompatActivity {
         if(email!=null)
             emailStatic = email;
             
-        
         txtEmail = (TextView) findViewById(R.id.email);
         btnLogout = (Button) findViewById(R.id.btnLogout);
  
@@ -48,7 +47,7 @@ public class TestActivity extends AppCompatActivity {
         if (!session.isLoggedIn()) {
             logoutUser();
         }
- 
+        
  
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {

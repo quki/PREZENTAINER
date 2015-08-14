@@ -21,6 +21,7 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.puregodic.android.prezentainer.HomeActivity;
 import com.puregodic.android.prezentainer.R;
 import com.puregodic.android.prezentainer.network.AppController;
 
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
      // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, TestActivity.class);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -71,14 +72,11 @@ public class LoginActivity extends AppCompatActivity {
                 // Check for empty data in the form
                 if (email.trim().length() > 0 && password.trim().length() > 0) {
                     // login user
-                    Toast.makeText(getApplicationContext(),
-                            "befor function", Toast.LENGTH_LONG)
-                            .show();
                     checkLogin(email, password);
                 } else {
                     // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter the credentials!", Toast.LENGTH_LONG)
+                    Toast.makeText(LoginActivity.this,
+                            "빈칸이 있는지 확인하세요.", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -104,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
  
-        pDialog.setMessage("Logging in ...");
+        pDialog.setMessage("계정 정보를 확인 중 입니다 ...");
         showDialog();
  
         StringRequest strReq = new StringRequest(Method.POST,
@@ -127,15 +125,16 @@ public class LoginActivity extends AppCompatActivity {
                                 
                                 // Launch main activity
                                 Intent intent = new Intent(LoginActivity.this,
-                                        TestActivity.class);
+                                        HomeActivity.class);
                                 intent.putExtra("email", email);
                                 startActivity(intent);
                                 finish();
                             } else {
                                 // Error in login. Get the error message
                                 String errorMsg = jObj.getString("error_msg");
-                                Toast.makeText(getApplicationContext(),
-                                        errorMsg, Toast.LENGTH_LONG).show();
+                                Log.e(TAG,"계정정보 불일치 : "+ errorMsg);
+                                Toast.makeText(LoginActivity.this,"이메일과 비밀번호가 일치하지 않습니다"
+                                        , Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             // JSON error
@@ -148,8 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Login Error: " + error.getMessage());
-                        Toast.makeText(getApplicationContext(),
-                                error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,"로그인 실패!\n네트워크가 불안정 합니다", Toast.LENGTH_SHORT).show();
                         hideDialog();
                     }
                 }) {

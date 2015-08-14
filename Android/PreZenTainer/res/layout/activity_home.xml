@@ -9,10 +9,9 @@
     tools:context="com.puregodic.android.prezentainer.HomeActivity" >
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/emailTxtView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PreZenTainer 홈화면" />
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/homeStartBtn"
@@ -33,10 +32,17 @@
         android:layout_below="@+id/textView"
         android:layout_marginTop="89dp"
         android:text="불러오기" />
+    <Button 
+        android:id="@+id/logoutBtn" 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_alignLeft="@+id/homeLoadBtn" 
+        android:layout_below="@+id/homeLoadBtn" 
+        android:layout_marginTop="36dp" 
+        android:background="@color/btn_logut_bg" 
+        android:text="@string/btn_logout" 
+        android:textAllCaps="false" 
+        android:textColor="@color/white" 
+        android:textSize="15dp"/>
     
-    <TextView
-        android:id="@+id/mEmailView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
 </RelativeLayout>

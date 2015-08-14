@@ -21,6 +21,7 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.puregodic.android.prezentainer.HomeActivity;
 import com.puregodic.android.prezentainer.R;
 import com.puregodic.android.prezentainer.network.AppController;
 
@@ -55,11 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
  
  
-        // Check if user is already logged in or not
+        // 유저가 한번 로그인 했었는지 체크
         if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
+            // 유저가 이미 로그인 했었을 때...
             Intent intent = new Intent(RegisterActivity.this,
-                    TestActivity.class);
+                    HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -74,8 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
                 if (name!=null && email!=null && password!=null) {
                     registerUser(name, email, password);
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter your details!", Toast.LENGTH_LONG)
+                    Toast.makeText(RegisterActivity.this,
+                            "빈칸이 있는지 확인하세요", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -104,20 +105,18 @@ public class RegisterActivity extends AppCompatActivity {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
  
-        //pDialog.setMessage("Registering ...");
-       //showDialog();
+        pDialog.setMessage("회원정보 등록 중 ...");
+        showDialog();
  
         StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_REGISTER, new Response.Listener<String>() {
  
                     @Override
                     public void onResponse(String response) {
                        // Log.d(TAG, "Register Response: " + response.toString());
-                       // hideDialog();
+                       hideDialog();
                        
                         try {
 
-                            
-   
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
                             //if (!error) {
@@ -126,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                            
                            
                            Toast.makeText(getApplicationContext(),
-                                "Proccessing!", Toast.LENGTH_LONG)
+                                "Proccessing!", Toast.LENGTH_SHORT)
                                   .show();
                                // String uid = jObj.getString("uid");
                               
@@ -160,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Registration Error: " + error.getMessage());
                         Toast.makeText(getApplicationContext(),
-                                error.getMessage(), Toast.LENGTH_LONG).show();
+                                error.getMessage(), Toast.LENGTH_SHORT).show();
                         hideDialog();
                     }
                 }) {
