@@ -147,7 +147,17 @@ public class AccessoryService extends SAAgent {
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
 			    
 			    Calendar calendar = Calendar.getInstance();
-			    String currentTime = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+			    final StringBuffer date = new StringBuffer();
+			    date.append(String.valueOf(calendar.get(Calendar.YEAR)));
+			    date.append("년 ");
+			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+			    date.append("월 ");
+			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+			    date.append("일 ");
+			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+			    date.append("시 ");
+			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+			    date.append("분");
 			    /*String currentTime = String.format("a%02d%02d%02d-%02d%02d%02d*%s@%s!",
 	                    calendar.get(Calendar.YEAR) % 100,
 	                    calendar.get(Calendar.MONTH) + 1,
@@ -155,9 +165,8 @@ public class AccessoryService extends SAAgent {
 	                    calendar.get(Calendar.HOUR_OF_DAY),
 	                    calendar.get(Calendar.MINUTE),
 	                    calendar.get(Calendar.SECOND));*/
-			   
-				
-		Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle +"\n current time : "+currentTime);
+			    Log.d(TAG, date.toString());
+			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
@@ -183,7 +192,7 @@ public class AccessoryService extends SAAgent {
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("email", email);
                             params.put("title", mPtTitle);
-                            //params.put("time", time);
+                            params.put("date", date.toString());
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;
