@@ -25,5 +25,6 @@
     <string name="name">Fullname</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_card_view">CardViewActivity</string>
 
 </resources>

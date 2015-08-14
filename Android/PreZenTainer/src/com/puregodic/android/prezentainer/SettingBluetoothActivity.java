@@ -91,8 +91,11 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             @Override
             public void onClick(View v) {
 
-                mBluetoothAdapter.startDiscovery();
-                btnSearch.setEnabled(false);
+                
+                Intent i = new Intent(SettingBluetoothActivity.this, CardViewActivity.class);
+                startActivity(i);
+               /* mBluetoothAdapter.startDiscovery();
+                btnSearch.setEnabled(false);*/
             }
         });
 

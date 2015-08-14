@@ -34,5 +34,9 @@
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
     
+    <!-- cardview -->
+    <color name="white_drawer">#FFFFFF</color>
+	  <color name="dark_black">#000000</color>
+    
     
 </resources>

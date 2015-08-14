@@ -2,8 +2,10 @@
 package com.puregodic.android.prezentainer;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +18,7 @@ import com.puregodic.android.prezentainer.login.SessionManager;
 public class HomeActivity extends AppCompatActivity {
     // participate
     Button homeStartBtn, homeLoadBtn, logoutBtn;
-
+    Toolbar mToolbar;
     TextView emailTxtView;
 
     private static String emailStatic;
@@ -29,6 +31,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        
+        mToolbar = (Toolbar) findViewById(R.id.mToolbar);
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.indigo500));
+        setSupportActionBar(mToolbar);
+       mToolbar.setTitleTextColor(Color.WHITE);
+        setTitleColor(Color.WHITE);
+        setTitle("Android Support");
 
         emailTxtView = (TextView)findViewById(R.id.emailTxtView);
         logoutBtn = (Button)findViewById(R.id.logoutBtn);
