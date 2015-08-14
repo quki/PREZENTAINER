@@ -9,5 +9,6 @@
     <string name="title_activity_file_transfer_requested">FileTransferRequestedActivity</string>
     <string name="title_activity_detail_setting">DetailSettingActivity</string>
     <string name="title_activity_setting_bluetooth">SettingBluetoothActivity</string>
+    <string name="title_activity_load">LoadActivity</string>
 
 </resources>

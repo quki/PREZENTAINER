@@ -64,21 +64,21 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
-        swipeRefreshLayout.setOnRefreshListener(this);
+        /*swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorScheme( R.color.color1, R.color.color2, R.color.color3, R.color.color4);
         
-        /**
+        *//**
          * Showing Swipe Refresh animation on activity create
          * As animation won't start on onCreate, post runnable is used
-         */
+         *//*
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
-                                        mBluetoothAdapter.startDiscovery();
+                                        //mBluetoothAdapter.startDiscovery();
                                     }
                                 }
-        );
+        );*/
 
     }
 
@@ -115,7 +115,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                     
-                    swipeRefreshLayout.setRefreshing(false);
+                    //swipeRefreshLayout.setRefreshing(false);
                    // btnSearch.setEnabled(true);
                     foundDeviceArrayList.clear();
                 }
@@ -161,13 +161,13 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     // SwipeRefresh
     @Override
     public void onRefresh() {
-        mBluetoothAdapter.startDiscovery();        
+       // mBluetoothAdapter.startDiscovery();        
     }
 
     // List Devices paired
     private void listPairedDevices() {
         
-        swipeRefreshLayout.setRefreshing(true);
+        //swipeRefreshLayout.setRefreshing(true);
         // pair된 기기들을 Set화 시킴
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         ArrayList<PairedDeviceData> pairedDeviceArrayList = new ArrayList<PairedDeviceData>();
@@ -177,8 +177,8 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         // pair된 device를 list
         for (BluetoothDevice pairedDevice : pairedDevices) {
             
-            
-            PairedDeviceData data = new PairedDeviceData(pairedDevice.getAddress(), pairedDevice.getName());
+            int type = pairedDevice.getBluetoothClass().getMajorDeviceClass();
+            PairedDeviceData data = new PairedDeviceData(type, pairedDevice.getName());
             pairedDeviceArrayList.add(data);
         }
         
@@ -191,7 +191,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-               final String mDeviceName = ((TextView)view.findViewById(R.id.textViewPairedName)).getText().toString();
+               final String mDeviceName = ((TextView)view.findViewById(R.id.pairedDeviceName)).getText().toString();
 
                 // AlertDialog
                 AlertDialog.Builder mAlertBuilder = new AlertDialog.Builder(
@@ -221,13 +221,13 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
 
         });
-        swipeRefreshLayout.setRefreshing(false);
+       // swipeRefreshLayout.setRefreshing(false);
     }
 
     // List Devices found
     private void listFoundDevices(BluetoothDevice device) {
         
-        swipeRefreshLayout.setRefreshing(true);
+       // swipeRefreshLayout.setRefreshing(true);
         
         foundDeviceArrayList.add(device.getName().toString());
         

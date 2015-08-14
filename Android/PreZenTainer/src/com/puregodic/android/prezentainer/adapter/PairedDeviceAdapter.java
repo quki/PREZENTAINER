@@ -19,6 +19,9 @@ public class PairedDeviceAdapter extends BaseAdapter{
     private LayoutInflater inflater;
     private ArrayList<PairedDeviceData> pairedDevicesList ;
     private Activity activity;
+    private final int NOTEBOOK = 256;
+    private final int PHONE = 512;
+    private final int WATCH = 1792;
     
     public PairedDeviceAdapter(Activity activity, ArrayList<PairedDeviceData> pairedDevicesList){
         this.activity = activity;
@@ -50,13 +53,28 @@ public class PairedDeviceAdapter extends BaseAdapter{
             convertView = inflater.inflate(R.layout.list_items_paired, null);
         
         
-        TextView textViewPairedName = (TextView) convertView.findViewById(R.id.textViewPairedName);
+        TextView textViewPairedName = (TextView) convertView.findViewById(R.id.pairedDeviceName);
         TextView textViewPairedAdress = (TextView) convertView.findViewById(R.id.textViewPairedAdress);
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
  
         textViewPairedName.setText(pairedDevicesList.get(position).name);
-        textViewPairedAdress.setText(pairedDevicesList.get(position).adress);
-        image.setImageResource(R.drawable.ic_pc);
+        textViewPairedAdress.setText(String.valueOf(pairedDevicesList.get(position).type));
+        
+        switch (pairedDevicesList.get(position).type) {
+            case NOTEBOOK:
+                image.setImageResource(R.drawable.ic_notebook);
+                break;
+
+            case WATCH:
+                image.setImageResource(R.drawable.ic_watch);
+                break;
+                
+            case PHONE:
+                image.setImageResource(R.drawable.ic_phone);
+                break;
+        }
+        
+        
         
         return convertView;
     }

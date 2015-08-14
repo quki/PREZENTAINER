@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private Button connectToGearBtn,connectToPcBtn,startBtn;
     private CheckBox timerCheckBox;
     private RadioGroup timerRadioGroup;
-    private TextView ptTitle;
+    private EditText ptTitleEditText;
     private LinearLayout rootView;
     
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
@@ -88,7 +88,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         connectToPcBtn = (Button)findViewById(R.id.connectToPcBtn);
         txtsendJson = (TextView)findViewById(R.id.txtsendJson);
         connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
-        ptTitle = (EditText)findViewById(R.id.ptTittle);
+        ptTitleEditText = (EditText)findViewById(R.id.ptTitleEditText);
         rootView = (LinearLayout)findViewById(R.id.rootView);
         
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
@@ -96,7 +96,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ptTitle.clearFocus();
+                ptTitleEditText.clearFocus();
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 return false;
@@ -251,7 +251,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             // 기어 어플리케이션에 설정값 전달(알람 시간 간격, 페어링된 PC이름) 및 시작
             case R.id.startBtn: {
-               final String mPtTitle =   ptTitle.getText().toString().trim();
+               final String mPtTitle =   ptTitleEditText.getText().toString().trim();
                 
                 // 프레젠테이션 제목을 기입한 경우
                 if(!TextUtils.isEmpty(mPtTitle)){

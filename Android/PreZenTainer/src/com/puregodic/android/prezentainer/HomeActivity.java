@@ -52,6 +52,8 @@ public class HomeActivity extends AppCompatActivity {
 			break;
 		}
 		case R.id.homeLoadBtn: {
+		    Intent i = new Intent(HomeActivity.this, LoadActivity.class);
+		    startActivity(i);
 			break;
 		}
 

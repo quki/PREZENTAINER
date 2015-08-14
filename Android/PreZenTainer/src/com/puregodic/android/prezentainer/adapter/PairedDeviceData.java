@@ -2,14 +2,14 @@ package com.puregodic.android.prezentainer.adapter;
 
 public class PairedDeviceData {
     
-    public String adress;
+    public int type;
     public String name;
  
     public PairedDeviceData() {
     }
  
-    public PairedDeviceData(String adress, String name) {
-        this.adress = adress;
+    public PairedDeviceData(int type, String name) {
+        this.type = type;
         this.name = name;
     }
 

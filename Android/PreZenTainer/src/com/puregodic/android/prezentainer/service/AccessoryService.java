@@ -1,6 +1,7 @@
 package com.puregodic.android.prezentainer.service;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,8 +145,19 @@ public class AccessoryService extends SAAgent {
 			//File Transfer Completed
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
+			    
+			    Calendar calendar = Calendar.getInstance();
+			    String currentTime = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+			    /*String currentTime = String.format("a%02d%02d%02d-%02d%02d%02d*%s@%s!",
+	                    calendar.get(Calendar.YEAR) % 100,
+	                    calendar.get(Calendar.MONTH) + 1,
+	                    calendar.get(Calendar.DAY_OF_MONTH),
+	                    calendar.get(Calendar.HOUR_OF_DAY),
+	                    calendar.get(Calendar.MINUTE),
+	                    calendar.get(Calendar.SECOND));*/
+			   
 				
-				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
+		Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle +"\n current time : "+currentTime);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
@@ -171,6 +183,7 @@ public class AccessoryService extends SAAgent {
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("email", email);
                             params.put("title", mPtTitle);
+                            //params.put("time", time);
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;
