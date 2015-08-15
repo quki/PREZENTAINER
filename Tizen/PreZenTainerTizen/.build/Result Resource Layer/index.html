@@ -9,11 +9,27 @@
 
 <link rel="stylesheet" href="lib/tau/wearable/theme/default/tau.min.css">
 <link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)" href="lib/tau/wearable/theme/default/tau.circle.min.css">
+<link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- main view -->
-  <div class="ui-page ui-page-active" id="main">
+  <!-- Main view -->	
+  <div data-role="page" class="ui-page ui-page-active" id="main">
+		<div data-role="header" data-theme="b">
+			<h5>Prezentainer</h5>
+		</div>
+			
+		<div data-role="content">
+			<p><a href="#start" data-role="button"  data-theme="c">Start</a></p>
+			<p><a href="#setting" data-role="button"  data-theme="a">Setting</a></p>
+		</div>
+
+ </div>
+  
+  
+
+  <!-- Start Program view -->
+  <div data-role="page"  id="start">
       <ul class="ui-listview">
       </ul>
       <div>
@@ -41,9 +57,44 @@
         <input type="button" id="startbtn" value="Start!" disabled="disabled">
         <input type="button" id="pceventbtn" value="Event to PC!" disabled="disabled">
         <input type="button" id="stopbtn" value="Stop!" disabled="disabled">
+        <input type="button" onClick="enable_motion()" value="Use motion" >
+        <span id="enable_motion">Off</span>
+        <p><a href="#main" data-direction="reverse" data-role="button" data-rel="back" data-theme="b">back</a></p>
       </div>
   </div>
-  <!-- sending status view -->
+
+<!-- setting view -->
+	<div data-role="page" id="setting">
+		<div data-role="header" data-theme="b">
+			<h5>Prezentainer</h5>
+		</div>
+
+		<div data-role="content">
+				<p><a href="#enroll_motion" id="motion_state" data-role="button" onClick="ready_motionSetting();" data-theme="c">Enroll Motion</a></p>
+				<p><a href="#main" data-direction="reverse" data-role="button" data-rel="back" data-theme="b">back</a></p>
+		</div>
+
+	</div>
+
+<!-- Enroll_motion view -->
+	<div data-role="page" id="enroll_motion">
+		<div data-role="header" data-theme="b">
+			<h4>Try 5 times</h4>
+		</div>
+
+		<div data-role="content">
+				<h5>같은 동작을 5회 반복해주세요</h5>
+				<span id="count" style="color: #555;">0/5</span>
+				<input id="ok_button" type="button" value="확인" onClick="buttonPush()" disabled="disabled">
+				<input id="reset_button" type="button" value="재설정" onClick="modify_motionSetting()">
+				<p><a href="#setting" data-direction="reverse" onClick="is_motion()" data-role="button" data-rel="back" data-theme="b">back</a></p>
+		</div>
+	</div>
+
+
+	
+	
+	<!-- sending status view -->
   <div class="ui-page" id="sendPage">
     <header class="ui-header">
       <h2 class="ui-title">Send file ...</h2>
@@ -62,11 +113,12 @@
 </body>
 
 <!-- load javascript file -->
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
 <script type="text/javascript" src="js/circle-helper.js"></script>
-<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="js/globalfcn.js"></script>
 <script type="text/javascript" src="js/viewhelper.js"></script>
 <script type="text/javascript" src="js/sap.js"></script>
+<script type="text/javascript" src="js/motion.js"></script>
 <script src="./js/core/core.js" data-main="./js/app.js"></script>
 </html>
