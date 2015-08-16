@@ -99,11 +99,11 @@ function buttonPush() {
 }
 
 function motionSensor() {
-	if (accelX < averageX+5 && accelX > averageX-5 && 
-		accelY > averageY-5 && accelY < averageY+5 &&
-		accelZ > averageZ-5 && accelZ < averageZ+5   ) {
-		 navigator.vibrate(2000);
-		 eventtopc();
+	if (accelX < averageX+4 && accelX > averageX-4 && 
+		accelY > averageY-4 && accelY < averageY+4 &&
+		accelZ > averageZ-4 && accelZ < averageZ+4   ) {
+		 navigator.vibrate(1000);
+		 //eventtopc();
 	}
 	accelX = 0;
 	accelY = 0;
@@ -124,7 +124,7 @@ function ready_motionSetting() {
 	    accelY = 0;
 	    accelZ = 0;
 	}
-	
+	save_setLocalStorage();
 }
 function retry_motionSetting() {
 
@@ -137,6 +137,11 @@ function retry_motionSetting() {
 }
 function finish_motionSetting() {
 	alert('완료되었습니다!');
+	console.log(averageX);
+	console.log(averageY);
+	console.log(averageZ);
+	console.log(arrayIndex);
+	save_setLocalStorage();
 	document.getElementById("ok_button").value="완료";
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').removeAttr('disabled');
@@ -187,14 +192,54 @@ function enable_motion(){
 	else{
 		alert('Motion 등록을 먼저해주세요!');
 	}
-	
-	
 }
+function load_setLocalStorage(){
+	if(window.localStorage['averageX'] == null && 
+			  window.localStorage['averageY'] == null &&
+			           window.localStorage['averageZ'] == null &&
+			           							window.localStorage['arrayIndex'] == null)
+	{
+		alert('Motion을 사용하려면 모션을 등록하셔주세요!');
+		//어플시작!
+	}	
+	else if(window.localStorage['averageX'] == 0 && 
+			  window.localStorage['averageY'] == 0 &&
+	           window.localStorage['averageZ'] == 0 &&
+	           		window.localStorage['arrayIndex'] == 0)
+	{
+		alert('Motion을 사용하려면 모션을 등록하셔주세요!');
+		//어플시작!
+	}
+	else
+	{
+		averageX=Number(window.localStorage['averageX']);
+		averageY=Number(window.localStorage['averageY']);
+		averageZ=Number(window.localStorage['averageZ']);
+		arrayIndex=Number(window.localStorage['arrayIndex']);
+		document.getElementById("motion_state").innerHTML="Modify Motion";
+		
+		console.log(averageX);
+		console.log(averageY);
+		console.log(averageZ);
+		console.log(arrayIndex);
+		
+		alert('Motion 등록이 되어있습니다.!');
+	}
+}
+
+function save_setLocalStorage(){
+	window.localStorage['averageX']=averageX;
+	window.localStorage['averageY']=averageY;
+	window.localStorage['averageZ']=averageZ;
+	window.localStorage['arrayIndex']=arrayIndex;
+}
+
 
 //Initialize function
 window.onload = function () {
     // TODO:: Do your initialization job
 	window.addEventListener("devicemotion", onDeviceMotion, true);
+	load_setLocalStorage();
     console.log("init() called");
     // add eventListener for tizenhwkey
     document.addEventListener('tizenhwkey', function(e) {
