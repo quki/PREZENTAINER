@@ -1,3 +1,4 @@
+
 #pragma once
 #include <stdio.h>
 #include "stdafx.h"
@@ -9,10 +10,22 @@
 
 
 //#include <assert.h>
-CSerialPort com1;
 char name[20]="\\\\.\\COM";
-bool check=false;
-bool overlap_check=false;
+
+
+int isStringDouble(const char *s) {
+  size_t size = strlen(s);
+  if (size == 0) return 0; // 0바이트 문자열은 숫자가 아님
+
+  for (int i = 0; i < (int) size; i++) {
+    if (s[i] == '.' || s[i] == '-' || s[i] == '+') continue;
+    if (s[i] < '0' || s[i] > '9') return 0; // 알파벳 등이 있으면 숫자 아님
+  }
+
+  return 1; // 그밖의 경우는 숫자임
+}
+
+
 void PressVirtualKeyboad(BYTE vk) {
 
 	// Simulate a key press
@@ -35,9 +48,47 @@ void PressRight() {
 	PressVirtualKeyboad(VK_RIGHT);
 	
 }
+/*
+void run_ready()
+{
+	CSerialPort com1;
+	com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);
+	com1.SetTimeout (10, 10, 1);
+
+			char buff[6]="0";
+			//int n;
+			while (1) {
+				//printf ("\nWRITE: ");
+				//scanf ("%s", buff);
+				//n = strlen(buff);
+
+				//		com1.Write (buff, n);
+
+				if(stop==true)  //중지버튼 눌렀을 때 무조건 정지
+				{
+					break;
+				}
+				//
+				com1.Read (buff, 6);
+
+				if(strcmp(buff,"conne")==0)
+				{ 
+					connection_check=true;
+					break;
+				}
+				else
+				{
+					connection_check=false;
+				}
+			}
+			com1.Close();
+		
+		}	
+*/
 void run_program()
 		{
 
+			CSerialPort com1;
 			com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);
 			com1.SetTimeout (10, 10, 1);
 
@@ -51,63 +102,32 @@ void run_program()
 
 				//		com1.Write (buff, n);
 
-				if(check==false)
-				{
-					break;
-				}
-
+		
+				//
 				com1.Read (buff, 6);
+                
 
 
 
-
-				if(strcmp(buff,"0")==0)
-				{}
-				else
+				if(strcmp(buff,"right")==0)
 				{
 					PressVirtualKeyboad(VK_RIGHT);
-
-					//	printf ("READ: %s\n", buff);
 					strcpy(buff,"0");
+				}
+				else if(strcmp(buff,"left")==0)
+				{
+					PressVirtualKeyboad(VK_RETURN);
+					strcpy(buff,"0");
+				}
+				else
+				{
+					continue;
 				}
 			}
 			com1.Close();
+		
 		}
 
-
-/*  http://stackoverflow.com/questions/4666635/run-threads-of-class-member-function-in-c 참조사이트
-class runnable
-{
-public:
-    virtual ~runnable() {}
-    static DWORD WINAPI run_thread(LPVOID args)
-    {
-        runnable *prunnable = static_cast<runnable*>(args);
-        return prunnable->run();
-    }
- protected:
-    virtual DWORD run() = 0; //derived class must implement this!
-};
-
-class Thread : public runnable //derived from runnable!
-{
-public:
-    void newthread()
-    {
-        CreateThread(NULL, 0, &runnable::run_thread, this, 0, NULL);
-    }
-protected:
-    DWORD run() //implementing the virtual function!
-    {
-        // .....your thread execution code.....
-
-		while(1)
-		{
-			printf("asd\n");
-		}
-    }
-};
-*/
 
 namespace 통신프로그램 {
 
@@ -150,30 +170,23 @@ namespace 통신프로그램 {
 	private: System::Windows::Forms::Label^  label1;
 	protected: 
 	private: System::Windows::Forms::TextBox^  textBox1;
-	private: System::Windows::Forms::Button^  button1;
+
 	private: System::Windows::Forms::Button^  button2;
 
 	private: System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::Button^  button4;
+
+	private: System::Windows::Forms::Button^  button3;
+	private: System::Windows::Forms::ToolTip^  toolTip1;
+	private: System::Windows::Forms::LinkLabel^  linkLabel1;
 
 
-
-
-
-
-
-
-
-
-
-
-
+	private: System::ComponentModel::IContainer^  components;
 
 	private:
 		/// <summary>
 		/// 필수 디자이너 변수입니다.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -182,13 +195,15 @@ namespace 통신프로그램 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->linkLabel1 = (gcnew System::Windows::Forms::LinkLabel());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -196,9 +211,9 @@ namespace 통신프로그램 {
 			this->label1->AccessibleName = L"";
 			this->label1->Font = (gcnew System::Drawing::Font(L"굴림", 9, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)), 
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(129)));
-			this->label1->Location = System::Drawing::Point(12, 15);
+			this->label1->Location = System::Drawing::Point(3, 15);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(100, 23);
+			this->label1->Size = System::Drawing::Size(109, 23);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"Port_number";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -208,24 +223,17 @@ namespace 통신프로그램 {
 			// 
 			this->textBox1->Location = System::Drawing::Point(107, 17);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(127, 21);
+			this->textBox1->Size = System::Drawing::Size(115, 21);
 			this->textBox1->TabIndex = 1;
-			// 
-			// button1
-			// 
-			this->button1->Location = System::Drawing::Point(12, 60);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(69, 51);
-			this->button1->TabIndex = 2;
-			this->button1->Text = L"입력";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &Form1::textBox1_TextChanged);
+			this->textBox1->MouseHover += gcnew System::EventHandler(this, &Form1::textBox1_MouseHover);
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(87, 60);
+			this->button2->Enabled = false;
+			this->button2->Location = System::Drawing::Point(118, 81);
 			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(69, 51);
+			this->button2->Size = System::Drawing::Size(104, 51);
 			this->button2->TabIndex = 2;
 			this->button2->Text = L"실행";
 			this->button2->UseVisualStyleBackColor = true;
@@ -233,31 +241,46 @@ namespace 통신프로그램 {
 			// 
 			// label2
 			// 
-			this->label2->Location = System::Drawing::Point(12, 38);
+			this->label2->Location = System::Drawing::Point(79, 41);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(100, 19);
+			this->label2->Size = System::Drawing::Size(143, 27);
 			this->label2->TabIndex = 3;
 			this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
-			// button4
+			// button3
 			// 
-			this->button4->Location = System::Drawing::Point(166, 60);
-			this->button4->Name = L"button4";
-			this->button4->Size = System::Drawing::Size(68, 51);
-			this->button4->TabIndex = 4;
-			this->button4->Text = L"중지";
-			this->button4->UseVisualStyleBackColor = true;
-			this->button4->Click += gcnew System::EventHandler(this, &Form1::button4_Click_1);
+			this->button3->Location = System::Drawing::Point(5, 81);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(104, 51);
+			this->button3->TabIndex = 5;
+			this->button3->Text = L"포트정보";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
+			// 
+			// toolTip1
+			// 
+			this->toolTip1->IsBalloon = true;
+			// 
+			// linkLabel1
+			// 
+			this->linkLabel1->AutoSize = true;
+			this->linkLabel1->Location = System::Drawing::Point(12, 41);
+			this->linkLabel1->Name = L"linkLabel1";
+			this->linkLabel1->Size = System::Drawing::Size(41, 12);
+			this->linkLabel1->TabIndex = 6;
+			this->linkLabel1->TabStop = true;
+			this->linkLabel1->Text = L"도움말";
+			this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Form1::linkLabel1_LinkClicked);
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(246, 131);
-			this->Controls->Add(this->button4);
+			this->ClientSize = System::Drawing::Size(228, 154);
+			this->Controls->Add(this->linkLabel1);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label1);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"$this.Icon")));
@@ -269,59 +292,66 @@ namespace 통신프로그램 {
 
 		}
 
+
 #pragma endregion
+
+
 		String^  firstName;
 
-		private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-
-					 firstName = textBox1->Text;
-					 label2->Text = "Port :"+firstName;
-					 check=false;
-					 overlap_check=false;
-					// WinExec("C:/Windows/System32/rundll32.EXE",SW_SHOW);
-					WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW);
-					 // C:\Windows\System32
-
-				 }
 		private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
 					 // CSerialPort com1;
 					 // char name[20]="\\\\.\\COM";
-
-					 if(overlap_check==false)
-					 {
-
-					 check=true;
+					 firstName = textBox1->Text;
 					 msclr::interop::marshal_context context;
-					 std::string num = context.marshal_as<std::string>(firstName);  //http://www.cplusplus.com/forum/windows/137117/ 참고자료
-					 strcat(name, num.c_str());                                      //포트입력버튼에서 입력한 포트번호로 포트통로열기!
+					 std::string num = context.marshal_as<std::string>(firstName); 
 
-					 label2->Text = "Port :"+firstName+" 연결중";
-					 boost::thread t(&run_program);
-					 overlap_check=true;
+
+					 if(strcmp(num.c_str(),"")==0)
+					 {
+						 label2->Text = "Port번호를 입력해주세요";
 					 }
 					 else
 					 {
+						 if(isStringDouble(num.c_str()))
+						 {
+							 strcat(name, num.c_str());
+							 button2->Enabled = false;
+							 label2->Text = "Port :"+firstName+"접속!";
+							 boost::thread t(&run_program);
+							 textBox1->Enabled = false;
+						 }
+						 else
+						 {
+							 label2->Text = "error! 숫자를 입력해주세요!";
+						 }
 					 }
-					 
+
 				 }
 
-		 private: System::Void button4_Click_1(System::Object^  sender, System::EventArgs^  e) {
-					  check=false;
-					  overlap_check=false;
-					  label2->Text = "Port :"+firstName+" 연결 중지";
-				  }
 
 
 	     private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
 				 }
 
-
-
-
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
 		 }
 
 
+private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
+			 WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW);
+		 }
+private: System::Void textBox1_MouseHover(System::Object^  sender, System::EventArgs^  e) {
+			 toolTip1->SetToolTip(textBox1,"Enter only Port Number!");
+		 }
+private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+			 button2->Enabled = true;
+		 }
+private: System::Void linkLabel1_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
+			  WinExec("C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE http://google.com",SW_SHOW); 
+		      //system("explorer http://naver.com");
+			  // ShellExecute(NULL, NULL, "http://lp.com", NULL, NULL, SW_SHOW);
+
+		 }
 };
 }
 
