@@ -25,7 +25,12 @@ public class LoadPtTitleAdapter extends RecyclerView.Adapter<LoadPtTitleAdapter.
         this.loadPtTitleDataList = loadPtTitleDataList;
     }
     
-    // Sub class로써 list_items_load.xml에 있는 모든 View(위젯)를 inflate한다
+    /*
+     * ViewHolder사용 !! 
+     * Sub class로써 list_items_load.xml에 있는 모든 View(위젯)를 inflate한다.
+     * 한번 생성한 클래스를 통해 서브 클래스(뷰)를 빠르게 다시 액세스 할 수 있다.
+     * 
+     * */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title,date;

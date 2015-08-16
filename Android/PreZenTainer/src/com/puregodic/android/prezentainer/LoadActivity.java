@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleAdapter;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleData;
+import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
+import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
 import com.puregodic.android.prezentainer.network.AppConfig;
@@ -65,6 +68,11 @@ public class LoadActivity extends AppCompatActivity {
         mAdapter = new LoadPtTitleAdapter(this, mDataList);
         mRecyclerView.setAdapter(mAdapter);
         
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        mRecyclerView.addItemDecoration(itemDecoration);
+        // this is the default; this call is actually only necessary with custom ItemAnimators
+        mRecyclerView.setItemAnimator(new CustomItemAnimator());
         setDataByVolley();
         
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new ClickListener() {
@@ -167,6 +175,8 @@ public class LoadActivity extends AppCompatActivity {
             
         }
     }
+    
+    
  
     // DB로 부터 response받고,JSON파싱 이후 adapter에 저장 (데이터 변화 감지)
     private void setDataByVolley(){
