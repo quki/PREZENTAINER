@@ -19,6 +19,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
@@ -43,9 +44,9 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	public static final int CHANNEL_ID_EVENTTIME = 114;
-	public String mDeviceName,mPtTitle,email;
+	public String mDeviceName,mPtTitle,yourId;
 	private String jsonHR,jsonET;
-	
+	StringBuffer date ;
 	private Boolean isGearConnected =false;
 	
 	public AccessoryService() {
@@ -101,6 +102,10 @@ public class AccessoryService extends SAAgent {
 			//File Transfer Requested
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
+			    
+			    
+			    
+			    
 				
 				if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
@@ -146,32 +151,37 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
 			    
-			    Calendar calendar = Calendar.getInstance();
-			    final StringBuffer date = new StringBuffer();
-			    date.append(String.valueOf(calendar.get(Calendar.YEAR)));
-			    date.append("년 ");
-			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-			    date.append("월 ");
-			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-			    date.append("일 ");
-			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-			    date.append("시 ");
-			    date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-			    date.append("분");
-			    /*String currentTime = String.format("a%02d%02d%02d-%02d%02d%02d*%s@%s!",
-	                    calendar.get(Calendar.YEAR) % 100,
-	                    calendar.get(Calendar.MONTH) + 1,
-	                    calendar.get(Calendar.DAY_OF_MONTH),
-	                    calendar.get(Calendar.HOUR_OF_DAY),
-	                    calendar.get(Calendar.MINUTE),
-	                    calendar.get(Calendar.SECOND));*/
-			    Log.d(TAG, date.toString());
+			    
+			    
+			    
 			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
 					
-					StringRequest str = new StringRequest(Method.POST,"http://cyh1704.dothome.co.kr/tizen/inserting.php",
+					Calendar calendar = Calendar.getInstance();
+	                date = new StringBuffer();
+	                date.append(String.valueOf(calendar.get(Calendar.YEAR)));
+	                date.append("- ");
+	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+	                date.append("- ");
+	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+	                date.append("- ");
+	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+	                date.append("- ");
+	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+	                date.append("-");
+	                /*String currentTime = String.format("a%02d%02d%02d-%02d%02d%02d*%s@%s!",
+	                        calendar.get(Calendar.YEAR) % 100,
+	                        calendar.get(Calendar.MONTH) + 1,
+	                        calendar.get(Calendar.DAY_OF_MONTH),
+	                        calendar.get(Calendar.HOUR_OF_DAY),
+	                        calendar.get(Calendar.MINUTE),
+	                        calendar.get(Calendar.SECOND));*/
+	                Log.d(TAG, date.toString());
+					
+					
+					StringRequest str = new StringRequest(Method.POST,AppConfig.URL_INSERT,
                             new Response.Listener<String>() {
 
                         @Override
@@ -190,9 +200,9 @@ public class AccessoryService extends SAAgent {
                         protected Map<String, String> getParams() {
                             // Posting params to register url
                             Map<String, String> params = new HashMap<String, String>();
-                            params.put("email", email);
+                            params.put("email", yourId);
                             params.put("title", mPtTitle);
-                            params.put("date", date.toString());
+                            params.put("date", "2015-77-77");
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;

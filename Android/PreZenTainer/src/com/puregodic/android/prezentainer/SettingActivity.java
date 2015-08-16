@@ -69,17 +69,19 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     private TextView txtsendJson;
     String gsonString;
     
-    private String email;
+    private String yourId;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        
+        Intent intent = getIntent();
+        yourId = intent.getStringExtra("yourId");
+        Toast.makeText(getApplicationContext(), yourId, Toast.LENGTH_SHORT).show();
        
         // Bind Service
         doBindService();
-        Intent intent = getIntent();
-        email = intent.getStringExtra("email");
         
         startBtn = (Button)findViewById(R.id.startBtn);
         timerCheckBox = (CheckBox)findViewById(R.id.timerCheckBox);
@@ -89,7 +91,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         txtsendJson = (TextView)findViewById(R.id.txtsendJson);
         connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
         ptTitleEditText = (EditText)findViewById(R.id.ptTitleEditText);
-        rootView = (LinearLayout)findViewById(R.id.rootView);
+        rootView = (LinearLayout)findViewById(R.id.settingActivityView);
         
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
         rootView.setOnTouchListener(new View.OnTouchListener() {
@@ -272,7 +274,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                         // Service에 device name, ppt tittle 넘기기
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
-                                        mAccessoryService.email = email;
+                                        mAccessoryService.yourId = yourId;
                                         if (timeInterval != null) {
                                             String timeJson = gson.toJson(timeInterval);
                                             sendDataToService(timeJson);

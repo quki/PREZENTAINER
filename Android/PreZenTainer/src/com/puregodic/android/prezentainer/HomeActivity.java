@@ -11,21 +11,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.SessionManager;
 
 public class HomeActivity extends AppCompatActivity {
-    // participate
-    Button homeStartBtn, homeLoadBtn, logoutBtn;
-    Toolbar mToolbar;
-    TextView emailTxtView;
 
-    private static String emailStatic;
+    private Button  logoutBtn;
+    
+    private TextView emailTxtView;
 
-    private String emailNonStatic;
+    private String yourId;
 
     private SessionManager session;
+    
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,26 +36,22 @@ public class HomeActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mToolbar.setBackgroundColor(getResources().getColor(R.color.indigo500));
         setSupportActionBar(mToolbar);
-       mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitleTextColor(Color.WHITE);
         setTitleColor(Color.WHITE);
-        setTitle("Android Support");
+        setTitle("홈화면");
 
         emailTxtView = (TextView)findViewById(R.id.emailTxtView);
         logoutBtn = (Button)findViewById(R.id.logoutBtn);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
+        yourId = intent.getStringExtra("yourId");
 
-        // static 변수로 초기화
-        if (email != null)
-            emailStatic = email;
-
-        if (email != null)
-            emailTxtView.setText(email);
+        if (yourId != null)
+            emailTxtView.setText(yourId);
         else {
-            // email String을 Non-Static으로 관리
-            emailNonStatic = emailStatic;
-            emailTxtView.setText(emailNonStatic);
+            Toast.makeText(this, "다시 로그인 해주세요", Toast.LENGTH_SHORT).show();
+            emailTxtView.setText("로그인 프로세스에 오류가 있음");
+            logoutUser();
         }
 
         // Session Manager
@@ -80,11 +77,13 @@ public class HomeActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.homeStartBtn: {
                 Intent i = new Intent(HomeActivity.this, SettingActivity.class);
+                i.putExtra("yourId", yourId);
                 startActivity(i);
                 break;
             }
             case R.id.homeLoadBtn: {
                 Intent i = new Intent(HomeActivity.this, LoadActivity.class);
+                i.putExtra("yourId", yourId);
                 startActivity(i);
                 break;
             }
@@ -94,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        session.setLogin(false);
+        session.setLogin(false,yourId);
         // Launching the login activity
         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);

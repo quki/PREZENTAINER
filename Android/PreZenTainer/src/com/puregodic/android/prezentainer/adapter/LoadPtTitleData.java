@@ -2,23 +2,21 @@ package com.puregodic.android.prezentainer.adapter;
 
 public class LoadPtTitleData {
 
-    String ptTitle;
-    String currentTime;
+    private String title;
+    private String date;
     
-    
-    public LoadPtTitleData(String ptTitle, String currentTime){
-        this.ptTitle = ptTitle;
-        this.currentTime = currentTime;
+    public void setDate(String date){
+        this.date = date;
+    }
+    public void setTitle(String title){
+        this.title = title;
     }
     
-    public String currentTime(){
-        
-        return currentTime; 
+    public String getDate(){
+        return date;
     }
-        
-    public String getPtTitle(){
-        
-        return ptTitle; 
+    public String getTitle(){
+        return title;
     }
 
 }

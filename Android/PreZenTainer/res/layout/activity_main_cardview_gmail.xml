@@ -73,7 +73,7 @@
 
                 <ImageView
 
-                    android:src="@drawable/gmail"
+                    android:src="@drawable/test_lap"
                     android:layout_gravity="center"
                     android:id="@+id/imageView"
                     android:layout_width="42dp"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/registerActivityView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/bg_register"
@@ -55,13 +56,25 @@
             android:textColorHint="@color/input_register_hint" />
  
         <!-- Login Button -->
+        <EditText 
+            android:id="@+id/password_check" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:layout_marginBottom="10dp" 
+            android:background="@color/input_register_bg" 
+            android:ems="10" android:hint="@string/hint_password_check" 
+            android:inputType="textPassword" 
+            android:padding="10dp" 
+            android:singleLine="true" 
+            android:textColor="@color/input_register" 
+            android:textColorHint="@color/input_register_hint"/>
  
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="#ea4c88"
+            android:background="@drawable/button_register"
             android:text="@string/btn_register"
             android:textColor="@color/white" />
  
@@ -72,7 +85,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
-            android:background="@null"
+            android:background="@drawable/button_link_to_login"
             android:text="@string/btn_link_to_login"
             android:textAllCaps="false"
             android:textColor="@color/white"

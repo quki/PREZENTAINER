@@ -1,6 +1,9 @@
 package com.puregodic.android.prezentainer.network;
 
+import java.lang.reflect.Field;
+
 import android.app.Application;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -19,6 +22,7 @@ public class AppController extends Application{
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        initDefaultTypeface();
     }
     
     public static synchronized AppController getInstance() {
@@ -48,5 +52,21 @@ public class AppController extends Application{
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+    
+    // Custom Font ¼³Á¤
+    private void initDefaultTypeface() {
+        try {
+            Typeface defaultTypeface = Typeface.createFromAsset(getAssets(), "fonts/nanumgothic/NanumGothic.ttf");
+            final Field field = Typeface.class.getDeclaredField("DEFAULT");
+            field.setAccessible(true);
+            field.set(null, defaultTypeface);
+        } catch ( NoSuchFieldException e ) {
+             e.printStackTrace();
+        } catch ( IllegalArgumentException e ) {
+            e.printStackTrace();
+        } catch ( IllegalAccessException e ) {
+            e.printStackTrace();
+         }
     }
 }

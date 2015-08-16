@@ -13,18 +13,20 @@
     <string name="title_activity_login">LoginActivity</string>
 
     <!-- Login -->
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_name">Fullname</string>
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_register">REGISTER</string>
-    <string name="btn_link_to_register">Not a member? Sign up now.</string>
-    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="hint_email">아이디</string>
+    <string name="hint_password">비밀번호</string>
+    <string name="hint_password_check">비밀번호 확인</string>
+    <string name="hint_name">실명</string>
+    <string name="btn_login">로그인</string>
+    <string name="btn_register">회원가입</string>
+    <string name="btn_link_to_register">회원이 아니세요? 계정을 만들어보아요</string>
+    <string name="btn_link_to_login">이미 등록했어요, 로그인 할래요</string>
     <string name="welcome">Welcome</string>
-    <string name="btn_logout">LOGOUT</string>
-    <string name="name">Fullname</string>
+    <string name="btn_logout">로그아웃</string>
+    <string name="name">실명</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_card_view">CardViewActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
 
 </resources>
