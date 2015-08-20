@@ -4,7 +4,7 @@ var accelX = 0, accelY = 0, accelZ = 0;
 //모션사용 check변수
 var check = 0;
 
-//1번모션 인식 위한 변수
+//한번모션 인식 위한 변수,통신을 원활히 하기위한 변수
 var motion_check=0;
 
 
@@ -15,7 +15,9 @@ var averageX = 0, averageY = 0, averageZ = 0;
 //배열의
 var userInputIndex = 5;
 var arrayIndex = 0;
- 
+
+//motion test하기위한 on/off 제어 변수
+var motion_test=0;  //0일때 off ,1 일때 on !!
 
 //사용자가 입력한 가속도값을 저장하는 배열
 var accelXArr = new Array(userInputIndex);
@@ -45,9 +47,14 @@ function onDeviceMotion(e) {
     }
 
     showResult();
-    if(averageX != 0 && averageY != 0 && averageZ != 0 && check==1) {
+    if(averageX != 0 && averageY != 0 && averageZ != 0 && check==1) {    //통신 할때 작동하는 코드!
     	motionSensor();
     }
+    
+    if(averageX != 0 && averageY != 0 && averageZ != 0 && motion_test==1) {    //test할때 작동하는 코드
+    	test_motionSensor();
+    }
+    
 }
 
 function buttonPush() {
@@ -103,12 +110,12 @@ function buttonPush() {
 }
 
 function motionSensor() {
-	if (accelX < averageX+7 && accelX > averageX-7 && 
-		accelY > averageY-7 && accelY < averageY+7 &&
-		accelZ > averageZ-7 && accelZ < averageZ+7 &&
+	if (accelX < averageX+5 && accelX > averageX-5 && 
+		accelY > averageY-5 && accelY < averageY+5 &&
+		accelZ > averageZ-5 && accelZ < averageZ+5 &&
 		motion_check == 0 ) {
 		 console.log('call function');
-		 navigator.vibrate(1000);
+		 navigator.vibrate(1000);  //나중에 뺄 코드
 		 eventtopc();
 		 p_makeJsonEventTime();
 		 motion_check=1;
@@ -118,14 +125,30 @@ function motionSensor() {
 	accelZ = 0;
 }
 
+function test_motionSensor() {
+	if (accelX < averageX+5 && accelX > averageX-5 && 
+		accelY > averageY-5 && accelY < averageY+5 &&
+		accelZ > averageZ-5 && accelZ < averageZ+5) 
+	{
+		 navigator.vibrate(1000);
+	}
+	accelX = 0;
+	accelY = 0;
+	accelZ = 0;
+}
+
+
 function ready_motionSetting() {
 	if(averageX != 0 && averageY != 0 && averageZ != 0) {
 		//모션이 저장되어있을 경우 해당페이지로 바로이동
+		$('#reset_button').removeAttr('disabled');
+		$('#motion_test_button').removeAttr('disabled');	
     }
 	else
 	{
 		$('#ok_button').attr('disabled','disabled');
 		$('#reset_button').attr('disabled','disabled');
+		$('#motion_test_button').attr('disabled','disabled');
 		alert('같은동작을 5번 해주세요!');
 		arrayIndex=0;
 		accelX = 0;
@@ -153,12 +176,17 @@ function finish_motionSetting() {
 	document.getElementById("ok_button").value="완료";
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').removeAttr('disabled');
-	
+	$('#motion_test_button').removeAttr('disabled');
 }
 function modify_motionSetting() {
 	document.getElementById("ok_button").value="확인";
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').attr('disabled','disabled');
+	$('#motion_test_button').attr('disabled','disabled');
+	check = 0;
+	document.getElementById("enable_motion").innerHTML="Off";
+	motion_test=0;
+	document.getElementById("test_motion").innerHTML="Off";
 	arrayIndex=0;
 	accelX = 0;
     accelY = 0;
@@ -166,8 +194,9 @@ function modify_motionSetting() {
     averageX=0;
 	averageY=0;
 	averageZ=0;
+	save_setLocalStorage();
 }
-function is_motion() {
+function is_motion() {   //back버튼 눌렀을 때  
 	if(averageX != 0 && averageY != 0 && averageZ != 0) {
 		document.getElementById("motion_state").innerHTML="Modify Motion";
     }
@@ -180,7 +209,17 @@ function is_motion() {
 	    accelZ = 0;
 
 	}
+        
+	motion_test=0;  //설정화면에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
+	document.getElementById("test_motion").innerHTML="Off";
+	
+	
 }
+function main_to_back(){
+	check=0;   //메인화면 에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
+	document.getElementById("enable_motion").innerHTML="Off";
+}
+
 
 function enable_motion(){
 	if(averageX != 0 && averageY != 0 && averageZ != 0){        //motion이 설정되어있을 때 motion설정을 on/off가능  
@@ -240,6 +279,21 @@ function save_setLocalStorage(){
 	window.localStorage['averageY']=averageY;
 	window.localStorage['averageZ']=averageZ;
 	window.localStorage['arrayIndex']=arrayIndex;
+}
+
+function test_motion_on_off(){
+	
+	if(motion_test==0)
+	{
+		document.getElementById("test_motion").innerHTML="On";
+		motion_test=1;
+		check = 0;
+	}
+	else
+	{
+		document.getElementById("test_motion").innerHTML="Off";
+		motion_test=0;
+	}	
 }
 
 

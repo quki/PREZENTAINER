@@ -25,6 +25,7 @@ function updateAfterStart(){
     $('#startbtn').attr('disabled','disabled');
     $('#pceventbtn').removeAttr('disabled');
     $('#stopbtn').removeAttr('disabled');
+    $('#motionbtn').removeAttr('disabled');
   }else{
     toastAlert('연결을 확인하세요.');
   }
@@ -34,6 +35,7 @@ function updateAfterStop(){
   if(!isConnect){
     $('#pceventbtn').attr('disabled','disabled');
     $('#stopbtn').attr('disabled','disabled');
+    $('#motionbtn').attr('disabled','disabled');
   }
 }
 

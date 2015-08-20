@@ -2,5 +2,6 @@
 #add
 #modify
 res/wgt/author-signature.xml
-res/wgt/js/motion.js
+res/wgt/index.html
+res/wgt/js/viewhelper.js
 res/wgt/signature1.xml
