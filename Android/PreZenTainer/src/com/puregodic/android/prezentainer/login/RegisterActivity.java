@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Button btnRegister,btnLinkToLogin;
 
-    private EditText inputFullName,inputEmail,inputPassword,inputPasswordCheck;
+    private EditText inputEmail,inputPassword,inputPasswordCheck;
     private LinearLayout rootView;
     private DialogHelper mDialogHelper;
 
@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        inputFullName = (EditText)findViewById(R.id.name);
         inputEmail = (EditText)findViewById(R.id.email);
         inputPassword = (EditText)findViewById(R.id.password);
         inputPasswordCheck = (EditText)findViewById(R.id.password_check);
@@ -83,15 +82,14 @@ public class RegisterActivity extends AppCompatActivity {
         // Register Button Click event
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String name = inputFullName.getText().toString();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
                 String passwordCheck = inputPasswordCheck.getText().toString();
 
-                if (name.trim().length() > 0 && email.trim().length() > 0 && password.trim().length() > 0 && passwordCheck.trim().length()>0) {
+                if (email.trim().length() > 0 && password.trim().length() > 0 && passwordCheck.trim().length()>0) {
                     
                     if(password.equals(passwordCheck)){
-                        registerUser(name, email, password);
+                        registerUser(email, password);
                     }else{
                         Toast.makeText(RegisterActivity.this, "비밀번호가 서로 다릅니다", Toast.LENGTH_LONG).show();
                         inputPassword.requestFocus();
@@ -114,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
    // 서버에 회원 정보 insert
-    private void registerUser(final String name, final String email, final String password) {
+    private void registerUser(final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -180,7 +178,7 @@ public class RegisterActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", name);
+                params.put("name", "user");
                 params.put("email", email);
                 params.put("password", password);
                 params.put("tag", "register");

@@ -28,5 +28,6 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_card_view">CardViewActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_result">ResultActivity</string>
 
 </resources>

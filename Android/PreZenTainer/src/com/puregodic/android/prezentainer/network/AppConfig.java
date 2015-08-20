@@ -7,7 +7,7 @@ public class AppConfig {
     // Server user register url
     public static String URL_REGISTER = "http://cyh1704.dothome.co.kr/logregi/index.php";
     
- // Server insert data to DB url
+    // Server insert data to DB url
     public static String URL_INSERT = "http://cyh1704.dothome.co.kr/tizen/inserting.php";
     
     // Server fetch data from DB url

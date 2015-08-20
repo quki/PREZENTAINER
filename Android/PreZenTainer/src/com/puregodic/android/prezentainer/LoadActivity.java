@@ -1,7 +1,10 @@
 
 package com.puregodic.android.prezentainer;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,14 +25,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.Request.Method;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleAdapter;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleData;
 import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
+import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
 import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
@@ -184,53 +193,65 @@ public class LoadActivity extends AppCompatActivity {
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
         
-        
-        
-        JsonObjectRequest request = new JsonObjectRequest(AppConfig.URL_FETCH, null,
-                
-                new Response.Listener<JSONObject>(){
+        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH,
+                new Response.Listener<String>() {
 
                     @Override
-                    public void onResponse(JSONObject response) {
-                           mDialogHelper.hidePdialog();
-                           
-                         // parsing
-                           try {
-                               
-                               JSONArray mJsonArray = response.getJSONArray("myJson");
-                               Log.v(TAG, mJsonArray.toString());
-                               
-                               for(int i=0; i<mJsonArray.length(); i++){
-                                   JSONObject jsonObj = (JSONObject)mJsonArray.get(i);
-                                   String title = jsonObj.getString("title");
-                                   String date = jsonObj.getString("date");
-                                   LoadPtTitleData mData =  new LoadPtTitleData();
-                                   mData.setTitle(title);
-                                   mData.setDate(date);
-                                   mDataList.add(mData);
-                                   }
-                               
+                    public void onResponse(String response) {
+                        
+                        mDialogHelper.hidePdialog();
+                        
+                        try {
+                            // String response -> JSON Array -> JSON Object 추출 -> 개별 항목 parsing
+                            JSONArray jArray = new JSONArray(response);
+                            Log.e("PARSING", jArray.toString());
+                            for(int i = 0; i<jArray.length(); i++){
+                                JSONObject jObj = (JSONObject)jArray.get(i);
+                                String title = jObj.getString("title");
+                                String date = jObj.getString("date");
+                                LoadPtTitleData mData =  new LoadPtTitleData();
+                                mData.setTitle(title);
+                                mData.setDate(date);
+                                mDataList.add(mData);
+                            }
+
                         } catch (JSONException e) {
-                            
-                            Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                            Log.e(TAG, "JSONException : " + e.getMessage());
                         }
-                           
-                           mAdapter.notifyDataSetChanged();
-                           
+                        mAdapter.notifyDataSetChanged();
                     }
-            
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error: " + error.getMessage());
                         mDialogHelper.hidePdialog();
-                        Log.e(TAG, "Server Error: " + error.getMessage());
-                        
                     }
-                });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(request);
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("yourId", yourId);
+                return params;
+            }
+
+            // Setting Encoding at Volley
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String utf8String = new String(response.data, "UTF-8");
+                    return Response.success(new String(utf8String), HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                }
+            }
+
+        };
         
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq);
         
     }
     

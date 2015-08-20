@@ -103,11 +103,7 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
 			    
-			    
-			    
-			    
-				
-				if (FileTransferRequestedActivity.isUp) {
+				/*if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
 					mFileAction.onFileActionTransferRequested(transId, fileName); 
 					//put data into FileAction Interface
@@ -135,7 +131,32 @@ public class AccessoryService extends SAAgent {
 							break;
 						}
 					}
-				}
+				}*/
+				////////////////////////////////////////////////////////////////////////////////////////////
+				
+				
+				// 5초 이내에 응답을 해야한다
+                int counter = 0;
+                while (counter < 10) {
+                    counter++;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (mFileAction != null) {
+                        mFileAction.onFileActionTransferRequested(transId, fileName);
+                        break;
+                    }
+                }
+				
+				
+				
+				
+				
+				
+				
+				
 			}
 			
 			
@@ -153,33 +174,24 @@ public class AccessoryService extends SAAgent {
 			    
 			    
 			    
-			    
 			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 					mFileAction.onFileActionTransferComplete();
 					
-					
+					// 파일 전송이 완료된 시간 측정
 					Calendar calendar = Calendar.getInstance();
 	                date = new StringBuffer();
 	                date.append(String.valueOf(calendar.get(Calendar.YEAR)));
-	                date.append("- ");
+	                date.append("년 ");
 	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-	                date.append("- ");
-	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-	                date.append("- ");
-	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-	                date.append("- ");
-	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-	                date.append("-");
-	                /*String currentTime = String.format("a%02d%02d%02d-%02d%02d%02d*%s@%s!",
-	                        calendar.get(Calendar.YEAR) % 100,
-	                        calendar.get(Calendar.MONTH) + 1,
-	                        calendar.get(Calendar.DAY_OF_MONTH),
-	                        calendar.get(Calendar.HOUR_OF_DAY),
-	                        calendar.get(Calendar.MINUTE),
-	                        calendar.get(Calendar.SECOND));*/
+	                date.append("월 ");
+	                date.append(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+	                date.append("일 ");
+	                date.append(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+	                date.append("시 ");
+	                date.append(String.valueOf(calendar.get(Calendar.MINUTE)));
+	                date.append("분 ");
 	                Log.d(TAG, date.toString());
-					
 					
 					StringRequest str = new StringRequest(Method.POST,AppConfig.URL_INSERT,
                             new Response.Listener<String>() {
@@ -198,11 +210,11 @@ public class AccessoryService extends SAAgent {
 
                         @Override
                         protected Map<String, String> getParams() {
-                            // Posting params to register url
+                            // Create Parameter to insert Table
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("email", yourId);
                             params.put("title", mPtTitle);
-                            params.put("date", "2015-77-77");
+                            params.put("date", date.toString());
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;
@@ -318,14 +330,23 @@ public class AccessoryService extends SAAgent {
 		@Override
 		public void onReceive(int channelId, byte[] data) {
 		    
+		 // MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
+		    
 			if (channelId == CHANNEL_ID_EVENT) {
-
+			   
 				new Thread(new Runnable() {
 					public void run() {
 						try {
 							// event 전달
 							ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
 							mConnecToPcHelper.transferToPc(mDeviceName);
+							if(mConnectionHandler != null){
+							    final String unlockMessage =  new String("UNLOCK");
+							    Thread.sleep(1000);
+							    mConnectionHandler.send(CHANNEL_ID_EVENT, unlockMessage.getBytes());
+							    Log.e(TAG,unlockMessage);
+							}
+							 
 						} catch (Exception e) {
 							Log.e(TAG, "Cannot transfer data to PC");
 						}
@@ -337,8 +358,6 @@ public class AccessoryService extends SAAgent {
 			    jsonHR = new String(data);
 			    Log.v(TAG, jsonHR);
 			    
-				/*MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
-				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });*/
 				
 			}else if (channelId == CHANNEL_ID_EVENTTIME){
 			    
@@ -349,7 +368,12 @@ public class AccessoryService extends SAAgent {
 
 		}
 
-		@Override
+		private void send(int channelIdEvent, String string) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
 		protected void onServiceConnectionLost(int reason) {
 			closeConnection();
 			Log.e(TAG, "onServiceConnectionLost ==socket close== reason : "
@@ -382,6 +406,7 @@ public class AccessoryService extends SAAgent {
         }
     }
     
+    // Send Timer data to gear by JSON
     public void sendDataToGear(String mData) {
         final String message = new String(mData);
         if(mConnectionHandler!= null){

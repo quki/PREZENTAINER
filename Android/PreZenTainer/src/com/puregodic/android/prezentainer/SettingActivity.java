@@ -282,10 +282,13 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                         }else{
                                             sendDataToService("0");
                                         }
-                                        Intent startActivity = new Intent(SettingActivity.this, StartActivity.class);
-                                        startActivity(startActivity);
-                                        mDeviceName = null;
                                         
+                                        // Start Activity로 나의 id와 PT 제목을 넘겨준다.
+                                        Intent startIntent = new Intent(SettingActivity.this, StartActivity.class);
+                                        startIntent.putExtra("yourId", yourId);
+                                        startIntent.putExtra("title", mPtTitle);
+                                        startActivity(startIntent);
+                                        mDeviceName = null;
                                         
                                     }else{
                                         

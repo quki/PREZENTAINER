@@ -138,6 +138,8 @@ public class LoginActivity extends AppCompatActivity {
  
         mDialogHelper.showPdialog("잠시만 기다려주세요...", false);
         
+        
+        
         StringRequest strReq = new StringRequest(Method.POST,
                 AppConfig.URL_REGISTER, new Response.Listener<String>() {
  

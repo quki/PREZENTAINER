@@ -63,7 +63,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
         }
 		
 		
-        mCtxt.bindService(new Intent(getApplicationContext(), AccessoryService.class),
+        mCtxt.bindService(new Intent(mCtxt, AccessoryService.class),
                 this.mServiceConnection, Context.BIND_AUTO_CREATE);
 		
 	}
@@ -160,7 +160,6 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
             public void onFileActionTransferRequested(int id, String path) {
                 mFilePath = path;
                 mTransId = id;
-                
                 String receiveFileName = mFilePath.substring(mFilePath.lastIndexOf("/"), mFilePath.length());
                 mAccessoryService.receiveFile(mTransId, DEST_DIRECTORY + receiveFileName, true);
                 Log.i(TAG, "Transfer accepted");
