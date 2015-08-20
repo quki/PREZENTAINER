@@ -4,6 +4,10 @@ var accelX = 0, accelY = 0, accelZ = 0;
 //모션사용 check변수
 var check = 0;
 
+//1번모션 인식 위한 변수
+var motion_check=0;
+
+
 //사용자가 입력한 가속도 값의 평균값
 var averageX = 0, averageY = 0, averageZ = 0;
 
@@ -76,7 +80,7 @@ function buttonPush() {
 				console.log("sum : " + sumX + " ," + sumY + " ," + sumZ);
 			}
 
-			if(gapSumX<20 && gapSumY<20 && gapSumZ<20 )        //일정하게 휘둘렀다면
+			if(gapSumX<25 && gapSumY<25 && gapSumZ<25 )        //일정하게 휘둘렀다면
 			{
 				for (var i = 0; i < userInputIndex; i++) {
 					sumX += Number(accelXArr[i]);
@@ -99,11 +103,14 @@ function buttonPush() {
 }
 
 function motionSensor() {
-	if (accelX < averageX+4 && accelX > averageX-4 && 
-		accelY > averageY-4 && accelY < averageY+4 &&
-		accelZ > averageZ-4 && accelZ < averageZ+4   ) {
+	if (accelX < averageX+5 && accelX > averageX-5 && 
+		accelY > averageY-5 && accelY < averageY+5 &&
+		accelZ > averageZ-5 && accelZ < averageZ+5 &&
+		motion_check == 0) {
+		 console.log('call function');
 		 navigator.vibrate(1000);
-		 //eventtopc();
+		 eventtopc();
+		 motion_check=1;
 	}
 	accelX = 0;
 	accelY = 0;

@@ -1,7 +1,8 @@
-
-var CHANNELID_EVENT = 104,
+var CHANNELID_SETTING = 100,
+	CHANNELID_EVENT = 104,
     CHANNELID_HR = 110,
     CHANNELID_EVENTTIME = 114;
+
 
 var isConnect = false;
 var heartRateArray ;
