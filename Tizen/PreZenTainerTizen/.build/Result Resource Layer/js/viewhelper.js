@@ -35,6 +35,8 @@ function updateAfterStop(){
   if(!isConnect){
     $('#pceventbtn').attr('disabled','disabled');
     $('#stopbtn').attr('disabled','disabled');
+    check = 0;
+	document.getElementById("enable_motion").innerHTML="Off";
     $('#motionbtn').attr('disabled','disabled');
   }
 }
