@@ -11,7 +11,9 @@ var heartRateArray ;
 var totalTime = 0; //슬라이드 개별설정 처리해주기 위한 전역변수
 var currentSlide = 0 ; //현재 슬라이드 위치
 var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
-//
+
+//makeJsonEventTime 함수참조 포인터 만들기
+var p_makeJsonEventTime;
 
 // Event btn clicked
 function eventtopc() {

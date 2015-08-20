@@ -103,13 +103,14 @@ function buttonPush() {
 }
 
 function motionSensor() {
-	if (accelX < averageX+5 && accelX > averageX-5 && 
-		accelY > averageY-5 && accelY < averageY+5 &&
-		accelZ > averageZ-5 && accelZ < averageZ+5 &&
-		motion_check == 0) {
+	if (accelX < averageX+7 && accelX > averageX-7 && 
+		accelY > averageY-7 && accelY < averageY+7 &&
+		accelZ > averageZ-7 && accelZ < averageZ+7 &&
+		motion_check == 0 ) {
 		 console.log('call function');
 		 navigator.vibrate(1000);
 		 eventtopc();
+		 p_makeJsonEventTime();
 		 motion_check=1;
 	}
 	accelX = 0;

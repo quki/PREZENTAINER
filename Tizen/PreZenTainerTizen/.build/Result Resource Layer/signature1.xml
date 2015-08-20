@@ -4,7 +4,7 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>aaXfwPxItKhOtm75vdDhAOTxwcEgoQDSAmbHuG1a5OY=</DigestValue>
+<DigestValue>SN0nZHc5xjU9mB2nT1wXMxE8pG/2I0ilXlRu1w7aEBM=</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -160,7 +160,7 @@
 </Reference>
 <Reference URI="js%2Fglobalfcn.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>QGoUraFKAubBE+bZb9QJZmmQ9/Ls4mnXP/VdhMAIMjQ=</DigestValue>
+<DigestValue>HojwMTk2gTB/7Mp4ydTthz0mm7ikKlnV5zapMOb4jbg=</DigestValue>
 </Reference>
 <Reference URI="js%2Fhelpers%2Fdate.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -184,7 +184,7 @@
 </Reference>
 <Reference URI="js%2Fmotion.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>lIOe8i8fI444rOv6pR1t1HjSaJmnSOpsNpLEoYKcEwM=</DigestValue>
+<DigestValue>I07iKJCr/iuUwL72igLPXIvRP9WTP0VhkK8YHVcx61w=</DigestValue>
 </Reference>
 <Reference URI="js%2Fsap.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -204,7 +204,7 @@
 </Reference>
 <Reference URI="js%2Fviews%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>LRZ2Vplm3KEmsa57XBTbCIt8gkLDbcoc6RJuXVEdiNI=</DigestValue>
+<DigestValue>rXbEdRxEhqKGPJbsUSghJriQZ/9C4ZoBIetxvLWr2BE=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1111,11 +1111,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-ieJR4rg1gY//UOHJgSzvo5Ct/1ZXCg56zhw3irI1IFfem9+JSZ8sRJymMxK1fHBLLNX14NS8aYs5
-Qav68xz5WVXdkz7Db/iyDWNDvOwV7l1nQJ5Ksf5zkL9YeNDCApoUfY/CzX4Z+gO1rqylQmHxS10D
-lG2nDkj878T+O7QDEvXGmdxIyk4tjo5CB9QN9FxbkKv+vbqRGK8vo0p2jB8KCEbO9Adkrv3x5zAn
-wLq9g2KSpss55BErUKKsakSJhgm4iy8bPGfEAqo1rAmIduNcLZNYfAYTnRabqVWDc70AkpjMg4cF
-QeaprR+gEAtYmzY1WTAiKJNf/r8rxc0MV96MnA==
+LXR6XWh/MHkSauJhs9Zt2V43NzPBeVIiUkOjFXttDmRQVCc8c1oX/MTpFSMigGv6bvL7cGCsWlJO
+xiVMC1cdVKY52GSRFCD7FB0kssi6vwN7hMlAF07HQyRFL1LIIH0M3KqOKL0OerLctOQ7gZ2qaXgX
+THj631NINj1jCuqUTSZzQoDOJJAoUbNbO5GlB9q/K84DDW0JLqqjxFJFWbal/Lg6L7l9yYNeIEZq
+j1mt+3WSFAlZCs+FODXTgnTGPtJxREotrYShl7sBwo5sLRhuG/4LQTdqC8vhtRGHJYY1w6Gel+JI
+Hy+I4iCxuavBgVX60jqmoGzLnPyh/bmm3CYUPQ==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

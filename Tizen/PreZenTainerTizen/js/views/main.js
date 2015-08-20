@@ -309,6 +309,7 @@ define({
       startTimeWatch();
       updateAfterStart();
       setStart();
+      p_makeJsonEventTime=makeJsonEventTime;
     }
 
     function onStopBtnClick() {

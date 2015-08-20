@@ -156,7 +156,7 @@
 </Reference>
 <Reference URI="js%2Fglobalfcn.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>QGoUraFKAubBE+bZb9QJZmmQ9/Ls4mnXP/VdhMAIMjQ=</DigestValue>
+<DigestValue>HojwMTk2gTB/7Mp4ydTthz0mm7ikKlnV5zapMOb4jbg=</DigestValue>
 </Reference>
 <Reference URI="js%2Fhelpers%2Fdate.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -180,7 +180,7 @@
 </Reference>
 <Reference URI="js%2Fmotion.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>lIOe8i8fI444rOv6pR1t1HjSaJmnSOpsNpLEoYKcEwM=</DigestValue>
+<DigestValue>I07iKJCr/iuUwL72igLPXIvRP9WTP0VhkK8YHVcx61w=</DigestValue>
 </Reference>
 <Reference URI="js%2Fsap.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -200,7 +200,7 @@
 </Reference>
 <Reference URI="js%2Fviews%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>LRZ2Vplm3KEmsa57XBTbCIt8gkLDbcoc6RJuXVEdiNI=</DigestValue>
+<DigestValue>rXbEdRxEhqKGPJbsUSghJriQZ/9C4ZoBIetxvLWr2BE=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1107,11 +1107,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-dDHpjLzTteveTWjkzkKjfL9wHe3CGDJuWvv+KAYx38KUCc3eSLcvgeyyQ/Q4JN9vv8mz/R5Kk9La
-GdCNDHbdA+MAkrxEYw3xU3nO4tBKljcN7mTegQ7JtU1L67zD7Cy9MLV0fVxzU/vCJ0f0TiK3Imm1
-U8GBr7yskaFlOu8YgC2+B39f86ourPomdNETso/0JOyreechboYinOFRFQBt/5rdlvZB1O9fl6Me
-d6nQm+R/YLALbL3zBCnGbp1QSi6aqSxZM/O/c31se6HdLCMpYS0vqNpuKLHe7ma/jKTbRic+m/Ty
-zzuxj2cxOObri62jTQc5pPsfz+WxZJu9ysNJKQ==
+Re6eneRWndRpwbYxu1bCJzM3wqzNAjKV1z+FYT31t/AOBVKWVQrHZ0EufjORFfPUbZhpJTW3dyRu
+1pAt7Sp5WjA+yeKQ3k54EvLyouJIwWlvsUFcFJGK/dzAGsgTkhDVzh1kqiaQqBpMExh2emHjVVr6
+083vLZH9Lwc+r4kqFOy1VIMTuMfnUN/JX8DnMcRihg9JYvUFiBMB32NgQJljgLAotzacBS5HS1R4
+qdn0sSz24LeSpjBhduaE6+bjy/sEypbvVAYbaOk/IxFEVRcfPAF3Q+QLycKqmgy5eOHSswpIZMqb
+2QeeyTXbaarjGMLAIITFvJjktyEG3ZkCZp7Hng==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
