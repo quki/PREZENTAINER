@@ -2,5 +2,5 @@
 #add
 #modify
 res/wgt/author-signature.xml
-res/wgt/js/viewhelper.js
+res/wgt/js/globalfcn.js
 res/wgt/signature1.xml

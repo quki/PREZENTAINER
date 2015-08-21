@@ -8,9 +8,11 @@ var check = 0;
 var motion_check=0;
 
 
-//사용자가 입력한 가속도 값의 평균값
-var averageX = 0, averageY = 0, averageZ = 0;
+//사용자가 입력한 가속도 값의 평균값 (오른쪽 슬라이드 넘길값)
+var averageX_right = 0, averageY_right = 0, averageZ_right = 0;
 
+//사용자가 입력한 가속도 값의 평균값 (왼쪽 슬라이드 넘길값)
+var averageX_left = 0, averageY_left = 0, averageZ_left = 0;
 
 //배열의
 var userInputIndex = 5;
@@ -18,6 +20,9 @@ var arrayIndex = 0;
 
 //motion test하기위한 on/off 제어 변수
 var motion_test=0;  //0일때 off ,1 일때 on !!
+
+//좌,우 측 모션을 컨트롤 할 변수
+var control_right_left=0;          //0일경우 오른쪽!   1 일경우 왼쪽!!
 
 //사용자가 입력한 가속도값을 저장하는 배열
 var accelXArr = new Array(userInputIndex);
@@ -47,11 +52,11 @@ function onDeviceMotion(e) {
     }
 
     showResult();
-    if(averageX != 0 && averageY != 0 && averageZ != 0 && check==1) {    //통신 할때 작동하는 코드!
+    if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0 && check==1) {    //통신 할때 작동하는 코드!
     	motionSensor();
     }
     
-    if(averageX != 0 && averageY != 0 && averageZ != 0 && motion_test==1) {    //test할때 작동하는 코드
+    if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0 && motion_test==1) {    //test할때 작동하는 코드
     	test_motionSensor();
     }
     
@@ -95,30 +100,53 @@ function buttonPush() {
 					sumZ += Number(accelZArr[i]);
 					console.log("sum : " + sumX + " ," + sumY + " ," + sumZ);
 				}
-				averageX = sumX/userInputIndex;
-				averageY = sumY/userInputIndex;
-				averageZ = sumZ/userInputIndex;
-				finish_motionSetting();
+				if(control_right_left==0)
+				{
+					averageX_right = sumX/userInputIndex;
+					averageY_right = sumY/userInputIndex;
+					averageZ_right = sumZ/userInputIndex;
+					control_right_left=1;
+					arrayIndex=0;
+					alert('오른쪽 넘김 설정 완료!! 왼쪽 넘김을 위한 같은동작을 5번 해주세요!!');
+				}
+				else
+				{
+					averageX_left = sumX/userInputIndex;
+					averageY_left = sumY/userInputIndex;
+					averageZ_left = sumZ/userInputIndex;
+					finish_motionSetting();
+				}
 			}
 			else	
 			{
-				retry_motionSetting()
+				retry_motionSetting();
 			}
 		}   
 	}
-	console.log("average : " + averageX + " ," + averageY + " ," + averageZ);
+	console.log("average_right : " + averageX_right + " ," + averageY_right + " ," + averageZ_right);
+	console.log("average_left : " + averageX_left + " ," + averageY_left + " ," + averageZ_left);
 }
 
 function motionSensor() {
-	if (accelX < averageX+5 && accelX > averageX-5 && 
-		accelY > averageY-5 && accelY < averageY+5 &&
-		accelZ > averageZ-5 && accelZ < averageZ+5 &&
+	if (accelX < averageX_right+5 && accelX > averageX_right-5 &&              //오른쪽 이벤트
+		accelY > averageY_right-5 && accelY < averageY_right+5 &&
+		accelZ > averageZ_right-5 && accelZ < averageZ_right+5 &&
 		motion_check == 0 ) {
-		 console.log('call function');
+		 console.log('call right function');
 		 navigator.vibrate(1000);  //나중에 뺄 코드
-		 eventtopc();
+		 eventtopc("right"); //오른쪽 이벤트!
 		 p_makeJsonEventTime();
 		 motion_check=1;
+	}
+	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&               //왼쪽이벤트
+		accelY > averageY_left-5 && accelY < averageY_left+5 &&
+		accelZ > averageZ_left-5 && accelZ < averageZ_left+5 &&
+		motion_check == 0 ) {
+		console.log('call left function');
+		navigator.vibrate(1000);  //나중에 뺄 코드
+		eventtopc("left"); //왼쪽 이벤트!
+		p_makeJsonEventTime();
+		motion_check=1;
 	}
 	accelX = 0;
 	accelY = 0;
@@ -126,11 +154,17 @@ function motionSensor() {
 }
 
 function test_motionSensor() {
-	if (accelX < averageX+5 && accelX > averageX-5 && 
-		accelY > averageY-5 && accelY < averageY+5 &&
-		accelZ > averageZ-5 && accelZ < averageZ+5) 
+	if (accelX < averageX_right+5 && accelX > averageX_right-5 &&  //오른쪽 이벤트
+		accelY > averageY_right-5 && accelY < averageY_right+5 &&
+		accelZ > averageZ_right-5 && accelZ < averageZ_right+5) 
 	{
-		 navigator.vibrate(1000);
+		 navigator.vibrate(3000);
+	}
+	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&    //왼쪽 이벤트
+		accelY > averageY_left-5 && accelY < averageY_left+5 &&
+		accelZ > averageZ_left-5 && accelZ < averageZ_left+5) 
+	{
+		navigator.vibrate(1000);
 	}
 	accelX = 0;
 	accelY = 0;
@@ -139,7 +173,8 @@ function test_motionSensor() {
 
 
 function ready_motionSetting() {
-	if(averageX != 0 && averageY != 0 && averageZ != 0) {
+	if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0 &&
+			averageX_left != 0 && averageY_left != 0 && averageZ_left != 0	) {
 		//모션이 저장되어있을 경우 해당페이지로 바로이동
 		$('#reset_button').removeAttr('disabled');
 		$('#motion_test_button').removeAttr('disabled');	
@@ -149,7 +184,7 @@ function ready_motionSetting() {
 		$('#ok_button').attr('disabled','disabled');
 		$('#reset_button').attr('disabled','disabled');
 		$('#motion_test_button').attr('disabled','disabled');
-		alert('같은동작을 5번 해주세요!');
+		alert('오른쪽 넘김을 위한 같은동작을 5번 해주세요!');
 		arrayIndex=0;
 		accelX = 0;
 	    accelY = 0;
@@ -158,8 +193,15 @@ function ready_motionSetting() {
 	save_setLocalStorage();
 }
 function retry_motionSetting() {
+	if(control_right_left==0)
+	{
+		alert('오른쪽넘김 모션이 일정하지 않습니다.! 다시입력!');
+	}
+	else
+	{
+		alert('왼쪽넘김 모션이 일정하지 않습니다.! 다시입력!');
+	}
 
-	alert('모션이 일정하지 않습니다.! 다시입력!');
 	$('#ok_button').attr('disabled','disabled');
 	arrayIndex=0;
 	accelX = 0;
@@ -168,9 +210,12 @@ function retry_motionSetting() {
 }
 function finish_motionSetting() {
 	alert('완료되었습니다!');
-	console.log(averageX);
-	console.log(averageY);
-	console.log(averageZ);
+	console.log(averageX_right);
+	console.log(averageY_right);
+	console.log(averageZ_right);
+	console.log(averageX_left);
+	console.log(averageY_left);
+	console.log(averageZ_left);
 	console.log(arrayIndex);
 	save_setLocalStorage();
 	document.getElementById("ok_button").value="완료";
@@ -179,6 +224,7 @@ function finish_motionSetting() {
 	$('#motion_test_button').removeAttr('disabled');
 }
 function modify_motionSetting() {
+	alert('오른쪽 넘김을 위한 같은동작을 5번 해주세요!');
 	document.getElementById("ok_button").value="확인";
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').attr('disabled','disabled');
@@ -188,16 +234,21 @@ function modify_motionSetting() {
 	motion_test=0;
 	document.getElementById("test_motion").innerHTML="Off";
 	arrayIndex=0;
+	
+	control_right_left=0;
 	accelX = 0;
     accelY = 0;
     accelZ = 0;
-    averageX=0;
-	averageY=0;
-	averageZ=0;
+    averageX_right=0;
+	averageY_right=0;
+	averageZ_right=0;
+	averageX_left=0;
+	averageY_left=0;
+	averageZ_left=0;
 	save_setLocalStorage();
 }
 function is_motion() {   //back버튼 눌렀을 때  
-	if(averageX != 0 && averageY != 0 && averageZ != 0) {
+	if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0) {
 		document.getElementById("motion_state").innerHTML="Modify Motion";
     }
 	else
@@ -222,7 +273,7 @@ function main_to_back(){
 
 
 function enable_motion(){
-	if(averageX != 0 && averageY != 0 && averageZ != 0){        //motion이 설정되어있을 때 motion설정을 on/off가능  
+	if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0){        //motion이 설정되어있을 때 motion설정을 on/off가능  
 		
 		if(check==0)
 		{
@@ -241,33 +292,45 @@ function enable_motion(){
 	}
 }
 function load_setLocalStorage(){
-	if(window.localStorage['averageX'] == null && 
-			  window.localStorage['averageY'] == null &&
-			           window.localStorage['averageZ'] == null &&
-			           							window.localStorage['arrayIndex'] == null)
+	if(window.localStorage['averageX_right'] == null && 
+			  window.localStorage['averageY_right'] == null &&
+			           window.localStorage['averageZ_right'] == null &&
+			           		window.localStorage['averageX_left'] == null && 
+			           				window.localStorage['averageY_left'] == null &&
+			           					window.localStorage['averageZ_left'] == null &&
+			           								window.localStorage['arrayIndex'] == null)
 	{
 		alert('Motion을 사용하려면 모션을 등록하셔주세요!');
 		//어플시작!
 	}	
-	else if(window.localStorage['averageX'] == 0 && 
-			  window.localStorage['averageY'] == 0 &&
-	           window.localStorage['averageZ'] == 0 &&
-	           		window.localStorage['arrayIndex'] == 0)
+	else if(window.localStorage['averageX_right'] == 0 && 
+			  	window.localStorage['averageY_right'] == 0 &&
+			  		window.localStorage['averageZ_right'] == 0 &&
+			  			window.localStorage['averageX_left'] == 0 && 
+			  				window.localStorage['averageY_left'] == 0 &&
+			  					window.localStorage['averageZ_left'] == 0 &&
+			  							window.localStorage['arrayIndex'] == 0)
 	{
 		alert('Motion을 사용하려면 모션을 등록하셔주세요!');
 		//어플시작!
 	}
 	else
 	{
-		averageX=Number(window.localStorage['averageX']);
-		averageY=Number(window.localStorage['averageY']);
-		averageZ=Number(window.localStorage['averageZ']);
+		averageX_right=Number(window.localStorage['averageX_right']);
+		averageY_right=Number(window.localStorage['averageY_right']);
+		averageZ_right=Number(window.localStorage['averageZ_right']);
+		averageX_left=Number(window.localStorage['averageX_left']);
+		averageY_left=Number(window.localStorage['averageY_left']);
+		averageZ_left=Number(window.localStorage['averageZ_left']);
 		arrayIndex=Number(window.localStorage['arrayIndex']);
 		document.getElementById("motion_state").innerHTML="Modify Motion";
 		
-		console.log(averageX);
-		console.log(averageY);
-		console.log(averageZ);
+		console.log(averageX_right);
+		console.log(averageY_right);
+		console.log(averageZ_right);
+		console.log(averageX_left);
+		console.log(averageY_left);
+		console.log(averageZ_left);
 		console.log(arrayIndex);
 		
 		alert('Motion 등록이 되어있습니다.!');
@@ -275,9 +338,12 @@ function load_setLocalStorage(){
 }
 
 function save_setLocalStorage(){
-	window.localStorage['averageX']=averageX;
-	window.localStorage['averageY']=averageY;
-	window.localStorage['averageZ']=averageZ;
+	window.localStorage['averageX_right']=averageX_right;
+	window.localStorage['averageY_right']=averageY_right;
+	window.localStorage['averageZ_right']=averageZ_right;
+	window.localStorage['averageX_left']=averageX_left;
+	window.localStorage['averageY_left']=averageY_left;
+	window.localStorage['averageZ_left']=averageZ_left;
 	window.localStorage['arrayIndex']=arrayIndex;
 }
 

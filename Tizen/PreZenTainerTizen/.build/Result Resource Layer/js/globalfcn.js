@@ -16,7 +16,7 @@ var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
 var p_makeJsonEventTime;
 
 // Event btn clicked
-function eventtopc() {
+function eventtopc(direction) {       //direction=0 이면 오른쪽 , direction=1 이면 왼쪽
   try {
 	//코드수정
 	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)
@@ -26,9 +26,17 @@ function eventtopc() {
 		clearTimeout(vibratingIntervalArr[currentSlide-1]);
 	}
 	++currentSlide; //슬라이드 +1
-	//  
-    mSASocket.sendData(CHANNELID_EVENT, "Current Slide : " + currentSlide);
-    console.log('Event to PC !' + currentSlide);
+	//
+	if(direction=="right") //오른쪽 이벤트 발생시!
+	{
+		mSASocket.sendData(CHANNELID_EVENT,"right" + "_Current Slide : " + currentSlide);
+	}
+	else //왼쪽 이벤트 발생시!
+	{
+		mSASocket.sendData(CHANNELID_EVENT,"left" + "_Current Slide : " + currentSlide);
+	}
+
+    console.log('Event to PC !' + currentSlide + direction);
     
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
@@ -91,13 +99,13 @@ function startTimer(){
     if(mTimeInterval.length !== 0){
     	//일정한 진동간격 일 때
     	if (mTimeInterval.length == 1) {
-    		vibratingInterval = setInterval(vibrator, mTimeInterval[0]*1000);
+    		vibratingInterval = setInterval(vibrator, mTimeInterval[0]*1000*60);
     	}
     	console.log('Timer Start ! Time Interval : '+ mTimeInterval[0] );
     	
     	//개별설정 일 때 첫번째 페이지 처리
     	if (mTimeInterval.length > 1) {
-    		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000));
+    		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000*60));
     		++currentSlide;
     	}
     //
