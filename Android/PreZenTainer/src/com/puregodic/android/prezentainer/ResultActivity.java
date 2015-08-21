@@ -234,12 +234,8 @@ public class ResultActivity extends AppCompatActivity {
            }
            dataset.addSeries(series);
          }
-       }
-    
-    
-    //재상바 관련////////////////////////////////////
-   
-    
+       } 
+    //재상바 관련////////////////////////////////////    
     public void buttonPlay(View v){
         /**
          * music.isPlaying()이 true : 음악이 현재 재생중입니다, false : 재생중이 아닙니다
