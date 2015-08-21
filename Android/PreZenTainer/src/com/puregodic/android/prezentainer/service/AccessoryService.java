@@ -311,10 +311,11 @@ public class AccessoryService extends SAAgent {
 		 // MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
 		    
 			if (channelId == CHANNEL_ID_EVENT) {
-			   
+			    final String direction =  new String(data);
 				new Thread(new Runnable() {
 					public void run() {
 						try {
+						    Log.e(TAG, direction);
 							// event 전달
 							ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
 							mConnecToPcHelper.transferToPc(mDeviceName);

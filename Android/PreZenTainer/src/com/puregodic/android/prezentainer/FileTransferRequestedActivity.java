@@ -31,10 +31,10 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
     public static boolean isUp = false;
 
     public int mTransId;
+    private String mDate;
     public static final String DIR_PATH = "/sdcard/prezentainer/";
     private Context mCtxt;
 
-    private String mFileName;
     private String mFileExtension;
     private AlertDialog mAlert;
     private ProgressBar mProgressBar;
@@ -86,15 +86,13 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
             public void onClick(View v) {
                 
                 
-               /* startActivity(new Intent()
+               startActivity(new Intent()
                 .setClass(FileTransferRequestedActivity.this, ResultActivity.class)
-                .putExtra("title", mFileName)
-                .putExtra("yourId", yourId));*/
-                
-                Intent i = new Intent(FileTransferRequestedActivity.this,ResultActivity.class);
-                i.putExtra("title", mFileName);
-                i.putExtra("yourId", yourId);
-                startActivity(i);
+                .putExtra("title", title)
+                .putExtra("date", mDate)
+                .putExtra("yourId", yourId));
+               
+                finish();
                 
             }
         });
@@ -127,21 +125,24 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 
     public void onDestroy() {
         isUp = false;
+        finish();
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
         isUp = false;
-        moveTaskToBack(true);
+        finish();
+        //moveTaskToBack(true);
     }
 
     // For Android before 2.0, Back key event
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
             isUp = false;
-            moveTaskToBack(true);
+            //moveTaskToBack(true);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -155,8 +156,9 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
             @Override
             public void onFileActionTransferRequested(int id, String date) {
                 mTransId = id;
+                mDate = date;
                 mFileExtension = ".amr";
-                mFileName = title + date + mFileExtension;
+                String mFileName = title + mDate + mFileExtension;
                 mAccessoryService.receiveFile(mTransId, DIR_PATH + mFileName, true);
                 Log.i(TAG, "Transfer accepted");
 
@@ -180,7 +182,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fileTransferStatus.setText("전송 완료 !"+title+yourId);
+                        fileTransferStatus.setText("전송 완료 !"+title+mDate+yourId);
                         mAlert.dismiss();
                         showBtn.setEnabled(true);
                     }

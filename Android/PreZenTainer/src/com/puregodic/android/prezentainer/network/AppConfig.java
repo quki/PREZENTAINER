@@ -13,5 +13,7 @@ public class AppConfig {
     // Server fetch data from DB url
     public static String URL_FETCH = "http://cyh1704.dothome.co.kr/tizen/select.php";
     
+    public static String URL_FETCH_GRAPH = "http://cyh1704.dothome.co.kr/tizen/second_select.php";
+    
     
 }
