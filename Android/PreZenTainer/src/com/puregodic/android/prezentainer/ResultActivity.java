@@ -202,7 +202,6 @@ public class ResultActivity extends AppCompatActivity {
     protected void onDestroy() {
         audio.stop();
         finish();
-        
         super.onDestroy();
     }
 
