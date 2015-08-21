@@ -2523,19 +2523,19 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0c0004;
         public static final int action_settings=0x7f0c0014;
         public static final int app_name=0x7f0c0012;
-        public static final int btn_link_to_login=0x7f0c0022;
-        public static final int btn_link_to_register=0x7f0c0021;
-        public static final int btn_login=0x7f0c001f;
-        public static final int btn_logout=0x7f0c0024;
-        public static final int btn_register=0x7f0c0020;
+        public static final int btn_link_to_login=0x7f0c0027;
+        public static final int btn_link_to_register=0x7f0c0026;
+        public static final int btn_login=0x7f0c0024;
+        public static final int btn_logout=0x7f0c0029;
+        public static final int btn_register=0x7f0c0025;
         public static final int hello_world=0x7f0c0013;
         /**  Login 
          */
-        public static final int hint_email=0x7f0c001b;
-        public static final int hint_name=0x7f0c001e;
-        public static final int hint_password=0x7f0c001c;
-        public static final int hint_password_check=0x7f0c001d;
-        public static final int name=0x7f0c0025;
+        public static final int hint_email=0x7f0c0020;
+        public static final int hint_name=0x7f0c0023;
+        public static final int hint_password=0x7f0c0021;
+        public static final int hint_password_check=0x7f0c0022;
+        public static final int name=0x7f0c002a;
         /**  Text to use when the number in a notification info is too large
          (greater than status_bar_notification_info_maxnum, defined in
          values/config.xml) and must be truncated. May need to be localized
@@ -2543,18 +2543,18 @@ containing a value of this type.
          [CHAR LIMIT=4] 
          */
         public static final int status_bar_notification_info_overflow=0x7f0c0011;
-        public static final int title_activity_card_view=0x7f0c0028;
+        public static final int title_activity_card_view=0x7f0c001d;
         public static final int title_activity_detail_setting=0x7f0c0017;
         public static final int title_activity_file_transfer_requested=0x7f0c0016;
         public static final int title_activity_load=0x7f0c0019;
         public static final int title_activity_login=0x7f0c001a;
-        public static final int title_activity_register=0x7f0c0026;
-        public static final int title_activity_result=0x7f0c002a;
+        public static final int title_activity_register=0x7f0c001b;
+        public static final int title_activity_result=0x7f0c001f;
         public static final int title_activity_setting=0x7f0c0015;
         public static final int title_activity_setting_bluetooth=0x7f0c0018;
-        public static final int title_activity_splash=0x7f0c0029;
-        public static final int title_activity_test=0x7f0c0027;
-        public static final int welcome=0x7f0c0023;
+        public static final int title_activity_splash=0x7f0c001e;
+        public static final int title_activity_test=0x7f0c001c;
+        public static final int welcome=0x7f0c0028;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f090043;

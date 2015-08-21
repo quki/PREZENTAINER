@@ -296,7 +296,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                     }else{
                                         
                                         finish();
-                                        Toast.makeText(SettingActivity.this, "설정을 다시 진행해주세요.",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SettingActivity.this, "설정을 다시 진행해주세요",Toast.LENGTH_SHORT).show();
                                     }
                                     
                                 }

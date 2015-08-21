@@ -48,10 +48,11 @@ import com.puregodic.android.prezentainer.network.AppController;
 
 public class ResultActivity extends AppCompatActivity {
 
-    private String title,yourId;
+    private String title,yourId,date;
     private DialogHelper mDialogHelper;
     private static final String TAG = ResultActivity.class.getSimpleName();
-    private ArrayList<Double> heartRateList = new ArrayList<Double>();
+    private ArrayList<Double> heartRateList;
+    private ArrayList<Double> eventTimeList;
     
     
     protected GraphicalView mChartView;
@@ -61,23 +62,26 @@ public class ResultActivity extends AppCompatActivity {
     MediaPlayer audio;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        
+        // 심장박동수와 eventTime을 받을 ArrayList
+        heartRateList = new ArrayList<Double>();
+        eventTimeList = new ArrayList<Double>();
         
         mDialogHelper = new DialogHelper(this);
         
         title = getIntent().getStringExtra("title");
         yourId = getIntent().getStringExtra("yourId");
-        Toast.makeText(getApplicationContext(), title+yourId, Toast.LENGTH_SHORT).show();
+        date = getIntent().getStringExtra("date");
+        Toast.makeText(getApplicationContext(), title+yourId+date, Toast.LENGTH_SHORT).show();
         
         
-        //fetchDataByVolley();
+        fetchDataByVolley();
         
         
-        
-        
-        Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title);
+        Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
         
         audio = MediaPlayer.create(this,audioPath);
         
@@ -181,7 +185,29 @@ public class ResultActivity extends AppCompatActivity {
         
     }
     
-  //그래프 관련함수///////////////////////////
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        
+        Toast.makeText(getApplicationContext(), "onPostCreate", Toast.LENGTH_SHORT).show();
+        
+        Log.d("PARSING", heartRateList.toString());
+        Log.d("PARSING", eventTimeList.toString());
+        
+        super.onPostCreate(savedInstanceState);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        audio.stop();
+        finish();
+        
+        super.onDestroy();
+    }
+
+
+    //그래프 관련함수///////////////////////////
     protected void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
            String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
            int labelsColor) {
@@ -323,31 +349,44 @@ public class ResultActivity extends AppCompatActivity {
 
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
+       
         
-        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH,
+        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH_GRAPH,
                 new Response.Listener<String>() {
+            
+            
 
                     @Override
                     public void onResponse(String response) {
                         
+                        
                         mDialogHelper.hidePdialog();
                         
                         try {
-                            // String response -> JSON Array -> JSON Object 추출 -> 개별 항목 parsing
+                            
+                            
+                            
+                            // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                             JSONObject jObj = new JSONObject(response);
-                            Log.e("PARSING", jObj.toString());
-                                JSONArray time = jObj.getJSONArray("time");
-                                JSONArray hbr = jObj.getJSONArray("hbr");
+                            Log.d("PARSING", jObj.toString());
+                            
+                                JSONArray time = new JSONArray(jObj.getString("time"));
+                                JSONArray hbr = new JSONArray(jObj.getString("hbr"));
                                 
-                                for(int i = 0;i<hbr.length();i++){
-                                   double Y_axisHeartRate = Double.valueOf((String)hbr.get(i)).doubleValue();
+                                for(int i = 0; i<hbr.length(); i++){
+                                   double Y_axisHeartRate = Double.valueOf(hbr.get(i).toString()).doubleValue();
                                    heartRateList.add(Y_axisHeartRate);
                                 }
-                                //heartRateMap.
-                                /*String timeStr = jObj.getString("time");
-                                String hbrStr = jObj.getString("hbr");*/
-                                Log.e(TAG, time.toString()+hbr.toString());
-
+                                
+                                for(int i = 0; i<time.length(); i++){
+                                    double X_axisEventTime = Double.valueOf(time.get(i).toString()).doubleValue();
+                                    eventTimeList.add(X_axisEventTime);
+                                 }
+                                
+                                Log.d("PARSING", heartRateList.toString());
+                                Log.d("PARSING", eventTimeList.toString());
+                                
+                                
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException : " + e.getMessage());
                         }

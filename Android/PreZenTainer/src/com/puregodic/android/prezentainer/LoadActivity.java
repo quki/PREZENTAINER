@@ -25,21 +25,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
+import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.Request.Method;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleAdapter;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleData;
 import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
 import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
@@ -191,7 +188,6 @@ public class LoadActivity extends AppCompatActivity {
     private void setDataByVolley(){
         
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
-        
         
         StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH,
                 new Response.Listener<String>() {
