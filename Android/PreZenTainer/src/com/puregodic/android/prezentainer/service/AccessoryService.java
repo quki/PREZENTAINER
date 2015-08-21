@@ -103,7 +103,7 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
 			    
-				/*if (FileTransferRequestedActivity.isUp) {
+				if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
 					mFileAction.onFileActionTransferRequested(transId, fileName); 
 					//put data into FileAction Interface
@@ -131,31 +131,7 @@ public class AccessoryService extends SAAgent {
 							break;
 						}
 					}
-				}*/
-				////////////////////////////////////////////////////////////////////////////////////////////
-				
-				
-				// 5초 이내에 응답을 해야한다
-                int counter = 0;
-                while (counter < 10) {
-                    counter++;
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (mFileAction != null) {
-                        mFileAction.onFileActionTransferRequested(transId, fileName);
-                        break;
-                    }
-                }
-				
-				
-				
-				
-				
-				
-				
+				}
 				
 			}
 			
