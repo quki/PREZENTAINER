@@ -51,10 +51,10 @@ public class ResultActivity extends AppCompatActivity {
     private String title,yourId,date;
     private DialogHelper mDialogHelper;
     private static final String TAG = ResultActivity.class.getSimpleName();
-    private ArrayList<Double> heartRateList;
-    private ArrayList<Double> eventTimeList;
+    private ArrayList<Double> heartRateList = new ArrayList<Double>();;
+    private ArrayList<Double> eventTimeList = new ArrayList<Double>();
     
-    
+    LinearLayout chart_area ;
     protected GraphicalView mChartView;
     Button buttonPlay;
     Button buttonStop;
@@ -66,38 +66,38 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         
-        // 심장박동수와 eventTime을 받을 ArrayList
-        heartRateList = new ArrayList<Double>();
-        eventTimeList = new ArrayList<Double>();
-        
         mDialogHelper = new DialogHelper(this);
         
         title = getIntent().getStringExtra("title");
         yourId = getIntent().getStringExtra("yourId");
         date = getIntent().getStringExtra("date");
-        Toast.makeText(getApplicationContext(), title+yourId+date, Toast.LENGTH_SHORT).show();
-        
         
         fetchDataByVolley();
         
-        
+        // audio path 구하기 
         Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
+        audio = MediaPlayer.create(this, audioPath);
         
-        audio = MediaPlayer.create(this,audioPath);
         
-        String[] titles = new String[] { "PPT" , "Slide_num"};
+        
+        
+        
+       
+        
         List<double[]> x = new ArrayList<double[]>();
         List<double[]> values = new ArrayList<double[]>();
         
         //double[] hbr_x= new double[audio.getDuration()/5000];      //심박수 x축 
-        double[] hbr_x= new double[]{5,10,15,20,25,30,35,40,45,50,55,60};
-        for(int i=0; i<audio.getDuration()/5000 ; i++)
+       double[] hbr_x= new double[]{5,10,15,20,25,30,35,40,45,50,55,60};
+        
+      for(int i=0; i<audio.getDuration()/5000 ; i++)
         {
            hbr_x[i]=i*5;
-        }                                                        
-        x.add(hbr_x);                                    
+        }                 
         
-        //double[] hbr_y= new double[audio.getDuration()/5000];      //심박수 y축                                                       //심박수 y축
+        x.add(hbr_x);                                 
+        
+        //double[] hbr_y= new double[audio.getDuration()/5000];      //심박수 y축
         double[] hbr_y= new double[]{60,65,68,72,77,81,59,78,63,66,67,78};
          
         values.add(hbr_y);                                         
@@ -111,29 +111,13 @@ public class ResultActivity extends AppCompatActivity {
          //values.add(new double[] { 40,40, 40, 40, 40});               //슬라이드 넘긴시간 y 축
          values.add(new double[] {50,50,50});
          
-         int[] colors = new int[] { Color.BLUE ,Color.RED};
-         PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE ,PointStyle.SQUARE};
-         XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
-         int length = renderer.getSeriesRendererCount();
-         for (int i = 0; i < length; i++) {
-           ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
-         }
+         
+         
         
-         setChartSettings(renderer, "MY PREZENTATION", "Minute", "Heart Rate", 0, audio.getDuration()/1000, 30, 170,
-                 Color.LTGRAY, Color.LTGRAY);                                         //x축 시작에서 끝까지↑
-             renderer.setXLabels(12);
-             renderer.setYLabels(10);
-             renderer.setShowGrid(true);
-             renderer.setXLabelsAlign(Align.RIGHT);
-             renderer.setYLabelsAlign(Align.RIGHT);
-             renderer.setZoomButtonsVisible(true);
-             renderer.setPanLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180  });
-             renderer.setZoomLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180   });
              
-             LinearLayout chart_area = (LinearLayout) findViewById(R.id.chart_area);
+             chart_area  = (LinearLayout) findViewById(R.id.chart_area);
              
-             mChartView = ChartFactory.getCubeLineChartView(this, buildDataset(titles, x, values), renderer, 0.33f);
-             chart_area.addView(mChartView);
+             //buildDataset(titles,x,y)
              
              
 
@@ -187,23 +171,67 @@ public class ResultActivity extends AppCompatActivity {
     
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        
-        Toast.makeText(getApplicationContext(), "onPostCreate", Toast.LENGTH_SHORT).show();
-        
-        Log.d("PARSING", heartRateList.toString());
-        Log.d("PARSING", eventTimeList.toString());
-        
-        super.onPostCreate(savedInstanceState);
-    }
-
-
-    @Override
     protected void onDestroy() {
         audio.stop();
         finish();
         
         super.onDestroy();
+    }
+    public void setData(ArrayList<Double> heartRateList, ArrayList<Double> eventTimeList){
+        
+        String[] titles = new String[] { "PPT" , "Slide_num"};
+        
+        
+        ArrayList<ArrayList<Double>> xAxis = new ArrayList<ArrayList<Double>>(); //x축 ArrayList : [ 시간x , eventTime ]
+        ArrayList<ArrayList<Double>> yAxis = new ArrayList<ArrayList<Double>>(); //y축 ArrayList : [ HeartRate, 50.0 ]
+        // heartRate크기 만큼 x축 만듬 -> 0초 5초 10초 15초
+        ArrayList<Double> hbrTimeList = new ArrayList<Double>();
+        for(int i=0; i<heartRateList.size(); i++){
+            hbrTimeList.add(Double.valueOf(i*5));
+        }
+        
+        ArrayList<Double> eventTimeValue = new ArrayList<Double>();
+        for(int i=0; i<eventTimeList.size(); i++){
+            eventTimeValue.add(50.0);
+        }
+        
+        
+       // X축에 시간, eventTime 들어감
+        xAxis.add(hbrTimeList);
+        xAxis.add(eventTimeList);
+        yAxis.add(heartRateList);
+        yAxis.add(eventTimeValue);
+        
+        Log.e("X축묶음",xAxis.toString());
+        Log.e("X-시간",hbrTimeList.toString());
+        Log.e("X-이벤트",eventTimeList.toString());
+        Log.e("Y축묶음",yAxis.toString());
+        Log.e("Y-심박수",heartRateList.toString());
+        Log.e("Y-이벤트",eventTimeValue.toString());
+        
+        int[] colors = new int[] { Color.BLUE ,Color.RED};
+        PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE ,PointStyle.SQUARE};
+        XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
+        
+        int length = renderer.getSeriesRendererCount();
+        for (int i = 0; i < length; i++) {
+          ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
+        }
+       
+        setChartSettings(renderer, "MY PREZENTATION", "Minute", "Heart Rate", 0, audio.getDuration()/1000, 30, 170,
+                Color.LTGRAY, Color.LTGRAY);                                         //x축 시작에서 끝까지↑
+            renderer.setXLabels(12);
+            renderer.setYLabels(10);
+            renderer.setShowGrid(true);
+            renderer.setXLabelsAlign(Align.RIGHT);
+            renderer.setYLabelsAlign(Align.RIGHT);
+            renderer.setZoomButtonsVisible(true);
+            renderer.setPanLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180  });
+            renderer.setZoomLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180   });
+        
+        mChartView = ChartFactory.getCubeLineChartView(this, buildDataset(titles, xAxis, yAxis), renderer, 0.33f);
+        chart_area.addView(mChartView);
+        
     }
 
 
@@ -241,22 +269,22 @@ public class ResultActivity extends AppCompatActivity {
            renderer.addSeriesRenderer(r);
          }
        }
-    protected XYMultipleSeriesDataset buildDataset(String[] titles, List<double[]> xValues,
-           List<double[]> yValues) {
+    protected XYMultipleSeriesDataset buildDataset(String[] titles, ArrayList<ArrayList<Double>> xValues,
+            ArrayList<ArrayList<Double>> yValues) {
          XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
          addXYSeries(dataset, titles, xValues, yValues, 0);
          return dataset;
        }
-    public void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles, List<double[]> xValues,
-           List<double[]> yValues, int scale) {
+    public void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles, ArrayList<ArrayList<Double>> xValues,
+            ArrayList<ArrayList<Double>> yValues, int scale) {
          int length = titles.length;
          for (int i = 0; i < length; i++) {
            XYSeries series = new XYSeries(titles[i], scale);
-           double[] xV = xValues.get(i);
-           double[] yV = yValues.get(i);
-           int seriesLength = xV.length;
+           ArrayList<Double> xV = xValues.get(i);
+           ArrayList<Double> yV = yValues.get(i);
+           int seriesLength = xV.size();
            for (int k = 0; k < seriesLength; k++) {
-             series.add(xV[k], yV[k]);
+             series.add(xV.get(k), yV.get(k));
            }
            dataset.addSeries(series);
          }
@@ -364,8 +392,6 @@ public class ResultActivity extends AppCompatActivity {
                         
                         try {
                             
-                            
-                            
                             // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                             JSONObject jObj = new JSONObject(response);
                             Log.d("PARSING", jObj.toString());
@@ -385,6 +411,18 @@ public class ResultActivity extends AppCompatActivity {
                                 
                                 Log.d("PARSING", heartRateList.toString());
                                 Log.d("PARSING", eventTimeList.toString());
+                                
+                                //대입
+                                setData(heartRateList,eventTimeList);
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                                 
                                 
                         } catch (JSONException e) {

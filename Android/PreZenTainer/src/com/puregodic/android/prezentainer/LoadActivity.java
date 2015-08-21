@@ -71,6 +71,7 @@ public class LoadActivity extends AppCompatActivity {
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        
         mAdapter = new LoadPtTitleAdapter(this, mDataList);
         mRecyclerView.setAdapter(mAdapter);
         
