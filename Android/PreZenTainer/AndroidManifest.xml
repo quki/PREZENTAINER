@@ -81,10 +81,6 @@
             android:label="@string/title_activity_setting" >
         </activity>
         <activity
-            android:name=".StartActivity"
-            android:label="@string/title_activity_start" >
-        </activity>
-        <activity
             android:name=".DetailSettingActivity"
             android:label="@string/title_activity_detail_setting" >
         </activity>

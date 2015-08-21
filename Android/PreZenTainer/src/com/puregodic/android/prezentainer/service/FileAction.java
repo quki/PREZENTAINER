@@ -8,6 +8,6 @@ public interface FileAction {
 
 	void onFileActionTransferComplete();
 
-	void onFileActionTransferRequested(int transId, String path);
+	void onFileActionTransferRequested(int transId,String date);
 
 }

@@ -46,7 +46,7 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENTTIME = 114;
 	public String mDeviceName,mPtTitle,yourId;
 	private String jsonHR,jsonET;
-	StringBuffer date ;
+	private StringBuffer date ;
 	private Boolean isGearConnected =false;
 	
 	public AccessoryService() {
@@ -103,9 +103,24 @@ public class AccessoryService extends SAAgent {
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
 			    
+			    
+			    // 파일 전송이 시작된 시간 측정
+                Calendar calendar = Calendar.getInstance();
+                date = new StringBuffer();
+                date.append(String.valueOf(calendar.get(Calendar.YEAR)));
+                date.append("년 ");
+                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+                date.append("월 ");
+                date.append(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                date.append("일 ");
+                date.append(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+                date.append("시 ");
+                date.append(String.valueOf(calendar.get(Calendar.MINUTE)));
+                date.append("분");
+			    
 				if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
-					mFileAction.onFileActionTransferRequested(transId, fileName); 
+					mFileAction.onFileActionTransferRequested(transId, date.toString()); 
 					//put data into FileAction Interface
 				} else {
 					Log.d(TAG, "Activity is not up, invoke activity");
@@ -114,8 +129,8 @@ public class AccessoryService extends SAAgent {
 									FileTransferRequestedActivity.class)
 							.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 							.setAction("incomingFT")
-							.putExtra("tx", transId)
-							.putExtra("fileName", fileName));
+							.putExtra("title", mPtTitle)
+							.putExtra("yourId", yourId));    
 					
 					// 5초 이내에 응답을 해야한다
 					int counter = 0;
@@ -127,7 +142,7 @@ public class AccessoryService extends SAAgent {
 							e.printStackTrace();
 						}
 						if (mFileAction != null) {
-							mFileAction.onFileActionTransferRequested(transId, fileName);
+							mFileAction.onFileActionTransferRequested(transId, date.toString());
 							break;
 						}
 					}
@@ -152,29 +167,16 @@ public class AccessoryService extends SAAgent {
 			    
 			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
-					mFileAction.onFileActionTransferComplete();
+				    
 					
-					// 파일 전송이 완료된 시간 측정
-					Calendar calendar = Calendar.getInstance();
-	                date = new StringBuffer();
-	                date.append(String.valueOf(calendar.get(Calendar.YEAR)));
-	                date.append("년 ");
-	                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
-	                date.append("월 ");
-	                date.append(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
-	                date.append("일 ");
-	                date.append(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
-	                date.append("시 ");
-	                date.append(String.valueOf(calendar.get(Calendar.MINUTE)));
-	                date.append("분 ");
-	                Log.d(TAG, date.toString());
-					
+                    mFileAction.onFileActionTransferComplete();
+                    
 					StringRequest str = new StringRequest(Method.POST,AppConfig.URL_INSERT,
                             new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String response) {
-                            Log.e(TAG, response.toString());
+                            Log.e(TAG, "Volley onResponse : " + response);
                         }
                     },      new Response.ErrorListener() {
 

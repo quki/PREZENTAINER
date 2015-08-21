@@ -31,7 +31,6 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
     public static boolean isUp = false;
 
     public int mTransId;
-
     public static final String DIR_PATH = "/sdcard/prezentainer/";
     private Context mCtxt;
 
@@ -87,16 +86,15 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
             public void onClick(View v) {
                 
                 
-              //mCtxt.startActivity(new Intent()
-                startActivity(new Intent()
+               /* startActivity(new Intent()
                 .setClass(FileTransferRequestedActivity.this, ResultActivity.class)
-                .putExtra("title", title)
-                .putExtra("yourId", yourId));
+                .putExtra("title", mFileName)
+                .putExtra("yourId", yourId));*/
                 
-                /*Intent resultIntent = new Intent(StartActivity.this, ResultActivity.class);
-                resultIntent.putExtra("title", title);
-                resultIntent.putExtra("yourId", yourId);
-                startActivity(resultIntent);*/
+                Intent i = new Intent(FileTransferRequestedActivity.this,ResultActivity.class);
+                i.putExtra("title", mFileName);
+                i.putExtra("yourId", yourId);
+                startActivity(i);
                 
             }
         });
@@ -155,10 +153,10 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 
             // Define FileAction Interface
             @Override
-            public void onFileActionTransferRequested(int id, String path) {
+            public void onFileActionTransferRequested(int id, String date) {
                 mTransId = id;
                 mFileExtension = ".amr";
-                mFileName = title + mFileExtension;
+                mFileName = title + date + mFileExtension;
                 mAccessoryService.receiveFile(mTransId, DIR_PATH + mFileName, true);
                 Log.i(TAG, "Transfer accepted");
 
@@ -182,8 +180,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fileTransferStatus.setText("전송 완료 !\n" + DIR_PATH);
-                        mProgressBar.setProgress(0);
+                        fileTransferStatus.setText("전송 완료 !"+title+yourId);
                         mAlert.dismiss();
                         showBtn.setEnabled(true);
                     }

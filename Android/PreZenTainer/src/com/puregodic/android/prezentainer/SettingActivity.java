@@ -272,7 +272,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                     if(mDeviceName != null && mAccessoryService != null){
                                         
                                         
-                                        // Service에 device name, ppt tittle 넘기기
+                                        // Service에 device name, ppt tittle, 계정정보 넘기기
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
                                         mAccessoryService.yourId = yourId;

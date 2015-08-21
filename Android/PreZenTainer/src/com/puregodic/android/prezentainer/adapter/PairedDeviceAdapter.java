@@ -22,6 +22,7 @@ public class PairedDeviceAdapter extends BaseAdapter{
     private final int NOTEBOOK = 256;
     private final int PHONE = 512;
     private final int WATCH = 1792;
+    private final int HEADPHONE = 1024;
     
     public PairedDeviceAdapter(Activity activity, ArrayList<PairedDeviceData> pairedDevicesList){
         this.activity = activity;
@@ -64,13 +65,14 @@ public class PairedDeviceAdapter extends BaseAdapter{
             case NOTEBOOK:
                 image.setImageResource(R.drawable.ic_notebook);
                 break;
-
             case WATCH:
                 image.setImageResource(R.drawable.ic_watch);
                 break;
-                
             case PHONE:
                 image.setImageResource(R.drawable.ic_phone);
+                break;
+            case HEADPHONE:
+                image.setImageResource(R.drawable.ic_launcher);
                 break;
         }
         
