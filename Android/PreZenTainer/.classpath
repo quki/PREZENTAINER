@@ -7,8 +7,14 @@
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/sdk-v1.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/volley.jar"/>
+<<<<<<< HEAD
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/android-support-v7-appcompat"/>
+=======
+	<classpathentry exported="true" kind="lib" path="libs/achartengine-1.1.0.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+>>>>>>> 50b7c327050ecb7e1fe9d2925cc593f6ac318608
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

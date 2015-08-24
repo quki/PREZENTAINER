@@ -1,6 +1,7 @@
 package com.puregodic.android.prezentainer.service;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
@@ -42,9 +44,9 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	public static final int CHANNEL_ID_EVENTTIME = 114;
-	public String mDeviceName,mPtTitle,email;
+	public String mDeviceName,mPtTitle,yourId;
 	private String jsonHR,jsonET;
-	
+	private StringBuffer date ;
 	private Boolean isGearConnected =false;
 	
 	public AccessoryService() {
@@ -100,10 +102,25 @@ public class AccessoryService extends SAAgent {
 			//File Transfer Requested
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
-				
+			    
+			    
+			    // 파일 전송이 시작된 시간 측정
+                Calendar calendar = Calendar.getInstance();
+                date = new StringBuffer();
+                date.append(String.valueOf(calendar.get(Calendar.YEAR)));
+                date.append("년 ");
+                date.append(String.valueOf(calendar.get(Calendar.MONTH)));
+                date.append("월 ");
+                date.append(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                date.append("일 ");
+                date.append(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+                date.append("시 ");
+                date.append(String.valueOf(calendar.get(Calendar.MINUTE)));
+                date.append("분");
+			    
 				if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
-					mFileAction.onFileActionTransferRequested(transId, fileName); 
+					mFileAction.onFileActionTransferRequested(transId, date.toString()); 
 					//put data into FileAction Interface
 				} else {
 					Log.d(TAG, "Activity is not up, invoke activity");
@@ -112,8 +129,8 @@ public class AccessoryService extends SAAgent {
 									FileTransferRequestedActivity.class)
 							.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 							.setAction("incomingFT")
-							.putExtra("tx", transId)
-							.putExtra("fileName", fileName));
+							.putExtra("title", mPtTitle)
+							.putExtra("yourId", yourId));    
 					
 					// 5초 이내에 응답을 해야한다
 					int counter = 0;
@@ -125,11 +142,12 @@ public class AccessoryService extends SAAgent {
 							e.printStackTrace();
 						}
 						if (mFileAction != null) {
-							mFileAction.onFileActionTransferRequested(transId, fileName);
+							mFileAction.onFileActionTransferRequested(transId, date.toString());
 							break;
 						}
 					}
 				}
+				
 			}
 			
 			
@@ -144,18 +162,21 @@ public class AccessoryService extends SAAgent {
 			//File Transfer Completed
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
-				
-				Log.d(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
+			    
+			    
+			    
+			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
-					mFileAction.onFileActionTransferComplete();
+				    
 					
-					
-					StringRequest str = new StringRequest(Method.POST,"http://cyh1704.dothome.co.kr/tizen/inserting.php",
+                    mFileAction.onFileActionTransferComplete();
+                    
+					StringRequest str = new StringRequest(Method.POST,AppConfig.URL_INSERT,
                             new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String response) {
-                            Log.e(TAG, response.toString());
+                            Log.e(TAG, "Volley onResponse : " + response);
                         }
                     },      new Response.ErrorListener() {
 
@@ -167,10 +188,11 @@ public class AccessoryService extends SAAgent {
 
                         @Override
                         protected Map<String, String> getParams() {
-                            // Posting params to register url
+                            // Create Parameter to insert Table
                             Map<String, String> params = new HashMap<String, String>();
-                            params.put("email", email);
+                            params.put("email", yourId);
                             params.put("title", mPtTitle);
+                            params.put("date", date.toString());
                             params.put("hbr", jsonHR);
                             params.put("time", jsonET);
                             return params;
@@ -286,14 +308,24 @@ public class AccessoryService extends SAAgent {
 		@Override
 		public void onReceive(int channelId, byte[] data) {
 		    
+		 // MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
+		    
 			if (channelId == CHANNEL_ID_EVENT) {
-
+			    final String direction =  new String(data);
 				new Thread(new Runnable() {
 					public void run() {
 						try {
+						    Log.e(TAG, direction);
 							// event 전달
 							ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
 							mConnecToPcHelper.transferToPc(mDeviceName);
+							if(mConnectionHandler != null){
+							    final String unlockMessage =  new String("UNLOCK");
+							    Thread.sleep(1000);
+							    mConnectionHandler.send(CHANNEL_ID_EVENT, unlockMessage.getBytes());
+							    Log.e(TAG,unlockMessage);
+							}
+							 
 						} catch (Exception e) {
 							Log.e(TAG, "Cannot transfer data to PC");
 						}
@@ -305,8 +337,6 @@ public class AccessoryService extends SAAgent {
 			    jsonHR = new String(data);
 			    Log.v(TAG, jsonHR);
 			    
-				/*MyAsyncTask myAsyncTask = new MyAsyncTask(fromGearMessage);
-				myAsyncTask.execute(new String[] { "http://cyh1704.dothome.co.kr/tizen/wow.php" });*/
 				
 			}else if (channelId == CHANNEL_ID_EVENTTIME){
 			    
@@ -317,7 +347,12 @@ public class AccessoryService extends SAAgent {
 
 		}
 
-		@Override
+		private void send(int channelIdEvent, String string) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
 		protected void onServiceConnectionLost(int reason) {
 			closeConnection();
 			Log.e(TAG, "onServiceConnectionLost ==socket close== reason : "
@@ -350,6 +385,7 @@ public class AccessoryService extends SAAgent {
         }
     }
     
+    // Send Timer data to gear by JSON
     public void sendDataToGear(String mData) {
         final String message = new String(mData);
         if(mConnectionHandler!= null){

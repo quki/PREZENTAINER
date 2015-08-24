@@ -168,17 +168,22 @@ connectionListener = {
              
              // Data를 받을 때
              dataOnReceive = function dataOnReceive(channelId,data){
-             try {
-            	 //json으로 진동간격 입력받기
-                 //mTimeInterval = JSON.stringify(data);
-                 mTimeInterval = JSON.parse(data);  
-                 for (var i = 0; i < mTimeInterval.length; i++) {
-                	 console.log('data : '+ mTimeInterval[i]);
-                 }
-                   updateAfterOnReceivce();
-            } catch (e) {
-                   console.error('dataOnReceive Error reason : '+ e);
-            }
+            	 if(channelId == CHANNELID_SETTING)
+            	 {
+            		 //json으로 진동간격 입력받기
+            		 //mTimeInterval = JSON.stringify(data);
+            		 mTimeInterval = JSON.parse(data);  
+            		 for (var i = 0; i < mTimeInterval.length; i++) {
+            			 console.log('data : '+ mTimeInterval[i]);
+            		 }
+            		 updateAfterOnReceivce();
+            	 }
+            	 else //unlock 하기 위한 통신 부분 , 채널ID=104 일 때를 뜻함!
+            	 {
+            		 motion_check=0;
+            		 console.log(channelId);
+
+            	 }
              }
              mSASocket.setDataReceiveListener(dataOnReceive);
          },

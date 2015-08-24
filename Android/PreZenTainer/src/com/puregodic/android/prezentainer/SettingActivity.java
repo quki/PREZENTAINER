@@ -40,7 +40,6 @@ import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 public class SettingActivity extends AppCompatActivity implements BluetoothHelper{
 
     private AccessoryService mAccessoryService = null;
-
     private Boolean isBound = false;
     private Boolean isGearConnected = false;
     private Boolean isPcConnected = false;
@@ -48,13 +47,12 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     public static final int REQUEST_DETAIL = 3;
     private static final String TAG = "==SETTING ACTIVITY==";
 
-    // 수정 - 타이머 설정값 저장하는 배열
-    private ArrayList<String> timeInterval;
+    
     
     private Button connectToGearBtn,connectToPcBtn,startBtn;
     private CheckBox timerCheckBox;
     private RadioGroup timerRadioGroup;
-    private TextView ptTitle;
+    private EditText ptTitleEditText;
     private LinearLayout rootView;
     
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
@@ -64,21 +62,27 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
    // private final IncomingHandler mHandler = new IncomingHandler(this);
     private String mDeviceName ;
     
+    // 수정 - 타이머 설정값 저장하는 배열
+    private ArrayList<String> timeInterval;
     // ArrayList To JSON
     private Gson gson = new Gson();
     private TextView txtsendJson;
     String gsonString;
     
-    private String email;
+    private String yourId;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        
+        Intent intent = getIntent();
+        yourId = intent.getStringExtra("yourId");
+        Toast.makeText(getApplicationContext(), yourId, Toast.LENGTH_SHORT).show();
        
         // Bind Service
         doBindService();
-
+        
         startBtn = (Button)findViewById(R.id.startBtn);
         timerCheckBox = (CheckBox)findViewById(R.id.timerCheckBox);
         timerRadioGroup = (RadioGroup)findViewById(R.id.timerRadioGroup);
@@ -86,15 +90,15 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         connectToPcBtn = (Button)findViewById(R.id.connectToPcBtn);
         txtsendJson = (TextView)findViewById(R.id.txtsendJson);
         connectToGearBtn = (Button)findViewById(R.id.connectToGearBtn);
-        ptTitle = (EditText)findViewById(R.id.ptTittle);
-        rootView = (LinearLayout)findViewById(R.id.rootView);
+        ptTitleEditText = (EditText)findViewById(R.id.ptTitleEditText);
+        rootView = (LinearLayout)findViewById(R.id.settingActivityView);
         
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
         rootView.setOnTouchListener(new View.OnTouchListener() {
             
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ptTitle.clearFocus();
+                ptTitleEditText.clearFocus();
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE); 
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 return false;
@@ -116,10 +120,10 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 if (isChecked) {
                     timerRadioGroup.setVisibility(timerRadioGroup.VISIBLE);
                 } else {
+                    // 체크박스를 해제한 경우 timeInterval을 null로
                     timerRadioGroup.setVisibility(timerRadioGroup.INVISIBLE);
                     timerRadioGroup.clearCheck();
-                    //timeInterval = new ArrayList<String>();
-                    //timeInterval.add(0, "0");
+                    timeInterval.clear();
                 }
             }
         });
@@ -128,14 +132,13 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
         timerRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 
                 // 5분마다
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio5) {
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("5");
                     Toast.makeText(SettingActivity.this,
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
+                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
                             .show();
                 }
                 // 10분마다
@@ -143,7 +146,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("10");
                     Toast.makeText(SettingActivity.this,
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
+                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
                             .show();
                 }
                 // 15분마다
@@ -151,11 +154,12 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     timeInterval = new ArrayList<String>();
                     timeInterval.add("15");
                     Toast.makeText(SettingActivity.this,
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_LONG)
+                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
                             .show();
                 }
                 // 개인 설정
                 if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadioDetail) {
+                    //DetailSettingActivity( Sub Activity )로 부터 ArrayList( timeInterval ) 요청
                     Intent intent = new Intent (SettingActivity.this, DetailSettingActivity.class);
                     startActivityForResult(intent, REQUEST_DETAIL);
                 }
@@ -179,6 +183,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 
                 @Override
                 public void run() {
+                    // 해당 Device 이름으로 연결
                     ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
                     mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
                     mConnecToPcHelper.connect(mDeviceName);
@@ -213,12 +218,12 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
         } else if (requestCode == REQUEST_DETAIL) {
             
+            // DetailSettingActivity로 부터 가져온 ArrayList를 timeInterval에 저장
             timeInterval = intent.getStringArrayListExtra("timeInterval");
-            for (int i = 0; i < timeInterval.size(); i++) {
-                
-                gsonString = gson.toJson(timeInterval);
-                txtsendJson.setText(gsonString);
-            }
+            
+            // 삭제 요망
+            gsonString = gson.toJson(timeInterval);
+            txtsendJson.setText(gsonString);
 
         }
         super.onActivityResult(requestCode, resultCode, intent);
@@ -249,7 +254,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
             
             // 기어 어플리케이션에 설정값 전달(알람 시간 간격, 페어링된 PC이름) 및 시작
             case R.id.startBtn: {
-               final String mPtTitle =   ptTitle.getText().toString().trim();
+               final String mPtTitle =   ptTitleEditText.getText().toString().trim();
                 
                 // 프레젠테이션 제목을 기입한 경우
                 if(!TextUtils.isEmpty(mPtTitle)){
@@ -267,26 +272,31 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                     if(mDeviceName != null && mAccessoryService != null){
                                         
                                         
-                                        // Service에 device name, ppt tittle 넘기기
+                                        // Service에 device name, ppt tittle, 계정정보 넘기기
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
-                                        mAccessoryService.email = email;
+                                        mAccessoryService.yourId = yourId;
+                                        
                                         if (timeInterval != null) {
+                                            // timeInterval(ArrayList) -> JSONArray -> String ex) "["2","3","5"]"
                                             String timeJson = gson.toJson(timeInterval);
                                             sendDataToService(timeJson);
-                                            //sendDataToService(timeInterval.get(0));
                                         }else{
+                                            // 체크박스를 단 한번도 누르지 않은 경우, 눌렀다가 해제한 경우 역시 ex) ["0"]
                                             sendDataToService("0");
                                         }
-                                        Intent startActivity = new Intent(SettingActivity.this, StartActivity.class);
-                                        startActivity(startActivity);
-                                        mDeviceName = null;
                                         
+                                        // Start Activity로 나의 id와 PT 제목을 넘겨준다.
+                                        startActivity(new Intent(SettingActivity.this, FileTransferRequestedActivity.class)
+                                        .putExtra("yourId", yourId)
+                                        .putExtra("title", mPtTitle));
+                                        
+                                        mDeviceName = null;
                                         
                                     }else{
                                         
                                         finish();
-                                        Toast.makeText(SettingActivity.this, "설정을 다시 진행해주세요.",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SettingActivity.this, "설정을 다시 진행해주세요",Toast.LENGTH_SHORT).show();
                                     }
                                     
                                 }
