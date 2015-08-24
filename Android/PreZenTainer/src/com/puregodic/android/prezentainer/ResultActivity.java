@@ -77,7 +77,6 @@ public class ResultActivity extends AppCompatActivity {
         // audio path 구하기 
         Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
         audio = MediaPlayer.create(this, audioPath);
-        
              
         chart_area  = (LinearLayout) findViewById(R.id.chart_area);
              
@@ -138,7 +137,6 @@ public class ResultActivity extends AppCompatActivity {
     protected void onDestroy() {
         audio.stop();
         finish();
-        
         super.onDestroy();
     }
     public void setData(ArrayList<Double> heartRateList, ArrayList<Double> eventTimeList){
@@ -254,12 +252,8 @@ public class ResultActivity extends AppCompatActivity {
            }
            dataset.addSeries(series);
          }
-       }
-    
-    
-    //재상바 관련////////////////////////////////////
-   
-    
+       } 
+    //재상바 관련////////////////////////////////////    
     public void buttonPlay(View v){
         /**
          * music.isPlaying()이 true : 음악이 현재 재생중입니다, false : 재생중이 아닙니다
@@ -380,16 +374,6 @@ public class ResultActivity extends AppCompatActivity {
                                 
                                 //대입
                                 setData(heartRateList,eventTimeList);
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
                                 
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException : " + e.getMessage());
