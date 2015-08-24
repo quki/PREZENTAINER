@@ -78,12 +78,6 @@ public class ResultActivity extends AppCompatActivity {
         Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
         audio = MediaPlayer.create(this, audioPath);
         
-        
-        
-        
-        
-       
-        
         List<double[]> x = new ArrayList<double[]>();
         List<double[]> values = new ArrayList<double[]>();
         
