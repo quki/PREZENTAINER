@@ -78,44 +78,8 @@ public class ResultActivity extends AppCompatActivity {
         Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
         audio = MediaPlayer.create(this, audioPath);
         
-        
-        
-        
-        
-       
-        
-        List<double[]> x = new ArrayList<double[]>();
-        List<double[]> values = new ArrayList<double[]>();
-        
-        //double[] hbr_x= new double[audio.getDuration()/5000];      //심박수 x축 
-       double[] hbr_x= new double[]{5,10,15,20,25,30,35,40,45,50,55,60};
-        
-      for(int i=0; i<audio.getDuration()/5000 ; i++)
-        {
-           hbr_x[i]=i*5;
-        }                 
-        
-        x.add(hbr_x);                                 
-        
-        //double[] hbr_y= new double[audio.getDuration()/5000];      //심박수 y축
-        double[] hbr_y= new double[]{60,65,68,72,77,81,59,78,63,66,67,78};
-         
-        values.add(hbr_y);                                         
-         
-         //double[] slide_x= new double[audio.getDuration()/5000];     //슬라이드 넘긴시간 x 축
-         double[] slide_x= new double[]{13,36,60};
-         x.add(slide_x);
-         
-         
-         
-         //values.add(new double[] { 40,40, 40, 40, 40});               //슬라이드 넘긴시간 y 축
-         values.add(new double[] {50,50,50});
-         
-         
-         
-        
              
-             chart_area  = (LinearLayout) findViewById(R.id.chart_area);
+        chart_area  = (LinearLayout) findViewById(R.id.chart_area);
              
              //buildDataset(titles,x,y)
              
@@ -285,6 +249,8 @@ public class ResultActivity extends AppCompatActivity {
            int seriesLength = xV.size();
            for (int k = 0; k < seriesLength; k++) {
              series.add(xV.get(k), yV.get(k));
+             Log.e("확인바람", "X축 : " +xV.get(k));
+             Log.e("확인바람", "Y축 : " +yV.get(k));
            }
            dataset.addSeries(series);
          }
