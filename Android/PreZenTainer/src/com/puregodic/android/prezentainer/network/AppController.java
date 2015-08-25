@@ -22,7 +22,7 @@ public class AppController extends Application{
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        initDefaultTypeface();
+       initDefaultTypeface();
     }
     
     public static synchronized AppController getInstance() {
@@ -54,7 +54,7 @@ public class AppController extends Application{
         }
     }
     
-    // Custom Font ¼³Á¤
+    // Custom Font ³ª´®°íµñ
     private void initDefaultTypeface() {
         try {
             Typeface defaultTypeface = Typeface.createFromAsset(getAssets(), "fonts/nanumgothic/NanumGothic.ttf");
@@ -69,4 +69,5 @@ public class AppController extends Application{
             e.printStackTrace();
          }
     }
+    
 }
