@@ -16,7 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
-    <None Include="app.ico">
+    <None Include="$this.Icon.ico">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="prezentainer.ico">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

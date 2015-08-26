@@ -84,7 +84,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.ico" />
+    <None Include="$this.Icon.ico" />
+    <None Include="prezentainer.ico" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

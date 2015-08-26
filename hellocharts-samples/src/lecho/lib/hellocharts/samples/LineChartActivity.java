@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -132,7 +131,7 @@ public class LineChartActivity extends AppCompatActivity {
             
             
             ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/prezentainer/ㄴㄴ2015년 7월 26일 19시 56분.amr");
+            Uri audioPath = Uri.parse("/sdcard/Download/이유갓지않은이유.mp3");
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -166,8 +165,8 @@ public class LineChartActivity extends AppCompatActivity {
                
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress,
-                     boolean fromUser) {
-            		   
+
+            		   boolean fromUser) {
                    /*
                     *          < currentSecond >
                     * 1. millisecond -> index 변환
