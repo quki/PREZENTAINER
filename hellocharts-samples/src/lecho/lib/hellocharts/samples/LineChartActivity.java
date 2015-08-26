@@ -161,6 +161,8 @@ public class LineChartActivity extends AppCompatActivity {
             /**
              * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정합니다
              */
+            
+            seekbar.incrementProgressBy(1);
             seekbar.setMax(audio.getDuration());
             
             /**
@@ -179,6 +181,7 @@ public class LineChartActivity extends AppCompatActivity {
                
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress,
+<<<<<<< HEAD
                      boolean fromUser) {
                   // TODO Auto-generated method stub
                   /**
@@ -200,14 +203,45 @@ public class LineChartActivity extends AppCompatActivity {
                        //replace chart data
                        chart.setLineChartData(data);*/
             		   
+=======
+            		   boolean fromUser) {
+            	   // TODO Auto-generated method stub
+            	   /**
+            	    * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
+            	    * false인경우에는 소스상, 어플상에서 움직인경우이며
+            	    * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
+            	    * 
+            	    * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
+            	    */
+
+            	   //For safety create copy of the chart's data
+            	   int mIndex=((progress/1000)-1);   //second->index 변환  progress/1000(초), (progress/1000)-1(인덱스)
+            	   int rIndex=0;
+            	   if(mIndex%5==0){
+            		   rIndex=mIndex;
             	   }
-            		   
-                   
+            	   else{
+            		   rIndex=((mIndex+1)/5)*5;
+>>>>>>> 46052552b4489870c3ee3f3f326fe069961ce646
+            	   }
+
+            	   Log.d("mindex!!", Integer.toString(mIndex));
+            	   Log.d("rindex!!", Integer.toString(rIndex));
+            	   
+            	   LineChartData data = new LineChartData(chart.getLineChartData());
+            	   //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
+            	   float line0ValueY = data.getLines().get(0).getValues().get((rIndex/5)).getY();
+
+            	   Log.d("Value!!", data.getLines().get(0).toString());
+            	   //update single point on the second line
+            	   data.getLines().get(1).getValues().get(0).set(rIndex, line0ValueY);
+            	   //replace chart data
+            	   chart.setLineChartData(data);
+
 
             	   
-            	   
-                  if (fromUser)
-                     audio.seekTo(progress);
+            	   if (fromUser)
+            		   audio.seekTo(progress);
                }
             });
             
