@@ -1,39 +1,24 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Color;
-import android.graphics.Paint.Align;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -55,7 +40,6 @@ public class ResultActivity extends AppCompatActivity {
     private ArrayList<Double> eventTimeList = new ArrayList<Double>();
     
     LinearLayout chart_area ;
-    protected GraphicalView mChartView;
     Button buttonPlay;
     Button buttonStop;
     SeekBar seekbar;
@@ -74,263 +58,11 @@ public class ResultActivity extends AppCompatActivity {
         
         fetchDataByVolley();
         
-        // audio path 구하기 
-        Uri audioPath = Uri.parse(FileTransferRequestedActivity.DIR_PATH + title+date+".amr");
-        audio = MediaPlayer.create(this, audioPath);
-             
-        chart_area  = (LinearLayout) findViewById(R.id.chart_area);
-             
-             //buildDataset(titles,x,y)
-             
-             
-
-               
-               /**
-                * 무한 반복을 설정하는 부분
-                * true : 무한반복 설정, false : 무한반복 해제
-                */
-               audio.setLooping(true);
-               
-               buttonPlay = (Button) findViewById(R.id.buttonPlay);
-               buttonStop = (Button) findViewById(R.id.buttonStop);
-               seekbar = (SeekBar) findViewById(R.id.seekBar1);
-               
-               /**
-                * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정합니다
-                */
-               seekbar.setMax(audio.getDuration());
-               
-               /**
-                * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정합니다
-                */
-               seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-                  @Override
-                  public void onStopTrackingTouch(SeekBar seekBar) {
-                     // TODO Auto-generated method stub
-                  }
-                  
-                  @Override
-                  public void onStartTrackingTouch(SeekBar seekBar) {
-                     // TODO Auto-generated method stub
-                  }
-                  
-                  @Override
-                  public void onProgressChanged(SeekBar seekBar, int progress,
-                        boolean fromUser) {
-                     // TODO Auto-generated method stub
-                     /**
-                      * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
-                      * false인경우에는 소스상, 어플상에서 움직인경우이며
-                      * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
-                      * 
-                      * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
-                      */
-                     if (fromUser)
-                        audio.seekTo(progress);
-                  }
-               });
-        
-    }
-    
-
-    @Override
-    protected void onDestroy() {
-        audio.stop();
-        finish();
-        super.onDestroy();
-    }
-    public void setData(ArrayList<Double> heartRateList, ArrayList<Double> eventTimeList){
-        
-        String[] titles = new String[] { "PPT" , "Slide_num"};
-        
-        
-        ArrayList<ArrayList<Double>> xAxis = new ArrayList<ArrayList<Double>>(); //x축 ArrayList : [ 시간x , eventTime ]
-        ArrayList<ArrayList<Double>> yAxis = new ArrayList<ArrayList<Double>>(); //y축 ArrayList : [ HeartRate, 50.0 ]
-        // heartRate크기 만큼 x축 만듬 -> 0초 5초 10초 15초
-        ArrayList<Double> hbrTimeList = new ArrayList<Double>();
-        for(int i=0; i<heartRateList.size(); i++){
-            hbrTimeList.add(Double.valueOf(i*5));
-        }
-        
-        ArrayList<Double> eventTimeValue = new ArrayList<Double>();
-        for(int i=0; i<eventTimeList.size(); i++){
-            eventTimeValue.add(50.0);
-        }
-        
-        
-       // X축에 시간, eventTime 들어감
-        xAxis.add(hbrTimeList);
-        xAxis.add(eventTimeList);
-        yAxis.add(heartRateList);
-        yAxis.add(eventTimeValue);
-        
-        Log.e("X축묶음",xAxis.toString());
-        Log.e("X-시간",hbrTimeList.toString());
-        Log.e("X-이벤트",eventTimeList.toString());
-        Log.e("Y축묶음",yAxis.toString());
-        Log.e("Y-심박수",heartRateList.toString());
-        Log.e("Y-이벤트",eventTimeValue.toString());
-        
-        int[] colors = new int[] { Color.BLUE ,Color.RED};
-        PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE ,PointStyle.SQUARE};
-        XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
-        
-        int length = renderer.getSeriesRendererCount();
-        for (int i = 0; i < length; i++) {
-          ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
-        }
-       
-        setChartSettings(renderer, "MY PREZENTATION", "Minute", "Heart Rate", 0, audio.getDuration()/1000, 30, 170,
-                Color.LTGRAY, Color.LTGRAY);                                         //x축 시작에서 끝까지↑
-            renderer.setXLabels(12);
-            renderer.setYLabels(10);
-            renderer.setShowGrid(true);
-            renderer.setXLabelsAlign(Align.RIGHT);
-            renderer.setYLabelsAlign(Align.RIGHT);
-            renderer.setZoomButtonsVisible(true);
-            renderer.setPanLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180  });
-            renderer.setZoomLimits(new double[] { 0,audio.getDuration()/1000 , 0, 180   });
-        
-        mChartView = ChartFactory.getCubeLineChartView(this, buildDataset(titles, xAxis, yAxis), renderer, 0.33f);
-        chart_area.addView(mChartView);
         
     }
 
 
-    //그래프 관련함수///////////////////////////
-    protected void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
-           String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
-           int labelsColor) {
-         renderer.setChartTitle(title);
-         renderer.setXTitle(xTitle);
-         renderer.setYTitle(yTitle);
-         renderer.setXAxisMin(xMin);
-         renderer.setXAxisMax(xMax);
-         renderer.setYAxisMin(yMin);
-         renderer.setYAxisMax(yMax);
-         renderer.setAxesColor(axesColor);
-         renderer.setLabelsColor(labelsColor);
-       }
-    protected XYMultipleSeriesRenderer buildRenderer(int[] colors, PointStyle[] styles) {
-         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-         setRenderer(renderer, colors, styles);
-         return renderer;
-       }
-    protected void setRenderer(XYMultipleSeriesRenderer renderer, int[] colors, PointStyle[] styles) {
-         renderer.setAxisTitleTextSize(16);
-         renderer.setChartTitleTextSize(20);
-         renderer.setLabelsTextSize(15);
-         renderer.setLegendTextSize(15);
-         renderer.setPointSize(5f);
-         renderer.setMargins(new int[] { 20, 30, 15, 20 });
-         int length = colors.length;
-         for (int i = 0; i < length; i++) {
-           XYSeriesRenderer r = new XYSeriesRenderer();
-           r.setColor(colors[i]);
-           r.setPointStyle(styles[i]);
-           renderer.addSeriesRenderer(r);
-         }
-       }
-    protected XYMultipleSeriesDataset buildDataset(String[] titles, ArrayList<ArrayList<Double>> xValues,
-            ArrayList<ArrayList<Double>> yValues) {
-         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-         addXYSeries(dataset, titles, xValues, yValues, 0);
-         return dataset;
-       }
-    public void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles, ArrayList<ArrayList<Double>> xValues,
-            ArrayList<ArrayList<Double>> yValues, int scale) {
-         int length = titles.length;
-         for (int i = 0; i < length; i++) {
-           XYSeries series = new XYSeries(titles[i], scale);
-           ArrayList<Double> xV = xValues.get(i);
-           ArrayList<Double> yV = yValues.get(i);
-           int seriesLength = xV.size();
-           for (int k = 0; k < seriesLength; k++) {
-             series.add(xV.get(k), yV.get(k));
-             Log.e("확인바람", "X축 : " +xV.get(k));
-             Log.e("확인바람", "Y축 : " +yV.get(k));
-           }
-           dataset.addSeries(series);
-         }
-       } 
-    //재상바 관련////////////////////////////////////    
-    public void buttonPlay(View v){
-        /**
-         * music.isPlaying()이 true : 음악이 현재 재생중입니다, false : 재생중이 아닙니다
-         */
-        // 음악을 실행합니다
-        if(audio.isPlaying()) {
-           //멈춤
-           audio.pause();
-           buttonPlay.setText("재생");
-        }
-        else {
-           //재생
-           audio.start();
-           buttonPlay.setText("일시정지");
-        }         
-        /**
-        * 쓰래드를 돌려 1초마다 SeekBar를 움직이게 합니다
-        */
-        Thread();
-     }
-     
-     public void buttonStop(View v){
-        //buttonStop 재생을 완전히 멈춤
 
-        audio.stop();
-        try {
-           // 음악을 재생할경우를 대비해 준비합니다
-           // prepare()은 예외가 2가지나 필요합니다
-           audio.prepare();
-        } catch (IllegalStateException e) {
-           // TODO Auto-generated catch block
-           e.printStackTrace();
-        } catch (IOException e) {
-           // TODO Auto-generated catch block
-           e.printStackTrace();
-        }
-        // 음악 진행 정도를 0, 즉 처음으로 되돌립니다
-        audio.seekTo(0);
-
-        // 버튼의 글자를 시작으로, 시크바를 처음으로 되돌립니다
-        seekbar.setProgress(0);
-        buttonPlay.setText("재생");
-
-     }
-     
-     /**
-      * 쓰래드는 한번만 사용할수 있으므로 따로 메소드화 하여 실행시마다 다시 재사용합니다
-      * 
-      * 참조 : http://indy9052.blog.me/120142002766
-      * http://naiacinn.tistory.com/109
-      * http://nephilim.tistory.com/56
-      * (쓰래드가 이미 만들어진 상태에서 start()메소드가 2번이상 호출되면 강제종료 오류가 발생하며
-      * 쓰래드는 한번만 실행할수 있습니다, 즉 한번 실행후 버려야 합니다)
-      */
-     public void Thread(){
-        Runnable task = new Runnable(){
-           public void run(){
-              /**
-               * while문을 돌려서 음악이 실행중일때 게속 돌아가게 합니다
-               */
-              while(audio.isPlaying()){
-                 try {
-                    Thread.sleep(1000);
-                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                 }
-                 /**
-                  * music.getCurrentPosition()은 현재 음악 재생 위치를 가져오는 구문 입니다
-                  */
-                 seekbar.setProgress(audio.getCurrentPosition());
-              }
-           }
-        };
-        Thread thread = new Thread(task);
-        thread.start();
-     }
     
     private void fetchDataByVolley(){
         
@@ -372,8 +104,6 @@ public class ResultActivity extends AppCompatActivity {
                                 Log.d("PARSING", heartRateList.toString());
                                 Log.d("PARSING", eventTimeList.toString());
                                 
-                                //대입
-                                setData(heartRateList,eventTimeList);
                                 
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException : " + e.getMessage());
