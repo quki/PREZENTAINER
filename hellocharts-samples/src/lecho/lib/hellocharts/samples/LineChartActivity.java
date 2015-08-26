@@ -146,7 +146,7 @@ public class LineChartActivity extends AppCompatActivity {
             
             
             ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/melon/스폰서.mp3");
+            Uri audioPath = Uri.parse("/sdcard/Download/이유갓지않은이유.mp3");
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -181,29 +181,7 @@ public class LineChartActivity extends AppCompatActivity {
                
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress,
-<<<<<<< HEAD
-                     boolean fromUser) {
-                  // TODO Auto-generated method stub
-                  /**
-                   * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
-                   * false인경우에는 소스상, 어플상에서 움직인경우이며
-                   * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
-                   * 
-                   * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
-                   */
-            	 //For safety create copy of the chart's data
-            	   if((progress-1)%5==0){
-            	       
-            	       Log.e("PROGRESS", ""+progress);
-            		   /*LineChartData data = new LineChartData(chart.getLineChartData());
-                       //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
-                       float line0ValueY = data.getLines().get(0).getValues().get((progress - 1)).getY();
-                       //update single point on the second line
-                       data.getLines().get(1).getValues().get(0).set(progress - 1, line0ValueY);
-                       //replace chart data
-                       chart.setLineChartData(data);*/
-            		   
-=======
+
             		   boolean fromUser) {
             	   // TODO Auto-generated method stub
             	   /**
@@ -222,7 +200,6 @@ public class LineChartActivity extends AppCompatActivity {
             	   }
             	   else{
             		   rIndex=((mIndex+1)/5)*5;
->>>>>>> 46052552b4489870c3ee3f3f326fe069961ce646
             	   }
 
             	   Log.d("mindex!!", Integer.toString(mIndex));

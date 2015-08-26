@@ -1,4 +1,3 @@
-
 #pragma once
 #include <stdio.h>
 #include "stdafx.h"
@@ -8,12 +7,9 @@
 #include <boost/thread/thread.hpp>
 #include "shellapi.h"
 
-
-//#include <assert.h>
 char name[20]="\\\\.\\COM";
 
-
-int isStringDouble(const char *s) {
+int isStringDouble(const char *s) { //입력받은 string이 숫자인지를 체크하는 함수
   size_t size = strlen(s);
   if (size == 0) return 0; // 0바이트 문자열은 숫자가 아님
 
@@ -24,7 +20,6 @@ int isStringDouble(const char *s) {
 
   return 1; // 그밖의 경우는 숫자임
 }
-
 
 void PressVirtualKeyboad(BYTE vk) {
 
@@ -48,73 +43,26 @@ void PressRight() {
 	PressVirtualKeyboad(VK_RIGHT);
 	
 }
-/*
-void run_ready()
-{
-	CSerialPort com1;
-	com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);
-	com1.SetTimeout (10, 10, 1);
 
-			char buff[6]="0";
-			//int n;
-			while (1) {
-				//printf ("\nWRITE: ");
-				//scanf ("%s", buff);
-				//n = strlen(buff);
-
-				//		com1.Write (buff, n);
-
-				if(stop==true)  //중지버튼 눌렀을 때 무조건 정지
-				{
-					break;
-				}
-				//
-				com1.Read (buff, 6);
-
-				if(strcmp(buff,"conne")==0)
-				{ 
-					connection_check=true;
-					break;
-				}
-				else
-				{
-					connection_check=false;
-				}
-			}
-			com1.Close();
-		
-		}	
-*/
 void run_program()
 		{
 
 			CSerialPort com1;
-			com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);
+			com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);  //통신포트 Open
 			com1.SetTimeout (10, 10, 1);
 
+			char buff[6]="0"; //read할 버퍼를 비워둔다.
 
-			char buff[6]="0";
-			//int n;
 			while (1) {
-				//printf ("\nWRITE: ");
-				//scanf ("%s", buff);
-				//n = strlen(buff);
 
-				//		com1.Write (buff, n);
-
-		
-				//
 				com1.Read (buff, 6);
                 
-
-
-
-				if(strcmp(buff,"right")==0)
+				if(strcmp(buff,"right")==0)        //스트림으로 부터 읽어들인 값이 right일경우 ->이벤트 실행
 				{
 					PressVirtualKeyboad(VK_RIGHT);
 					strcpy(buff,"0");
 				}
-				else if(strcmp(buff,"left")==0)
+				else if(strcmp(buff,"left")==0) //스트림으로 부터 읽어들인 값이 left일경우 ->이벤트 실행
 				{
 					PressVirtualKeyboad(VK_RETURN);
 					strcpy(buff,"0");
@@ -125,9 +73,7 @@ void run_program()
 				}
 			}
 			com1.Close();
-		
 		}
-
 
 namespace 통신프로그램 {
 
@@ -235,7 +181,7 @@ namespace 통신프로그램 {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(104, 51);
 			this->button2->TabIndex = 2;
-			this->button2->Text = L"실행";
+			this->button2->Text = L"입력";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
 			// 
@@ -306,29 +252,29 @@ namespace 통신프로그램 {
 					 std::string num = context.marshal_as<std::string>(firstName); 
 
 
-					 if(strcmp(num.c_str(),"")==0)
+					 if(strcmp(num.c_str(),"")==0)                    //입력하지 않았을경우
 					 {
 						 label2->Text = "Port번호를 입력해주세요";
 					 }
-					 else
+					 else                                             //입력했을 경우
 					 {
-						 if(isStringDouble(num.c_str()))
+						 if(isStringDouble(num.c_str()))      //숫자라면
 						 {
 							 strcat(name, num.c_str());
 							 button2->Enabled = false;
+							 button2->Text="실행중";
 							 label2->Text = "Port :"+firstName+"접속!";
 							 boost::thread t(&run_program);
 							 textBox1->Enabled = false;
+
 						 }
-						 else
+						 else //숫자가 아니면 다시 입력!
 						 {
 							 label2->Text = "error! 숫자를 입력해주세요!";
 						 }
 					 }
 
 				 }
-
-
 
 	     private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
 				 }
@@ -338,7 +284,7 @@ private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e)
 
 
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
-			 WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW);
+			 WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW); //블루투스 port번호를 확인할 수 있는 process를 띄워줌 
 		 }
 private: System::Void textBox1_MouseHover(System::Object^  sender, System::EventArgs^  e) {
 			 toolTip1->SetToolTip(textBox1,"Enter only Port Number!");
@@ -347,9 +293,7 @@ private: System::Void textBox1_TextChanged(System::Object^  sender, System::Even
 			 button2->Enabled = true;
 		 }
 private: System::Void linkLabel1_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
-			  WinExec("C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE http://google.com",SW_SHOW); 
-		      //system("explorer http://naver.com");
-			  // ShellExecute(NULL, NULL, "http://lp.com", NULL, NULL, SW_SHOW);
+			  WinExec("C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE http://google.com",SW_SHOW);  //도움말 버튼, 어플 사용설명페이지로 이동
 
 		 }
 };
