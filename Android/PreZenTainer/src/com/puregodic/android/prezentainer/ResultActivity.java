@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import lecho.lib.hellocharts.samples.R;
+import lecho.lib.hellocharts.samples.LineChartActivity.PlaceholderFragment;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,8 +39,6 @@ public class ResultActivity extends AppCompatActivity {
     private String title,yourId,date;
     private DialogHelper mDialogHelper;
     private static final String TAG = ResultActivity.class.getSimpleName();
-    private ArrayList<Double> heartRateList = new ArrayList<Double>();;
-    private ArrayList<Double> eventTimeList = new ArrayList<Double>();
     
     LinearLayout chart_area ;
     Button buttonPlay;
@@ -91,18 +92,27 @@ public class ResultActivity extends AppCompatActivity {
                                 JSONArray time = new JSONArray(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
                                 
+                                ArrayList<Float> heartRateList= new ArrayList<Float>();
+                                ArrayList<Float> eventTimeList= new ArrayList<Float>(); 
+                                
                                 for(int i = 0; i<hbr.length(); i++){
-                                   double Y_axisHeartRate = Double.valueOf(hbr.get(i).toString()).doubleValue();
-                                   heartRateList.add(Y_axisHeartRate);
+                                    float heartRateValue = Float.parseFloat(hbr.get(i).toString());
+                                   heartRateList.add(heartRateValue);
                                 }
                                 
                                 for(int i = 0; i<time.length(); i++){
-                                    double X_axisEventTime = Double.valueOf(time.get(i).toString()).doubleValue();
-                                    eventTimeList.add(X_axisEventTime);
+                                    float eventTimeValue = Float.parseFloat(time.get(i).toString());
+                                    eventTimeList.add(eventTimeValue);
                                  }
                                 
                                 Log.d("PARSING", heartRateList.toString());
                                 Log.d("PARSING", eventTimeList.toString());
+                                
+                             // Set Fragment
+                                getSupportFragmentManager()
+                                .beginTransaction()
+                                .add(R.id.container, new PlaceholderFragment(heartRateList, eventTimeList))
+                                .commit();
                                 
                                 
                         } catch (JSONException e) {
