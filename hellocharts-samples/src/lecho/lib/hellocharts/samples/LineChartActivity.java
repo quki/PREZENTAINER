@@ -63,16 +63,9 @@ public class LineChartActivity extends AppCompatActivity {
 	
     private DialogHelper mDialogHelper;
     private static final String TAG = LineChartActivity.class.getSimpleName();
-	Button buttonPlay;
-    Button buttonStop;
-    SeekBar seekbar;
-    MediaPlayer audio;
-    int audio_time;
+	
     
-    TextView textViewTime;
-    TextView textViewHR;
-    String meanHeartRate = null;
-    public TimeHandler timeHandler = new TimeHandler(this);
+    
     private static final int SEND_THREAD_INFOMATION = 1;
     
     @Override
@@ -82,261 +75,28 @@ public class LineChartActivity extends AppCompatActivity {
        
         mDialogHelper = new DialogHelper(this);
         
-        
-        Uri audioPath = Uri.parse("/sdcard/Download/darkstar.mp3");
-        audio = MediaPlayer.create(this, audioPath);
-        
-        audio.setLooping(true);
-        
-        buttonPlay = (Button) findViewById(R.id.buttonPlay);
-        buttonStop = (Button) findViewById(R.id.buttonStop);
-        seekbar = (SeekBar) findViewById(R.id.seekBar1);
-        audio_time=audio.getDuration()/1000;
-        
-        textViewTime = (TextView) findViewById(R.id.textViewTime);
-        textViewHR = (TextView) findViewById(R.id.textViewHR);
-        /**
-         * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정합니다
-         */
-        seekbar.setMax(audio.getDuration());
-        
-        /**
-         * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정합니다
-         */
-        seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-           @Override
-           public void onStopTrackingTouch(SeekBar seekBar) {
-              // TODO Auto-generated method stub
-           }
-           
-           @Override
-           public void onStartTrackingTouch(SeekBar seekBar) {
-              // TODO Auto-generated method stub
-           }
-           
-           @Override
-           public void onProgressChanged(SeekBar seekBar, int progress,
-                 boolean fromUser) {
-              // TODO Auto-generated method stub
-              /**
-               * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
-               * false인경우에는 소스상, 어플상에서 움직인경우이며
-               * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
-               * 
-               * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
-               */
-              if (fromUser)
-                 audio.seekTo(progress);
-           }
-        });
-        
         fetchDataByVolley();
         
     }
-    @Override
-    protected void onDestroy() {
-        audio.stop();
-        finish();
-        super.onDestroy();
-    }
-    
-    public void buttonPlay(View v){
-	      /**
-	       * music.isPlaying()�씠 true : �쓬�븙�씠 �쁽�옱 �옱�깮以묒엯�땲�떎, false : �옱�깮以묒씠 �븘�떃�땲�떎
-	       */
-	      // �쓬�븙�쓣 �떎�뻾�빀�땲�떎
-	      if(audio.isPlaying()) {
-	         //硫덉땄
-	         audio.pause();
-	         buttonPlay.setText("play");
-	      }
-	      else {
-	         //�옱�깮
-	         audio.start();
-	         buttonPlay.setText("playing");
-	      }         
-	      /**
-	      * �벐�옒�뱶瑜� �룎�젮 1珥덈쭏�떎 SeekBar瑜� ��吏곸씠寃� �빀�땲�떎
-	      */
-	      Thread();
-	   }
-	   
-	   public void buttonStop(View v){
-	      //buttonStop �옱�깮�쓣 �셿�쟾�엳 硫덉땄
-
-	      audio.stop();
-	      try {
-	         // �쓬�븙�쓣 �옱�깮�븷寃쎌슦瑜� ��鍮꾪빐 以�鍮꾪빀�땲�떎
-	         // prepare()�� �삁�쇅媛� 2媛�吏��굹 �븘�슂�빀�땲�떎
-	         audio.prepare();
-	      } catch (IllegalStateException e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      } catch (IOException e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      }
-	      // �쓬�븙 吏꾪뻾 �젙�룄瑜� 0, 利� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
-	      audio.seekTo(0);
-
-	      // 踰꾪듉�쓽 湲��옄瑜� �떆�옉�쑝濡�, �떆�겕諛붾�� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
-	      seekbar.setProgress(0);
-	      buttonPlay.setText("play");
-
-	   }
-	   
-	   public void Thread(){Runnable task = new Runnable() {
-		   public void run() {
-
-			   while (audio.isPlaying()) {
-				   try {
-					   Thread.sleep(1000);
-				   } catch (InterruptedException e) {
-					   // TODO Auto-generated catch block
-					   e.printStackTrace();
-				   }
-				   seekbar.setProgress(audio.getCurrentPosition());
-				   Log.e("audio.getCurrentPosition()",
-						   ":" + audio.getCurrentPosition());
-				   // textViewTime.setText(audio.getCurrentPosition()); 占쎈퓠占쎌쑎獄쏆뮇源�
-
-				   // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(audio.getCurrentPosition()占쎌뱽 占쎌뵠占쎌뒠占쎈퉸 獄쏅뗀以� 雅뚯눊�ц쳸�룇釉섓옙猷� 占쎈쭆占쎈뼄. 占쎈퉾占쎈굶筌랃옙
-				   // 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
-
-				   // 筌롫뗄�뻻筌욑옙 占쎈섯占쎈선占쎌궎疫뀐옙
-				   Message msg = timeHandler.obtainMessage();
-
-				   // 筌롫뗄�뻻筌욑옙 ID 占쎄퐬占쎌젟
-				   msg.what = SEND_THREAD_INFOMATION;
-
-				   // 筌롫뗄�뻻筌욑옙 占쎌젟癰귨옙 占쎄퐬占쎌젟 (int 占쎌굨占쎈뻼)
-				   msg.arg1 = Integer.valueOf(audio.getCurrentPosition());
-				   // 占쎈퉾占쎈굶占쎌쑎嚥∽옙 筌롫뗄苑�筌욑옙 占쎌읈占쎈꽊
-				   timeHandler.sendMessage(msg);
-
-			   }
-		   }
-	   };
-	   Thread thread = new Thread(task);
-	   thread.start();
-	   }
-	   public class TimeHandler extends Handler {
-	        private final WeakReference<LineChartActivity> mActivity;
-	        ArrayList<Float> heartRateLists = new ArrayList<Float>();
-	        public TimeHandler(LineChartActivity activity) {
-	            mActivity = new WeakReference<LineChartActivity>(activity);
-	        }
-
-	        @Override
-	        public void handleMessage(Message msg) {
-	            String stringTime = null;
-	            String stringHR = null;
-	            String stringWholeTime = null;
-	            LineChartActivity activity = mActivity.get();
-	            // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(textViewTime.setText(audio.getCurrentPosition());占쎌뱽 獄쏅뗀以� 占쎈쑅占쎈즲
-	            // 揶쏉옙占쎈뮟, 占쎈퉾占쎈굶筌랃옙 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
-	            super.handleMessage(msg);
-
-	            switch (msg.what) {
-	            case SEND_THREAD_INFOMATION:
-	                //雅뚯눘�벥 setText占쎈뮉 獄쏆꼶諭띰옙�뻻 string占쎌몵嚥∽옙 獄쏅떽��占쎈선占쎄퐣 占쎌뵥占쎌쁽嚥∽옙 占쎌읈占쎈뼎 占쎈퉸占쎈튊占쎈립占쎈뼄.(int嚥∽옙 占쎈릭筌롳옙 error)
-	                //占쎈뻻揶쏄쑬而�饔낅뗄苑� 占쎈뮞占쎈뱜筌띻낯�몵嚥∽옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾
-	                stringTime = ChangeTime(msg.arg1);
-	                //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
-	                stringHR = FindHeartRateValue(heartRateLists, msg.arg1);
-	                stringWholeTime = ChangeTime(audio.getDuration());
-	                activity.textViewHR.setText("   "+stringHR + " / " + FindMeanHeartRateValue(heartRateLists));
-	                activity.textViewTime.setText("       "+stringTime + " / " + stringWholeTime);
-	                
-	                break;
-	            default:
-	                break;
-	            }
-
-	        }
-	        public void set_heartRateLists(ArrayList<Float> heartRateLists){
-	        	this.heartRateLists=heartRateLists;
-	        }
-	        
-	    }
-	    
-	    //占쎈뼎占쎌삢獄쏅베猷욑옙�땾 占쎈즸域뱀쥒而� �뤃�뗫릭占쎈뮉 占쎈맙占쎈땾
-	    public String FindMeanHeartRateValue(ArrayList<Float> heartRateList) {
-	        double heartRateSum = 0;
-	        String meanHeartRate = null;
-	        for (int i = 0; i < heartRateList.size(); i++) {
-	            heartRateSum += heartRateList.get(i); 
-	        }
-	        meanHeartRate = Integer.toString((int)((double)(heartRateSum / heartRateList.size())));
-	        return meanHeartRate;
-	    }
-	    
-	    //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
-	    public String FindHeartRateValue(ArrayList<Float> heartRateList, int time) {
-	        int HeartRateValueToInt = 0;
-	        String HeartRateValueToString = null;
-	        
-	        if (time / (1000 * 5) > heartRateList.size() - 1) {
-	            HeartRateValueToInt = (int)((double)heartRateList.get(heartRateList.size() - 1));
-	            HeartRateValueToString = Integer.toString(HeartRateValueToInt);
-	            return HeartRateValueToString;
-	        }
-	        else {
-	            HeartRateValueToInt = (int)((double)heartRateList.get(time / (1000 * 5)));
-	            HeartRateValueToString = Integer.toString(HeartRateValueToInt);
-	        }
-	        
-	        return HeartRateValueToString; 
-	    }
-	    
-	    //獄쏉옙�뵳�딄쉭�뚢뫀諭띄몴占� 癰귣떯由� 占쎈젶占쎈릭野껓옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾.
-	    public String ChangeTime (int time) {
-	        int secondTime = 0;
-	        int minuteTime = 0;
-	        int hourTime = 0;
-	                
-	        String stringTime = null;
-	        String secondTimeToString = null;
-	        String minuteTimeToString = null;
-	        String hourTimeToString = null;
-	                
-	        if (time / (1000 * 60 * 60) > 0) {
-	            time = time / 1000;
-	            secondTime = time % 60;
-	            minuteTime = time / 60;
-	            hourTime = minuteTime / 60;
-	            
-	            secondTimeToString = Integer.toString(secondTime);
-	            minuteTimeToString = Integer.toString(minuteTime);
-	            hourTimeToString = Integer.toString(hourTime);
-	            
-	            stringTime = hourTimeToString + ":" + minuteTimeToString + ":" + secondTimeToString;
-	        }
-	        else {
-	            time = time / 1000;
-	            secondTime = time % 60;
-	            minuteTime = time / 60;
-	            
-	            secondTimeToString = Integer.toString(secondTime);
-	            minuteTimeToString = Integer.toString(minuteTime);
-	            
-	            stringTime = minuteTimeToString + ":" + secondTimeToString;
-	            }
-	        
-	        return stringTime;
-	    }
-
 
     /**
      * A fragment containing a line chart.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
 
         private LineChartView chart;
         private LineChartData data;
         private LineChartData pre_data;
         private PreviewLineChartView previewChart;
         private LineChartData previewData;
+        Button buttonPlay;
+        Button buttonStop;
+        SeekBar seekbar;
+        MediaPlayer audio;
+        TextView textViewTime;
+        TextView textViewHR;
+        String meanHeartRate = null;
+        public TimeHandler timeHandler = new TimeHandler(this);
         
         private int numberOfLines = 1;
         private int maxNumberOfLines = 4;
@@ -359,10 +119,9 @@ public class LineChartActivity extends AppCompatActivity {
 
         public PlaceholderFragment() {
         }
-        public PlaceholderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> eventTimeList,int audio_time) {
+        public PlaceholderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> eventTimeList) {
             this.heartRateList = heartRateList;
             this.eventTimeList = eventTimeList;
-            this.audio_time=audio_time;
         }
 
         @Override
@@ -384,9 +143,268 @@ public class LineChartActivity extends AppCompatActivity {
 
             // 설정
            // resetViewport();
-
+            
+            
+            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
+            Uri audioPath = Uri.parse("/sdcard/melon/스폰서.mp3");
+            audio = MediaPlayer.create(getApplicationContext(), audioPath);
+            
+            audio.setLooping(true);
+            
+            buttonPlay = (Button) findViewById(R.id.buttonPlay);
+            buttonStop = (Button) findViewById(R.id.buttonStop);
+            seekbar = (SeekBar) findViewById(R.id.seekBar1);
+            audio_time=audio.getDuration()/1000;
+            
+            textViewTime = (TextView) findViewById(R.id.textViewTime);
+            textViewHR = (TextView) findViewById(R.id.textViewHR);
+            /**
+             * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정합니다
+             */
+            seekbar.setMax(audio.getDuration());
+            
+            /**
+             * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정합니다
+             */
+            seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+               @Override
+               public void onStopTrackingTouch(SeekBar seekBar) {
+                  // TODO Auto-generated method stub
+               }
+               
+               @Override
+               public void onStartTrackingTouch(SeekBar seekBar) {
+                  // TODO Auto-generated method stub
+               }
+               
+               @Override
+               public void onProgressChanged(SeekBar seekBar, int progress,
+                     boolean fromUser) {
+                  // TODO Auto-generated method stub
+                  /**
+                   * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
+                   * false인경우에는 소스상, 어플상에서 움직인경우이며
+                   * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
+                   * 
+                   * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
+                   */
+                  if (fromUser)
+                     audio.seekTo(progress);
+               }
+            });
+            
+            
+            buttonPlay.setOnClickListener(new View.OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    buttonPlay();
+                }
+            });
+            
+            buttonStop.setOnClickListener(new View.OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    buttonStop();
+                }
+            });
+            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
+            
+            
+            
+            
             return rootView;
         }
+        
+        @Override
+        public void onDestroy() {
+            audio.stop();
+            finish();
+            super.onDestroy();
+        }
+        public void buttonPlay(){
+            /**
+             * music.isPlaying()�씠 true : �쓬�븙�씠 �쁽�옱 �옱�깮以묒엯�땲�떎, false : �옱�깮以묒씠 �븘�떃�땲�떎
+             */
+            // �쓬�븙�쓣 �떎�뻾�빀�땲�떎
+            if(audio.isPlaying()) {
+               //硫덉땄
+               audio.pause();
+               buttonPlay.setText("play");
+            }
+            else {
+               //�옱�깮
+               audio.start();
+               buttonPlay.setText("pause");
+            }         
+            /**
+            * �벐�옒�뱶瑜� �룎�젮 1珥덈쭏�떎 SeekBar瑜� ��吏곸씠寃� �빀�땲�떎
+            */
+            Thread();
+         }
+         
+         public void buttonStop(){
+            //buttonStop �옱�깮�쓣 �셿�쟾�엳 硫덉땄
+
+            audio.stop();
+            try {
+               // �쓬�븙�쓣 �옱�깮�븷寃쎌슦瑜� ��鍮꾪빐 以�鍮꾪빀�땲�떎
+               // prepare()�� �삁�쇅媛� 2媛�吏��굹 �븘�슂�빀�땲�떎
+               audio.prepare();
+            } catch (IllegalStateException e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            } catch (IOException e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
+            // �쓬�븙 吏꾪뻾 �젙�룄瑜� 0, 利� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
+            audio.seekTo(0);
+
+            // 踰꾪듉�쓽 湲��옄瑜� �떆�옉�쑝濡�, �떆�겕諛붾�� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
+            seekbar.setProgress(0);
+            buttonPlay.setText("play");
+
+         }
+         
+         public void Thread(){Runnable task = new Runnable() {
+             public void run() {
+
+                 while (audio.isPlaying()) {
+                     try {
+                         Thread.sleep(1000);
+                     } catch (InterruptedException e) {
+                         // TODO Auto-generated catch block
+                         e.printStackTrace();
+                     }
+                     seekbar.setProgress(audio.getCurrentPosition());
+                     Log.e("audio.getCurrentPosition()",
+                             ":" + audio.getCurrentPosition());
+                     // textViewTime.setText(audio.getCurrentPosition()); 占쎈퓠占쎌쑎獄쏆뮇源�
+
+                     // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(audio.getCurrentPosition()占쎌뱽 占쎌뵠占쎌뒠占쎈퉸 獄쏅뗀以� 雅뚯눊�ц쳸�룇釉섓옙猷� 占쎈쭆占쎈뼄. 占쎈퉾占쎈굶筌랃옙
+                     // 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
+
+                     // 筌롫뗄�뻻筌욑옙 占쎈섯占쎈선占쎌궎疫뀐옙
+                     Message msg = timeHandler.obtainMessage();
+
+                     // 筌롫뗄�뻻筌욑옙 ID 占쎄퐬占쎌젟
+                     msg.what = SEND_THREAD_INFOMATION;
+
+                     // 筌롫뗄�뻻筌욑옙 占쎌젟癰귨옙 占쎄퐬占쎌젟 (int 占쎌굨占쎈뻼)
+                     msg.arg1 = Integer.valueOf(audio.getCurrentPosition());
+                     // 占쎈퉾占쎈굶占쎌쑎嚥∽옙 筌롫뗄苑�筌욑옙 占쎌읈占쎈꽊
+                     timeHandler.sendMessage(msg);
+
+                 }
+             }
+         };
+         Thread thread = new Thread(task);
+         thread.start();
+         }
+         public class TimeHandler extends Handler {
+              private final WeakReference<PlaceholderFragment> mActivity;
+             
+              public TimeHandler(PlaceholderFragment activity) {
+                  mActivity = new WeakReference<PlaceholderFragment>(activity);
+              }
+
+              @Override
+              public void handleMessage(Message msg) {
+                  String stringTime = null;
+                  String stringHR = null;
+                  String stringWholeTime = null;
+                  PlaceholderFragment activity = mActivity.get();
+                  // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(textViewTime.setText(audio.getCurrentPosition());占쎌뱽 獄쏅뗀以� 占쎈쑅占쎈즲
+                  // 揶쏉옙占쎈뮟, 占쎈퉾占쎈굶筌랃옙 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
+                  super.handleMessage(msg);
+
+                  switch (msg.what) {
+                  case SEND_THREAD_INFOMATION:
+                      //雅뚯눘�벥 setText占쎈뮉 獄쏆꼶諭띰옙�뻻 string占쎌몵嚥∽옙 獄쏅떽��占쎈선占쎄퐣 占쎌뵥占쎌쁽嚥∽옙 占쎌읈占쎈뼎 占쎈퉸占쎈튊占쎈립占쎈뼄.(int嚥∽옙 占쎈릭筌롳옙 error)
+                      //占쎈뻻揶쏄쑬而�饔낅뗄苑� 占쎈뮞占쎈뱜筌띻낯�몵嚥∽옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾
+                      stringTime = ChangeTime(msg.arg1);
+                      //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
+                      stringHR = FindHeartRateValue(heartRateList, msg.arg1);
+                      stringWholeTime = ChangeTime(audio.getDuration());
+                      activity.textViewHR.setText("   "+stringHR + " / " + FindMeanHeartRateValue(heartRateList));
+                      activity.textViewTime.setText("       "+stringTime + " / " + stringWholeTime);
+                      
+                      break;
+                  default:
+                      break;
+                  }
+
+              }
+              
+          }
+          
+          //占쎈뼎占쎌삢獄쏅베猷욑옙�땾 占쎈즸域뱀쥒而� �뤃�뗫릭占쎈뮉 占쎈맙占쎈땾
+          public String FindMeanHeartRateValue(ArrayList<Float> heartRateList) {
+              double heartRateSum = 0;
+              String meanHeartRate = null;
+              for (int i = 0; i < heartRateList.size(); i++) {
+                  heartRateSum += heartRateList.get(i); 
+              }
+              meanHeartRate = Integer.toString((int)((double)(heartRateSum / heartRateList.size())));
+              return meanHeartRate;
+          }
+          
+          //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
+          public String FindHeartRateValue(ArrayList<Float> heartRateList, int time) {
+              int HeartRateValueToInt = 0;
+              String HeartRateValueToString = null;
+              
+              if (time / (1000 * 5) > heartRateList.size() - 1) {
+                  HeartRateValueToInt = (int)((double)heartRateList.get(heartRateList.size() - 1));
+                  HeartRateValueToString = Integer.toString(HeartRateValueToInt);
+                  return HeartRateValueToString;
+              }
+              else {
+                  HeartRateValueToInt = (int)((double)heartRateList.get(time / (1000 * 5)));
+                  HeartRateValueToString = Integer.toString(HeartRateValueToInt);
+              }
+              
+              return HeartRateValueToString; 
+          }
+          
+          //獄쏉옙�뵳�딄쉭�뚢뫀諭띄몴占� 癰귣떯由� 占쎈젶占쎈릭野껓옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾.
+          public String ChangeTime (int time) {
+              int secondTime = 0;
+              int minuteTime = 0;
+              int hourTime = 0;
+                      
+              String stringTime = null;
+              String secondTimeToString = null;
+              String minuteTimeToString = null;
+              String hourTimeToString = null;
+                      
+              if (time / (1000 * 60 * 60) > 0) {
+                  time = time / 1000;
+                  secondTime = time % 60;
+                  minuteTime = time / 60;
+                  hourTime = minuteTime / 60;
+                  
+                  secondTimeToString = Integer.toString(secondTime);
+                  minuteTimeToString = Integer.toString(minuteTime);
+                  hourTimeToString = Integer.toString(hourTime);
+                  
+                  stringTime = hourTimeToString + ":" + minuteTimeToString + ":" + secondTimeToString;
+              }
+              else {
+                  time = time / 1000;
+                  secondTime = time % 60;
+                  minuteTime = time / 60;
+                  
+                  secondTimeToString = Integer.toString(secondTime);
+                  minuteTimeToString = Integer.toString(minuteTime);
+                  
+                  stringTime = minuteTimeToString + ":" + secondTimeToString;
+                  }
+              
+              return stringTime;
+          }
 
         // MENU
         @Override
@@ -843,14 +861,11 @@ public class LineChartActivity extends AppCompatActivity {
     				}
     				Log.e("+++++", heartRateList.toString());
     				Log.e("+++++", eventTimeList.toString());
-    				Log.e("audio_time", Integer.toString(audio_time));
-    				
-    				timeHandler.set_heartRateLists(heartRateList);
     				
     				// Set Fragment
     				getSupportFragmentManager()
     				.beginTransaction()
-    				.add(R.id.container, new PlaceholderFragment(heartRateList, eventTimeList,audio_time))
+    				.add(R.id.container, new PlaceholderFragment(heartRateList, eventTimeList))
     				.commit();
     				
     			} catch (JSONException e) {

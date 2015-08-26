@@ -64,7 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.48"
-            android:onClick="buttonPlay"
             android:text="play" />
 
         <Button
@@ -72,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.48"
-            android:onClick="buttonStop"
             android:text="stop" />
     </LinearLayout>
 
