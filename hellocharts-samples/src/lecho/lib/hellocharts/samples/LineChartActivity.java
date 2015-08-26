@@ -98,7 +98,7 @@ public class LineChartActivity extends AppCompatActivity {
         String meanHeartRate = null;
         public final Handler timeHandler = new TimeHandler(this);
         
-        private int numberOfLines = 1;
+        private int numberOfLines = 2;
         private int maxNumberOfLines = 4;
         private int numberOfPoints = 20;
         private int audio_time;
@@ -146,7 +146,7 @@ public class LineChartActivity extends AppCompatActivity {
             
             
             ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/Download/이유갓지않은이유.mp3");
+            Uri audioPath = Uri.parse("/sdcard/melon/스폰서.mp3");
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -190,13 +190,15 @@ public class LineChartActivity extends AppCompatActivity {
                    */
             	 //For safety create copy of the chart's data
             	   if((progress-1)%5==0){
-            		   LineChartData data = new LineChartData(chart.getLineChartData());
+            	       
+            	       Log.e("PROGRESS", ""+progress);
+            		   /*LineChartData data = new LineChartData(chart.getLineChartData());
                        //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
                        float line0ValueY = data.getLines().get(0).getValues().get((progress - 1)).getY();
                        //update single point on the second line
                        data.getLines().get(1).getValues().get(0).set(progress - 1, line0ValueY);
                        //replace chart data
-                       chart.setLineChartData(data);
+                       chart.setLineChartData(data);*/
             		   
             	   }
             		   
@@ -580,6 +582,7 @@ public class LineChartActivity extends AppCompatActivity {
             		if(i == 1 && j == 0) {
             			//second line, first point, break because we want to add only one point to the second line, with the same Y value as the first point on the first line
             			values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
+            			Log.d("!!!!!!!!!!!", ""+lines.get(0).getValues().get(0).getY());
             			break;
             		} else {
             			values.add(new PointValue(j*5, heartRateList.get(j)));//adding point to the first line
