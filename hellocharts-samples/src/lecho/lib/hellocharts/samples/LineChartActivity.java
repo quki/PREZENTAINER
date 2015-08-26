@@ -146,7 +146,7 @@ public class LineChartActivity extends AppCompatActivity {
             
             
             ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/melon/스폰서.mp3");
+            Uri audioPath = Uri.parse("/sdcard/Download/이유갓지않은이유.mp3");
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -188,6 +188,22 @@ public class LineChartActivity extends AppCompatActivity {
                    * 
                    * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
                    */
+            	 //For safety create copy of the chart's data
+            	   if((progress-1)%5==0){
+            		   LineChartData data = new LineChartData(chart.getLineChartData());
+                       //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
+                       float line0ValueY = data.getLines().get(0).getValues().get((progress - 1)).getY();
+                       //update single point on the second line
+                       data.getLines().get(1).getValues().get(0).set(progress - 1, line0ValueY);
+                       //replace chart data
+                       chart.setLineChartData(data);
+            		   
+            	   }
+            		   
+                   
+
+            	   
+            	   
                   if (fromUser)
                      audio.seekTo(progress);
                }
@@ -545,7 +561,7 @@ public class LineChartActivity extends AppCompatActivity {
         
         private void generateData() {
 
-            List<Line> lines = new ArrayList<Line>();
+        	List<Line> lines = new ArrayList<Line>();
             List<String> slideNum = new ArrayList<String>();
             // 축 값 설정
             List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
@@ -553,27 +569,41 @@ public class LineChartActivity extends AppCompatActivity {
                 slideNum.add(j+1+"번");
                 axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
             }
-            
+
             for (int i = 0; i < numberOfLines; ++i) {
 
             	List<PointValue> values = new ArrayList<PointValue>();
-            	
-            	    for (int j = 0; j < heartRateList.size(); ++j) {
-                        values.add(new PointValue(j*5, heartRateList.get(j)));
-                    }
-            	
+
+            	for (int j = 0; j < heartRateList.size(); ++j) {
+
+
+            		if(i == 1 && j == 0) {
+            			//second line, first point, break because we want to add only one point to the second line, with the same Y value as the first point on the first line
+            			values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
+            			break;
+            		} else {
+            			values.add(new PointValue(j*5, heartRateList.get(j)));//adding point to the first line
+            		}
+            	}
+
             	Log.e("!!!!!!!!!!!", values.toString());
             	Line line = new Line(values);
             	line.setColor(ChartUtils.COLORS[i]);
-            	line.setShape(shape);
-            	line.setCubic(isCubic);
-            	line.setFilled(isFilled);
-            	line.setHasLabels(hasLabels);
-            	line.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            	line.setHasLines(hasLines);
-            	line.setHasPoints(hasPoints);
-            	if (pointsHaveDifferentColor){
-            		line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
+            	if(i==1){
+            		line.setHasLabels(true);
+            	}
+            	else
+            	{
+            		line.setShape(shape);
+            		line.setCubic(isCubic);
+            		line.setFilled(isFilled);
+            		line.setHasLabels(hasLabels);
+            		line.setHasLabelsOnlyForSelected(hasLabelForSelected);
+            		line.setHasLines(hasLines);
+            		line.setHasPoints(hasPoints);
+            		if (pointsHaveDifferentColor){
+            			line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
+            		}
             	}
             	lines.add(line);
             }
