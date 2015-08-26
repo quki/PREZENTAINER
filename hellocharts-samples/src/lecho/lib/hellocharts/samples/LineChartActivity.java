@@ -30,11 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Handler;
-import android.os.Message;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -96,7 +96,7 @@ public class LineChartActivity extends AppCompatActivity {
         TextView textViewTime;
         TextView textViewHR;
         String meanHeartRate = null;
-        public TimeHandler timeHandler = new TimeHandler(this);
+        public final Handler timeHandler = new TimeHandler(this);
         
         private int numberOfLines = 1;
         private int maxNumberOfLines = 4;
