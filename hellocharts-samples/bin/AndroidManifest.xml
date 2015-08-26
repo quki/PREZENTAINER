@@ -24,6 +24,7 @@
         </activity>
         <activity
             android:name=".LineChartActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_line_chart" >
         </activity>
         <activity
