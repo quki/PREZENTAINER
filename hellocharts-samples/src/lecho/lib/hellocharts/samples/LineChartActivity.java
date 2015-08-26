@@ -209,6 +209,8 @@ public class LineChartActivity extends AppCompatActivity {
             	   //update single point on the second line
             	   data.getLines().get(1).getValues().get(0).set(rIndex, line0ValueY);
             	   //replace chart data
+            	   
+            	   
             	   chart.setLineChartData(data);
 
 
@@ -571,6 +573,7 @@ public class LineChartActivity extends AppCompatActivity {
         private void generateData() {
 
         	List<Line> lines = new ArrayList<Line>();
+        	List<Line> lines_for_pre_data = new ArrayList<Line>();  //미리보기 데이터를 위한 List
             List<String> slideNum = new ArrayList<String>();
             // 축 값 설정
             List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
@@ -616,10 +619,14 @@ public class LineChartActivity extends AppCompatActivity {
             		}
             	}
             	lines.add(line);
+            	if(i==0){                                  //미리보기 데이터에는 심장박동수 라인만 넣기!
+            		lines_for_pre_data.add(line);
+            	}
+            		
             }
 
             data = new LineChartData(lines);
-            pre_data = new LineChartData(lines);
+            pre_data = new LineChartData(lines_for_pre_data);
             // 축이 있을 때
             if (hasAxes) {
                 Axis axisX = new Axis().setHasLines(true);
