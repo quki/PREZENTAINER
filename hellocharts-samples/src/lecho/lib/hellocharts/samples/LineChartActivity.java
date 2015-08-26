@@ -63,9 +63,6 @@ public class LineChartActivity extends AppCompatActivity {
 	
     private DialogHelper mDialogHelper;
     private static final String TAG = LineChartActivity.class.getSimpleName();
-	
-    
-    
     private static final int SEND_THREAD_INFOMATION = 1;
     
     @Override
@@ -181,9 +178,14 @@ public class LineChartActivity extends AppCompatActivity {
                
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress,
+<<<<<<< HEAD
 
             		   boolean fromUser) {
             	   // TODO Auto-generated method stub
+=======
+                     boolean fromUser) {
+            		   
+>>>>>>> a40df4ecd815d3b1c08608a0a1e1d39273dd5665
             	   /**
             	    * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
             	    * false인경우에는 소스상, 어플상에서 움직인경우이며
@@ -901,12 +903,12 @@ public class LineChartActivity extends AppCompatActivity {
     			    ArrayList<Float> eventTimeList= new ArrayList<Float>(); 
     				
     				for(int i = 0; i<hbr.length(); i++){
-    					float Y_axisHeartRate = Double.valueOf(hbr.get(i).toString()).floatValue();
+    					float Y_axisHeartRate = Float.parseFloat(hbr.get(i).toString());
     					heartRateList.add(Y_axisHeartRate);
     				}
 
     				for(int i = 0; i<time.length(); i++){
-    					float X_axisEventTime = Double.valueOf(time.get(i).toString()).floatValue();
+    				    float X_axisEventTime = Float.parseFloat(time.get(i).toString());
     					eventTimeList.add(X_axisEventTime);
     					
     				}
@@ -958,7 +960,5 @@ public class LineChartActivity extends AppCompatActivity {
    AppController.getInstance().addToRequestQueue(strReq);
 
     }
-
-
 
 }
