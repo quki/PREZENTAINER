@@ -235,6 +235,8 @@ define({
           jsonInfoET = JSON.stringify(eventTimeArray);
           mSASocket.sendData(CHANNELID_EVENTTIME, jsonInfoET);
           console.log("Event Time sent : " + jsonInfoET);
+          eventTimeArray = [];
+          console.log("eventTimeArray Initialize : " + eventTimeArray);
       } catch (err) {
         console.log("exception [" + err.name + "] msg[" + err.message + "]");
       }
@@ -319,7 +321,7 @@ define({
     }
     
     function onPcEventBtnClick(){
-      eventtopc();
+      eventtopc("leftt");
       makeJsonEventTime();
       
     }

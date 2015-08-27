@@ -29,11 +29,13 @@ function eventtopc(direction) {       //direction=0 이면 오른쪽 , direction
 	//
 	if(direction=="right") //오른쪽 이벤트 발생시!
 	{
-		mSASocket.sendData(CHANNELID_EVENT,"right" + "_Current Slide : " + currentSlide);
+		mSASocket.sendData(CHANNELID_EVENT,direction);
+		console.log("sendData(RIGHT)");
 	}
-	else //왼쪽 이벤트 발생시!
+	else if(direction == "leftt")//왼쪽 이벤트 발생시!
 	{
-		mSASocket.sendData(CHANNELID_EVENT,"left" + "_Current Slide : " + currentSlide);
+		mSASocket.sendData(CHANNELID_EVENT, direction);
+		console.log("sendData(LEFT)");
 	}
 
     console.log('Event to PC !' + currentSlide + direction);
@@ -63,6 +65,7 @@ function sendJsonHR(){
       console.log(jsonInfoHR);
       mSASocket.sendData(CHANNELID_HR, jsonInfoHR);
       console.log("Heart Rate sent : " + jsonInfoHR);
+      
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
@@ -84,6 +87,7 @@ function stopHR() {
   window.webapis.motion.stop("HRM");
   clearInterval(sendingInterval);
   heartRateArray = null;
+  console.log("heartRateArray Initialize : " + heartRateArray);
   console.log('HR Stop !');
 }
 
@@ -118,7 +122,7 @@ function startTimer(){
 }
 // Stop Timer
 function stopTimer(){
-  if(mTimeInterval !== 0){
+  if(mTimeInterval.length !== 0){
 	//일정간격 초기화
     clearInterval(vibratingInterval);
     //코드수정

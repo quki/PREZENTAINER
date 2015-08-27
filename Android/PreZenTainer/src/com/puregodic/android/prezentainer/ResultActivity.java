@@ -417,15 +417,19 @@ public class ResultActivity extends AppCompatActivity {
 
               List<Line> lines = new ArrayList<Line>();
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
-              List<String> slideNum = new ArrayList<String>();
+              //List<String> slideNum = new ArrayList<String>();
               
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < eventTimeList.size(); ++j) {
-                  slideNum.add(j+1+"번");
-                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
+                  //slideNum.add(j+1+"번");
+                  //axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
+                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000));
               }
-
+              for(int i=0; i<axisXvalue.size(); i++){
+                  Log.d("axisXvalue", ""+axisXvalue.get(i));
+              }
+              
               for (int i = 0; i < numberOfLines; ++i) {
 
                   List<PointValue> values = new ArrayList<PointValue>();
