@@ -156,7 +156,11 @@
 </Reference>
 <Reference URI="js%2Fglobalfcn.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<<<<<<< HEAD
 <DigestValue>QpB4u1DuVQl81rpCRB5MuC3W5f7uhdckdhD6uTkM+Uo=</DigestValue>
+=======
+<DigestValue>MHn5td8spB2n4tYaLcjTD1YklgMCEagyKSyTINuEg2c=</DigestValue>
+>>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 </Reference>
 <Reference URI="js%2Fhelpers%2Fdate.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -180,7 +184,11 @@
 </Reference>
 <Reference URI="js%2Fmotion.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<<<<<<< HEAD
 <DigestValue>kPs+jINMLP8q+htoXV4H9nDU/ddWzP+vDRMoPEsIR4s=</DigestValue>
+=======
+<DigestValue>W1oEXjQCNQlm+oWMMDM4bXBNsa0gd2PouR6rMW1Nr00=</DigestValue>
+>>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 </Reference>
 <Reference URI="js%2Fsap.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1107,11 +1115,19 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
+<<<<<<< HEAD
 XfSKSthZF7LsnBosumftlqS7ez3NZocj6z0PLyMlZ1gCY95TFp5ReFhivt4IHKAdxqyzD+h4f5sd
 zqm4WP4R3dLJ/ReEVTsImMcgwIDnvyeJklTiprVKH8+3Z0tuYRE3o3LZfi4mM1LNyWSRZf3KknrD
 A2xeaMmA6IIRwb5BshaqQcenU6b84kf8HMfHjFDlb+r/l+vFdvwYku3KsWmu/J/5nOkStDwejZjH
 gIodczMZt6xhdE7zbo8vOr5Ef3kg57R+kjfKzckcfOK+uXY7O1rI/aJhOb/eA1Fkk+oP8/e7S7zW
 adj3FkB7tlQERe/0x2vnbFpyCoUzYZDFDw10Kg==
+=======
+i0ygo9z3CCutEhPG3Mzgii6IMaXMCum/e2u9NuHXY7lU4BKeTz3651UgEaezq1ci6UUKVt7tD/+a
+UvzSxTwoLAktWEJMN5H1HyYomGhbXJOtYyj7If1pdrzmYnX9a8U2yu527jRQUnyv2I8c+ZzRHThm
+1DK3TTPQuvpuRvhckKUPNizYkuyCWIiE0ppfmzjAAUwoWJtSQxecTqNfhnOFXDGqmvMAEb4tFAEm
+2bGdwEOROO/ETHMuHvP5/HFBWZUWrldlnb8azT4kx03tKUrMEAdmXRa41BTiDrHXIt/sPxKxbSc9
+zl+inHenAGEMOyV69X+saqyx7GtgHLEoDneEJg==
+>>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 </SignatureValue>
 <KeyInfo>
 <X509Data>

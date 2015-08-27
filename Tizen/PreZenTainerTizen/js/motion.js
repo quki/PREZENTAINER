@@ -372,6 +372,12 @@ window.onload = function () {
     // add eventListener for tizenhwkey
     document.addEventListener('tizenhwkey', function(e) {
         if(e.keyName == "back")
-            tizen.application.getCurrentApplication().exit();
+        	{
+        		if(confirm("어플을 종료하시겠습니까?")==true){
+        			tizen.application.getCurrentApplication().exit();
+        		}
+ 	
+        	}
+            
     });
 };

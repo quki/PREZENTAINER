@@ -16,7 +16,7 @@ var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
 var p_makeJsonEventTime;
 
 // Event btn clicked
-function eventtopc(direction) {       //direction=0 이면 오른쪽 , direction=1 이면 왼쪽
+function eventtopc(direction) {       
   try {
 	//코드수정
 	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)

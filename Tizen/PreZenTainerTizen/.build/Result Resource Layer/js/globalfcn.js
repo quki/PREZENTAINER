@@ -16,7 +16,7 @@ var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
 var p_makeJsonEventTime;
 
 // Event btn clicked
-function eventtopc(direction) {       //direction=0 이면 오른쪽 , direction=1 이면 왼쪽
+function eventtopc(direction) {       
   try {
 	//코드수정
 	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)
@@ -29,13 +29,21 @@ function eventtopc(direction) {       //direction=0 이면 오른쪽 , direction
 	//
 	if(direction=="right") //오른쪽 이벤트 발생시!
 	{
+<<<<<<< HEAD
 		mSASocket.sendData(CHANNELID_EVENT,direction);
 		console.log("sendData(RIGHT)");
+=======
+		mSASocket.sendData(CHANNELID_EVENT,"right");
+>>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 	}
 	else if(direction == "leftt")//왼쪽 이벤트 발생시!
 	{
+<<<<<<< HEAD
 		mSASocket.sendData(CHANNELID_EVENT, direction);
 		console.log("sendData(LEFT)");
+=======
+		mSASocket.sendData(CHANNELID_EVENT,"left");
+>>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 	}
 
     console.log('Event to PC !' + currentSlide + direction);

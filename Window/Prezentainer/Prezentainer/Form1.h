@@ -35,7 +35,7 @@ void PressVirtualKeyboad(BYTE vk) {
 }
 void PressLeft() {
 
-	PressVirtualKeyboad(VK_RETURN);
+	PressVirtualKeyboad(VK_LEFT);
 
 }
 void PressRight() {
@@ -53,18 +53,19 @@ void run_program()
 
 			char buff[6]="0"; //read할 버퍼를 비워둔다.
 
-			while (1) {
-
+			while (1)
+			
+			{
 				com1.Read (buff, 6);
                 
 				if(strcmp(buff,"right")==0)        //스트림으로 부터 읽어들인 값이 right일경우 ->이벤트 실행
 				{
-					PressVirtualKeyboad(VK_RIGHT);
+					PressRight();
 					strcpy(buff,"0");
 				}
-				else if(strcmp(buff,"left")==0) //스트림으로 부터 읽어들인 값이 left일경우 ->이벤트 실행
+				else if(strcmp(buff,"leftt")==0) //스트림으로 부터 읽어들인 값이 left일경우 ->이벤트 실행
 				{
-					PressVirtualKeyboad(VK_RETURN);
+					PressLeft();
 					strcpy(buff,"0");
 				}
 				else

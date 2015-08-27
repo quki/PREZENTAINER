@@ -104,7 +104,7 @@ public class ResultActivity extends AppCompatActivity {
         TextView textViewTime;
         TextView textViewHR;
         String meanHeartRate = null;
-        
+        int audioSize;
         private int numberOfLines = 2;
         
         private boolean hasYaxis = true;
@@ -153,9 +153,9 @@ public class ResultActivity extends AppCompatActivity {
             /**
              * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정
              */
-            
+            audioSize = audio.getDuration();
             seekbar.incrementProgressBy(1);
-            seekbar.setMax(audio.getDuration());
+            seekbar.setMax(audioSize);
             
             /**
              * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
