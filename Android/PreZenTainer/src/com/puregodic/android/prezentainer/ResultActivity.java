@@ -66,12 +66,14 @@ public class ResultActivity extends AppCompatActivity {
     private DialogHelper mDialogHelper;
     private String mFilePath;
     private static final int SEND_THREAD_INFOMATION = 1;
+    private TextView pptTitle;
     
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         
+        pptTitle = (TextView)findViewById(R.id.pptTitle);
         mDialogHelper = new DialogHelper(this);
         
         title = getIntent().getStringExtra("title");
@@ -80,6 +82,8 @@ public class ResultActivity extends AppCompatActivity {
         // 녹음 파일 경로
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
+        
+        pptTitle.setText(title);
         
         fetchDataByVolley();
         
@@ -135,7 +139,7 @@ public class ResultActivity extends AppCompatActivity {
             
             // 최초에에 chart에 뿌려 줄 data 생성 
             generateData();
-            
+            viewPortSetting();
             // 자동으로 chart가 계산 되는 것 방지
             chart.setViewportCalculationEnabled(false);
             
@@ -183,7 +187,7 @@ public class ResultActivity extends AppCompatActivity {
                     * 
                     *           < realIndex >
                     * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
-                    * 2. 단, 일의 자리에서 내림
+                    * 2. 단, 일의 자리(5단위)에서 내림
                     * ex)  43 -> 40, 47 -> 45     
                     *     
                     * */
@@ -210,14 +214,12 @@ public class ResultActivity extends AppCompatActivity {
                     * 
                     * */
                    if(xValue <= lastXvalue){
-                       Log.d("TRUE", "TRUE");
                        line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
                        data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
                    }else{
                        xValue = 0;
                        line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
                        data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
-                       Log.d("FAlSE", "FAlSE");
                    }
                    chart.setLineChartData(data);
 
@@ -414,17 +416,17 @@ public class ResultActivity extends AppCompatActivity {
           }
           // 최초에에 chart에 뿌려 줄 data 생성 
           private void generateData() {
+              
 
               List<Line> lines = new ArrayList<Line>();
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
-              //List<String> slideNum = new ArrayList<String>();
+              List<String> slideNum = new ArrayList<String>();
               
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < eventTimeList.size(); ++j) {
-                  //slideNum.add(j+1+"번");
-                  //axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
-                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000));
+                  slideNum.add(j+1+"번");
+                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
               }
               for(int i=0; i<axisXvalue.size(); i++){
                   Log.d("axisXvalue", ""+axisXvalue.get(i));
@@ -505,17 +507,25 @@ public class ResultActivity extends AppCompatActivity {
               previewChart.setViewportChangeListener(new ViewportListener());
 
               previewX(true);
-              viewPortSetting();
+              
           }
           
-          // 미리보기 - X축 방향으로만 움직임, param으로 true를 주면 animation효과
+          /*
+           * View Port Setting x축 y축 범위 지정 (미리보기)
+           * X축 방향으로만 움직임, param으로 true를 주면 animation효과
+           * 
+           * */
           private void previewX(boolean animate) {
               Viewport tempViewport = new Viewport(chart.getMaximumViewport());
+              tempViewport.top = 150;
+              tempViewport.bottom = 50;
               float dx = tempViewport.width() / 3;
-              tempViewport.inset(dx, 0);
+              tempViewport.inset(0, 0);
               if (animate) {
+                  previewChart.setMaximumViewport(tempViewport);
                   previewChart.setCurrentViewportWithAnimation(tempViewport);
               } else {
+                  previewChart.setMaximumViewport(tempViewport);
                   previewChart.setCurrentViewport(tempViewport);
               }
               previewChart.setZoomType(ZoomType.HORIZONTAL);
@@ -525,10 +535,11 @@ public class ResultActivity extends AppCompatActivity {
           private void viewPortSetting(){
               
               final Viewport v = new Viewport(chart.getMaximumViewport());
-              v.bottom = -5;
-              v.top = 200;
+              v.bottom = 50;
+              v.top = 150;
+              //v.right = 
               chart.setMaximumViewport(v);
-              chart.setCurrentViewport(v);
+              chart.setCurrentViewportWithAnimation(v);
           }
           
           // Y축 없애는 option

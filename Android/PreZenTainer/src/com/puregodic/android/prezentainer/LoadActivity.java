@@ -93,20 +93,17 @@ public class LoadActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 
                 final String ptTitle = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
-                Toast.makeText(LoadActivity.this, ptTitle, Toast.LENGTH_SHORT).show();
+                final String currDate = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
+                Toast.makeText(LoadActivity.this, ptTitle+currDate+yourId, Toast.LENGTH_SHORT).show();
+ 
+                startActivity(new Intent(LoadActivity.this,ResultActivity.class)
+                .putExtra("yourId",yourId)               
+                .putExtra("title", ptTitle)
+                .putExtra("date", currDate));
             }
         }));
      
         
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        
-        
-        
-       
-        super.onPostCreate(savedInstanceState);
     }
 
     @Override
