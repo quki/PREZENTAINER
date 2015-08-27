@@ -38,6 +38,16 @@ function updateAfterStop(){
     check = 0;
 	document.getElementById("enable_motion").innerHTML="Off";
     $('#motionbtn').attr('disabled','disabled');
+    
+    $('#right_motion_btn').attr('disabled','disabled');
+	$('#left_motion_btn').attr('disabled','disabled');
+	
+	document.getElementById("right_motion").innerHTML="Off";
+	right_motion_enable=0;
+	
+	document.getElementById("left_motion").innerHTML="Off";
+	left_motion_enable=0;
+    
   }
 }
 

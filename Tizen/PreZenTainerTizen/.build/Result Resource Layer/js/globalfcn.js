@@ -29,21 +29,13 @@ function eventtopc(direction) {
 	//
 	if(direction=="right") //오른쪽 이벤트 발생시!
 	{
-<<<<<<< HEAD
 		mSASocket.sendData(CHANNELID_EVENT,direction);
 		console.log("sendData(RIGHT)");
-=======
-		mSASocket.sendData(CHANNELID_EVENT,"right");
->>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 	}
 	else if(direction == "leftt")//왼쪽 이벤트 발생시!
 	{
-<<<<<<< HEAD
 		mSASocket.sendData(CHANNELID_EVENT, direction);
 		console.log("sendData(LEFT)");
-=======
-		mSASocket.sendData(CHANNELID_EVENT,"left");
->>>>>>> a1fbfb4eb45963b309a880d45cf033c018a7485f
 	}
 
     console.log('Event to PC !' + currentSlide + direction);

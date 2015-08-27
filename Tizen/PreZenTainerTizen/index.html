@@ -15,7 +15,7 @@
 <body>
   <!-- Main view -->	
   <div data-role="page" class="ui-page ui-page-active" id="main">
-		<div data-role="header" data-theme="b">
+		<div data-role="header" data-theme="a">
 			<h5>Prezentainer</h5>
 		</div>
 			
@@ -59,13 +59,21 @@
         <input type="button" id="stopbtn" value="Stop!" disabled="disabled">
         <input type="button" id="motionbtn" onClick="enable_motion()" value="Use motion" disabled="disabled" >
         <span id="enable_motion">Off</span>
+        <p>
+        <input type="button" id="right_motion_btn" onClick="right_enable_motion()" value="Right" disabled="disabled">
+        <span id="right_motion">Off</span>
+        </p>
+        <p>
+        <input type="button" id="left_motion_btn" onClick="left_enable_motion()" value="Left" disabled="disabled">
+        <span id="left_motion">Off</span>
+        </p>
         <p><a href="#main" data-direction="reverse" data-role="button" data-rel="back" onClick="main_to_back()" data-theme="b">back</a></p>
       </div>
   </div>
 
 <!-- setting view -->
 	<div data-role="page" id="setting">
-		<div data-role="header" data-theme="b">
+		<div data-role="header" data-theme="a">
 			<h5>Prezentainer</h5>
 		</div>
 
@@ -78,7 +86,7 @@
 
 <!-- Enroll_motion view -->
 	<div data-role="page" id="enroll_motion">
-		<div data-role="header" data-theme="b">
+		<div data-role="header" data-theme="a">
 			<h4>Try 5 times</h4>
 		</div>
 
@@ -89,7 +97,16 @@
 				<input id="reset_button" type="button" value="재설정" onClick="modify_motionSetting()">
 				<input id="motion_test_button" type="button" value="Test" onClick="test_motion_on_off()" disabled="disabled">
 				<span id="test_motion">Off</span>
-				<p><a href="#setting" data-direction="reverse" onClick="is_motion()" data-role="button" data-rel="back" data-theme="b">back</a></p>
+			
+				<p>
+					<input type="button" id="test_right_motion_btn" onClick="right_enable_motion()" value="Right" disabled="disabled">
+					<span id="test_right_motion">Off</span>
+				</p>
+				<p>
+					<input type="button" id="test_left_motion_btn" onClick="left_enable_motion()" value="Left" disabled="disabled">
+					<span id="test_left_motion">Off</span>
+				</p>
+			<p><a href="#setting" data-direction="reverse" onClick="is_motion()" data-role="button" data-rel="back" data-theme="b">back</a></p>
 		</div>
 	</div>
 

@@ -1,9 +1,6 @@
 //실시간 가속도 값
 var accelX = 0, accelY = 0, accelZ = 0;
 
-//모션사용 check변수
-var check = 0;
-
 //한번모션 인식 위한 변수,통신을 원활히 하기위한 변수
 var motion_check=0;
 
@@ -20,6 +17,13 @@ var arrayIndex = 0;
 
 //motion test하기위한 on/off 제어 변수
 var motion_test=0;  //0일때 off ,1 일때 on !!
+
+//모션사용 check변수
+var check = 0;      //0일때 off ,1 일때 on !!
+
+//좌우측 모션 사용제어 변수
+var right_motion_enable=0; // 0일때 off ,1 일때 on !!
+var left_motion_enable=0; // 0일때 off ,1 일때 on !!
 
 //좌,우 측 모션을 컨트롤 할 변수
 var control_right_left=0;          //0일경우 오른쪽!   1 일경우 왼쪽!!
@@ -131,7 +135,7 @@ function motionSensor() {
 	if (accelX < averageX_right+5 && accelX > averageX_right-5 &&              //오른쪽 이벤트
 		accelY > averageY_right-5 && accelY < averageY_right+5 &&
 		accelZ > averageZ_right-5 && accelZ < averageZ_right+5 &&
-		motion_check == 0 ) {
+		motion_check == 0 && right_motion_enable==1) {
 		 console.log('call right function');
 		 navigator.vibrate(1000);  //나중에 뺄 코드
 		 eventtopc("right"); //오른쪽 이벤트!
@@ -141,10 +145,10 @@ function motionSensor() {
 	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&               //왼쪽이벤트
 		accelY > averageY_left-5 && accelY < averageY_left+5 &&
 		accelZ > averageZ_left-5 && accelZ < averageZ_left+5 &&
-		motion_check == 0 ) {
+		motion_check == 0 && left_motion_enable==1) {
 		console.log('call left function');
 		navigator.vibrate(1000);  //나중에 뺄 코드
-		eventtopc("left"); //왼쪽 이벤트!
+		eventtopc("leftt"); //왼쪽 이벤트!
 		p_makeJsonEventTime();
 		motion_check=1;
 	}
@@ -156,13 +160,15 @@ function motionSensor() {
 function test_motionSensor() {
 	if (accelX < averageX_right+5 && accelX > averageX_right-5 &&  //오른쪽 이벤트
 		accelY > averageY_right-5 && accelY < averageY_right+5 &&
-		accelZ > averageZ_right-5 && accelZ < averageZ_right+5) 
+		accelZ > averageZ_right-5 && accelZ < averageZ_right+5 &&
+		right_motion_enable==1 ) 
 	{
 		 navigator.vibrate(3000);
 	}
 	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&    //왼쪽 이벤트
 		accelY > averageY_left-5 && accelY < averageY_left+5 &&
-		accelZ > averageZ_left-5 && accelZ < averageZ_left+5) 
+		accelZ > averageZ_left-5 && accelZ < averageZ_left+5 &&
+		left_motion_enable==1) 
 	{
 		navigator.vibrate(1000);
 	}
@@ -264,11 +270,31 @@ function is_motion() {   //back버튼 눌렀을 때
 	motion_test=0;  //설정화면에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
 	document.getElementById("test_motion").innerHTML="Off";
 	
+	$('#test_right_motion_btn').attr('disabled','disabled');
+	$('#test_left_motion_btn').attr('disabled','disabled');
+	
+	document.getElementById("test_right_motion").innerHTML="Off";
+	right_motion_enable=0;
+	
+	document.getElementById("test_left_motion").innerHTML="Off";
+	left_motion_enable=0;
+	
 	
 }
 function main_to_back(){
 	check=0;   //메인화면 에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
 	document.getElementById("enable_motion").innerHTML="Off";
+	
+	$('#right_motion_btn').attr('disabled','disabled');
+	$('#left_motion_btn').attr('disabled','disabled');
+	
+	document.getElementById("right_motion").innerHTML="Off";
+	document.getElementById("test_right_motion").innerHTML="Off";
+	right_motion_enable=0;
+	
+	document.getElementById("left_motion").innerHTML="Off";
+	document.getElementById("test_left_motion").innerHTML="Off";
+	left_motion_enable=0;
 }
 
 
@@ -279,11 +305,21 @@ function enable_motion(){
 		{
 			document.getElementById("enable_motion").innerHTML="On";
 			check=1;
+			$('#right_motion_btn').removeAttr('disabled');
+			$('#left_motion_btn').removeAttr('disabled');
 		}
 		else
 		{
 			document.getElementById("enable_motion").innerHTML="Off";
 			check=0;
+			$('#right_motion_btn').attr('disabled','disabled');
+			$('#left_motion_btn').attr('disabled','disabled');
+
+			document.getElementById("right_motion").innerHTML="Off";
+			right_motion_enable=0;
+			
+			document.getElementById("left_motion").innerHTML="Off";
+			left_motion_enable=0;
 		}	
 		
 	}
@@ -354,12 +390,58 @@ function test_motion_on_off(){
 		document.getElementById("test_motion").innerHTML="On";
 		motion_test=1;
 		check = 0;
+		
+		$('#test_right_motion_btn').removeAttr('disabled');
+		$('#test_left_motion_btn').removeAttr('disabled');	
+
 	}
 	else
 	{
 		document.getElementById("test_motion").innerHTML="Off";
 		motion_test=0;
+		
+		$('#test_right_motion_btn').attr('disabled','disabled');
+		$('#test_left_motion_btn').attr('disabled','disabled');
+		
+		document.getElementById("test_right_motion").innerHTML="Off";
+		right_motion_enable=0;
+		
+		document.getElementById("test_left_motion").innerHTML="Off";
+		left_motion_enable=0;
+		
 	}	
+}
+
+function right_enable_motion(){
+	if(right_motion_enable==0)
+	{
+		document.getElementById("test_right_motion").innerHTML="On";
+		document.getElementById("right_motion").innerHTML="On";
+		right_motion_enable=1;
+	}
+	else
+	{
+		document.getElementById("test_right_motion").innerHTML="Off";
+		document.getElementById("right_motion").innerHTML="Off";
+		right_motion_enable=0;
+	}	
+	
+}
+
+function left_enable_motion(){
+	if(left_motion_enable==0)
+	{
+		document.getElementById("test_left_motion").innerHTML="On";
+		document.getElementById("left_motion").innerHTML="On";
+		left_motion_enable=1;
+	}
+	else
+	{
+		document.getElementById("test_left_motion").innerHTML="Off";
+		document.getElementById("left_motion").innerHTML="Off";
+		left_motion_enable=0;
+	}	
+	
 }
 
 
@@ -376,6 +458,10 @@ window.onload = function () {
         		if(confirm("어플을 종료하시겠습니까?")==true){
         			tizen.application.getCurrentApplication().exit();
         		}
+        		
+            ///////////어떤 화면에서든 back버튼 눌렀을 때 모든 설정 초기화
+        		main_to_back();
+        		is_motion();
  	
         	}
             
