@@ -66,12 +66,14 @@ public class ResultActivity extends AppCompatActivity {
     private DialogHelper mDialogHelper;
     private String mFilePath;
     private static final int SEND_THREAD_INFOMATION = 1;
+    private TextView pptTitle;
     
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         
+        pptTitle = (TextView)findViewById(R.id.pptTitle);
         mDialogHelper = new DialogHelper(this);
         
         title = getIntent().getStringExtra("title");
@@ -80,6 +82,8 @@ public class ResultActivity extends AppCompatActivity {
         // 녹음 파일 경로
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
+        
+        pptTitle.setText(title);
         
         fetchDataByVolley();
         
@@ -133,11 +137,7 @@ public class ResultActivity extends AppCompatActivity {
             textViewTime = (TextView) findViewById(R.id.textViewTime);
             textViewHR = (TextView) findViewById(R.id.textViewHR);
             
-            // 최초에에 chart에 뿌려 줄 data 생성 
-            generateData();
             
-            // 자동으로 chart가 계산 되는 것 방지
-            chart.setViewportCalculationEnabled(false);
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
@@ -156,6 +156,13 @@ public class ResultActivity extends AppCompatActivity {
             audioSize = audio.getDuration();
             seekbar.incrementProgressBy(1);
             seekbar.setMax(audioSize);
+            
+            // 최초에에 chart에 뿌려 줄 data 생성 
+            generateData();
+            viewPortSetting();
+            // 자동으로 chart가 계산 되는 것 방지
+            chart.setViewportCalculationEnabled(false);
+            
             
             /**
              * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
@@ -183,7 +190,7 @@ public class ResultActivity extends AppCompatActivity {
                     * 
                     *           < realIndex >
                     * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
-                    * 2. 단, 일의 자리에서 내림
+                    * 2. 단, 일의 자리(5단위)에서 내림
                     * ex)  43 -> 40, 47 -> 45     
                     *     
                     * */
@@ -210,14 +217,12 @@ public class ResultActivity extends AppCompatActivity {
                     * 
                     * */
                    if(xValue <= lastXvalue){
-                       Log.d("TRUE", "TRUE");
                        line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
                        data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
                    }else{
                        xValue = 0;
                        line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
                        data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
-                       Log.d("FAlSE", "FAlSE");
                    }
                    chart.setLineChartData(data);
 
@@ -414,17 +419,17 @@ public class ResultActivity extends AppCompatActivity {
           }
           // 최초에에 chart에 뿌려 줄 data 생성 
           private void generateData() {
+              
 
               List<Line> lines = new ArrayList<Line>();
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
-              //List<String> slideNum = new ArrayList<String>();
+              List<String> slideNum = new ArrayList<String>();
               
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < eventTimeList.size(); ++j) {
-                  //slideNum.add(j+1+"번");
-                  //axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
-                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000));
+                  slideNum.add(j+1+"번");
+                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
               }
               for(int i=0; i<axisXvalue.size(); i++){
                   Log.d("axisXvalue", ""+axisXvalue.get(i));
@@ -475,7 +480,7 @@ public class ResultActivity extends AppCompatActivity {
               // X축은 무조건 설정
               Axis axisX = new Axis()
               .setHasLines(true)
-              .setLineColor(ChartUtils.COLOR_RED)
+              .setLineColor(ChartUtils.COLOR_RED).setTextColor(getResources().getColor(R.color.dark_black))
               .setValues(axisXvalue); 
               data.setAxisXBottom(axisX);
               // Y 축을 갖고 싶을 때
@@ -505,17 +510,25 @@ public class ResultActivity extends AppCompatActivity {
               previewChart.setViewportChangeListener(new ViewportListener());
 
               previewX(true);
-              viewPortSetting();
+              
           }
           
-          // 미리보기 - X축 방향으로만 움직임, param으로 true를 주면 animation효과
+          /*
+           * View Port Setting x축 y축 범위 지정 (미리보기)
+           * X축 방향으로만 움직임, param으로 true를 주면 animation효과
+           * 
+           * */
           private void previewX(boolean animate) {
               Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-              float dx = tempViewport.width() / 3;
-              tempViewport.inset(dx, 0);
+              tempViewport.top = 150;
+              tempViewport.bottom = 50;
+              tempViewport.left=0;
+              tempViewport.right = audioSize/1000;
               if (animate) {
-                  previewChart.setCurrentViewportWithAnimation(tempViewport);
+                  previewChart.setMaximumViewport(tempViewport);  // 설정한 ViewPort 값을 최대로 지정한다
+                  previewChart.setCurrentViewportWithAnimation(tempViewport); // 현재 보여지는 창을 설정한 최대 ViewPort로 한다
               } else {
+                  previewChart.setMaximumViewport(tempViewport);
                   previewChart.setCurrentViewport(tempViewport);
               }
               previewChart.setZoomType(ZoomType.HORIZONTAL);
@@ -525,10 +538,12 @@ public class ResultActivity extends AppCompatActivity {
           private void viewPortSetting(){
               
               final Viewport v = new Viewport(chart.getMaximumViewport());
-              v.bottom = -5;
-              v.top = 200;
+              v.bottom = 50;
+              v.top = 150;
+              v.left=0;
+              v.right = audioSize/1000;
               chart.setMaximumViewport(v);
-              chart.setCurrentViewport(v);
+              chart.setCurrentViewportWithAnimation(v);
           }
           
           // Y축 없애는 option
@@ -541,7 +556,7 @@ public class ResultActivity extends AppCompatActivity {
 
               @Override
               public void onViewportChanged(Viewport newViewport) {
-                  // don't use animation, it is unnecessary when using preview chart.
+
                   chart.setCurrentViewport(newViewport);
               }
 
