@@ -137,11 +137,7 @@ public class ResultActivity extends AppCompatActivity {
             textViewTime = (TextView) findViewById(R.id.textViewTime);
             textViewHR = (TextView) findViewById(R.id.textViewHR);
             
-            // 최초에에 chart에 뿌려 줄 data 생성 
-            generateData();
-            viewPortSetting();
-            // 자동으로 chart가 계산 되는 것 방지
-            chart.setViewportCalculationEnabled(false);
+            
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
@@ -160,6 +156,13 @@ public class ResultActivity extends AppCompatActivity {
             audioSize = audio.getDuration();
             seekbar.incrementProgressBy(1);
             seekbar.setMax(audioSize);
+            
+            // 최초에에 chart에 뿌려 줄 data 생성 
+            generateData();
+            viewPortSetting();
+            // 자동으로 chart가 계산 되는 것 방지
+            chart.setViewportCalculationEnabled(false);
+            
             
             /**
              * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
@@ -477,7 +480,7 @@ public class ResultActivity extends AppCompatActivity {
               // X축은 무조건 설정
               Axis axisX = new Axis()
               .setHasLines(true)
-              .setLineColor(ChartUtils.COLOR_RED)
+              .setLineColor(ChartUtils.COLOR_RED).setTextColor(getResources().getColor(R.color.dark_black))
               .setValues(axisXvalue); 
               data.setAxisXBottom(axisX);
               // Y 축을 갖고 싶을 때
@@ -519,11 +522,11 @@ public class ResultActivity extends AppCompatActivity {
               Viewport tempViewport = new Viewport(chart.getMaximumViewport());
               tempViewport.top = 150;
               tempViewport.bottom = 50;
-              float dx = tempViewport.width() / 3;
-              tempViewport.inset(0, 0);
+              tempViewport.left=0;
+              tempViewport.right = audioSize/1000;
               if (animate) {
-                  previewChart.setMaximumViewport(tempViewport);
-                  previewChart.setCurrentViewportWithAnimation(tempViewport);
+                  previewChart.setMaximumViewport(tempViewport);  // 설정한 ViewPort 값을 최대로 지정한다
+                  previewChart.setCurrentViewportWithAnimation(tempViewport); // 현재 보여지는 창을 설정한 최대 ViewPort로 한다
               } else {
                   previewChart.setMaximumViewport(tempViewport);
                   previewChart.setCurrentViewport(tempViewport);
@@ -537,7 +540,8 @@ public class ResultActivity extends AppCompatActivity {
               final Viewport v = new Viewport(chart.getMaximumViewport());
               v.bottom = 50;
               v.top = 150;
-              //v.right = 
+              v.left=0;
+              v.right = audioSize/1000;
               chart.setMaximumViewport(v);
               chart.setCurrentViewportWithAnimation(v);
           }
@@ -552,7 +556,7 @@ public class ResultActivity extends AppCompatActivity {
 
               @Override
               public void onViewportChanged(Viewport newViewport) {
-                  // don't use animation, it is unnecessary when using preview chart.
+
                   chart.setCurrentViewport(newViewport);
               }
 
