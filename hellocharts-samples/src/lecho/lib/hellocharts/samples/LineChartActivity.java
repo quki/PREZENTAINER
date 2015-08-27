@@ -19,10 +19,8 @@ import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.samples.network.AppConfig;
 import lecho.lib.hellocharts.samples.network.AppController;
 import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PreviewLineChartView;
 
@@ -98,21 +96,13 @@ public class LineChartActivity extends AppCompatActivity {
         private int numberOfLines = 2;
         private int maxNumberOfLines = 4;
         private int numberOfPoints = 20;
-        private int audio_time;
         float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
     
         private ArrayList<Float> heartRateList;
         private ArrayList<Float> eventTimeList; 
-        private boolean hasAxes = true;
-        private boolean hasAxesNames = true;
-        private boolean hasLines = true;
-        private boolean hasPoints = true;
+        private boolean hasYaxis = true;
         private ValueShape shape = ValueShape.CIRCLE;
-        private boolean isFilled = false;
-        private boolean hasLabels = false;
         private boolean isCubic = false;
-        private boolean hasLabelForSelected = false;
-        private boolean pointsHaveDifferentColor;
 
         public PlaceholderFragment() {
         }
@@ -130,8 +120,6 @@ public class LineChartActivity extends AppCompatActivity {
             previewChart = (PreviewLineChartView) rootView.findViewById(R.id.chart_preview);
             chart.setOnValueTouchListener(new ValueTouchListener());
 
-            // Generate some randome values.
-           // generateValues();
 
             generateData();
 
@@ -151,7 +139,6 @@ public class LineChartActivity extends AppCompatActivity {
             buttonPlay = (Button) findViewById(R.id.buttonPlay);
             buttonStop = (Button) findViewById(R.id.buttonStop);
             seekbar = (SeekBar) findViewById(R.id.seekBar1);
-            audio_time=audio.getDuration()/1000;
             
             textViewTime = (TextView) findViewById(R.id.textViewTime);
             textViewHR = (TextView) findViewById(R.id.textViewHR);
@@ -178,50 +165,57 @@ public class LineChartActivity extends AppCompatActivity {
                
                @Override
                public void onProgressChanged(SeekBar seekBar, int progress,
-<<<<<<< HEAD
 
             		   boolean fromUser) {
-            	   // TODO Auto-generated method stub
-=======
-                     boolean fromUser) {
-            		   
->>>>>>> a40df4ecd815d3b1c08608a0a1e1d39273dd5665
-            	   /**
-            	    * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
-            	    * false인경우에는 소스상, 어플상에서 움직인경우이며
-            	    * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
-            	    * 
-            	    * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
-            	    */
-
-            	   //For safety create copy of the chart's data
-            	   int mIndex=((progress/1000)-1);   //second->index 변환  progress/1000(초), (progress/1000)-1(인덱스)
-            	   int rIndex=0;
-            	   if(mIndex%5==0){
-            		   rIndex=mIndex;
+                   /*
+                    *          < currentSecond >
+                    * 1. millisecond -> index 변환
+                    * 2. progress/1000 (초) 
+                    * 3. (progress/1000)-1 (인덱스)
+                    * 
+                    *           < realIndex >
+                    * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
+                    * 2. 단, 일의 자리에서 내림
+                    * ex)  43 -> 40, 47 -> 45     
+                    *     
+                    * */
+            	   int currentSecond = ((progress/1000)-1);   
+            	   int xValue = 0;
+            	   if( currentSecond % 5 == 0 ){
+            	       xValue = currentSecond;
             	   }
             	   else{
-            		   rIndex=((mIndex+1)/5)*5;
+            	       xValue = currentSecond-(currentSecond % 5);
             	   }
+            	   
+            	  // LineChartData data = new LineChartData(chart.getLineChartData());
+            	   int lastXvalue = (data.getLines().get(0).getValues().size()-1)*5;
 
-            	   Log.d("mindex!!", Integer.toString(mIndex));
-            	   Log.d("rindex!!", Integer.toString(rIndex));
+            	   Log.d("mIndex!!", "currentsecond : "+currentSecond);
+                   Log.d("rIndex!!", "xValue : "+xValue);
+            	   Log.d("LastIndex!!","LastIndex : "+lastXvalue);
+            	   float line0ValueY = 0;
             	   
-            	   LineChartData data = new LineChartData(chart.getLineChartData());
-            	   //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
-            	   float line0ValueY = data.getLines().get(0).getValues().get((rIndex/5)).getY();
-
-            	   Log.d("Value!!", data.getLines().get(0).toString());
-            	   //update single point on the second line
-            	   data.getLines().get(1).getValues().get(0).set(rIndex, line0ValueY);
-            	   //replace chart data
-            	   
-            	   
+            	   /*
+            	    * progress로 ArrayList의 index를 참조할 때,
+            	    * IndexOutOfBoudsException 방지를 위해
+            	    * 
+            	    * */
+            	   if(xValue <= lastXvalue){
+            	       Log.d("TRUE", "TRUE");
+            	       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
+                       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+            	   }else{
+            	       xValue = 0;
+            	       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
+            	       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+            	       Log.d("FAlSE", "FAlSE");
+            	   }
             	   chart.setLineChartData(data);
-
-
             	   
-            	   if (fromUser)
+
+            	   // user가 클릭할 경우 해당 position으로 progressbar이동
+                   if (fromUser)
             		   audio.seekTo(progress);
                }
             });
@@ -449,135 +443,19 @@ public class LineChartActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == R.id.action_reset) {
-                reset();
                 generateData();
-                return true;
-            }
-            if (id == R.id.action_add_line) {
-                addLineToData();
-                return true;
-            }
-            if (id == R.id.action_toggle_lines) {
-                toggleLines();
-                return true;
-            }
-            if (id == R.id.action_toggle_points) {
-                togglePoints();
-                return true;
-            }
-            if (id == R.id.action_toggle_cubic) {
-                toggleCubic();
-                return true;
-            }
-            if (id == R.id.action_toggle_area) {
-                toggleFilled();
-                return true;
-            }
-            if (id == R.id.action_point_color) {
-                togglePointColor();
-                return true;
-            }
-            if (id == R.id.action_shape_circles) {
-                setCircles();
-                return true;
-            }
-            if (id == R.id.action_shape_square) {
-                setSquares();
-                return true;
-            }
-            if (id == R.id.action_shape_diamond) {
-                setDiamonds();
-                return true;
-            }
-            if (id == R.id.action_toggle_labels) {
-                toggleLabels();
                 return true;
             }
             if (id == R.id.action_toggle_axes) {
                 toggleAxes();
                 return true;
             }
-            if (id == R.id.action_toggle_axes_names) {
-                toggleAxesNames();
-                return true;
-            }
-            if (id == R.id.action_animate) {
-                prepareDataAnimation();
-                chart.startDataAnimation();
-                return true;
-            }
-            if (id == R.id.action_toggle_selection_mode) {
-                toggleLabelForSelected();
-
-                Toast.makeText(getActivity(),
-                        "Selection mode set to " + chart.isValueSelectionEnabled() + " select any point.",
-                        Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            if (id == R.id.action_toggle_touch_zoom) {
-                chart.setZoomEnabled(!chart.isZoomEnabled());
-                Toast.makeText(getActivity(), "IsZoomEnabled " + chart.isZoomEnabled(), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            if (id == R.id.action_zoom_both) {
-                chart.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
-                return true;
-            }
-            if (id == R.id.action_zoom_horizontal) {
-                chart.setZoomType(ZoomType.HORIZONTAL);
-                return true;
-            }
-            if (id == R.id.action_zoom_vertical) {
-                chart.setZoomType(ZoomType.VERTICAL);
-                return true;
-            }
             return super.onOptionsItemSelected(item);
         }
 
-        private void generateValues() {
-            for (int i = 0; i < maxNumberOfLines; ++i) {
-                for (int j = 0; j < numberOfPoints; ++j) {
-                    randomNumbersTab[i][j] = (float) Math.random() * 100f;
-                }
-            }
-        }
 
-        private void reset() {
-            numberOfLines = 1;
-
-            hasAxes = true;
-            hasAxesNames = true;
-            hasLines = true;
-            hasPoints = true;
-            shape = ValueShape.CIRCLE;
-            isFilled = false;
-            hasLabels = false;
-            isCubic = false;
-            hasLabelForSelected = false;
-            pointsHaveDifferentColor = false;
-
-            chart.setValueSelectionEnabled(hasLabelForSelected);
-            //resetViewport();
-        }
-
-        private void resetViewport() {
-            
-            
-            // Reset viewport height range to Y : (0,200), X : ( 0, 배열갯수 )
-            final Viewport v = new Viewport(chart.getMaximumViewport());
-            v.bottom = 0;
-            v.top = 120;
-            v.left = 0;
-            v.right = audio_time;
-            v.offset(5, 5);
-            chart.setMaximumViewport(v);
-            chart.setCurrentViewport(v);
-            
-        }
-
-        
         private void generateData() {
-
+            
         	List<Line> lines = new ArrayList<Line>();
         	List<Line> lines_for_pre_data = new ArrayList<Line>();  //미리보기 데이터를 위한 List
             List<String> slideNum = new ArrayList<String>();
@@ -608,21 +486,18 @@ public class LineChartActivity extends AppCompatActivity {
             	Log.e("!!!!!!!!!!!", values.toString());
             	Line line = new Line(values);
             	line.setColor(ChartUtils.COLORS[i]);
+            	
+            	// Point
             	if(i==1){
             		line.setHasLabels(true);
             	}
             	else
             	{
-            		line.setShape(shape);
-            		line.setCubic(isCubic);
-            		line.setFilled(isFilled);
-            		line.setHasLabels(hasLabels);
-            		line.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            		line.setHasLines(hasLines);
-            		line.setHasPoints(hasPoints);
-            		if (pointsHaveDifferentColor){
-            			line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-            		}
+            		line.setShape(shape); // point -> circle
+            		line.setCubic(true); // line -> curve 
+            		line.setPointRadius(1); 
+            		line.setFilled(true); // area 채우기
+            		line.setHasLabelsOnlyForSelected(true); //눌렀을 때, 라벨 표시
             	}
             	lines.add(line);
             	if(i==0){                                  //미리보기 데이터에는 심장박동수 라인만 넣기!
@@ -633,39 +508,52 @@ public class LineChartActivity extends AppCompatActivity {
 
             data = new LineChartData(lines);
             pre_data = new LineChartData(lines_for_pre_data);
-            // 축이 있을 때
-            if (hasAxes) {
-                Axis axisX = new Axis().setHasLines(true);
-                Axis axisY = new Axis().setHasLines(true);
-                if (hasAxesNames) {
-                    axisX.setLineColor(ChartUtils.COLOR_RED);
-                    axisX.setValues(axisXvalue);
-                }
-                data.setAxisXBottom(axisX);
+            
+            // X축 빨간 줄 설정- EventTime
+            Axis axisX = new Axis().setHasLines(true);
+            
+            axisX.setLineColor(ChartUtils.COLOR_RED);
+            axisX.setValues(axisXvalue);
+            data.setAxisXBottom(axisX);
+            
+            // Y 축을 갖고 싶을 때
+            if (hasYaxis) {
+                Axis axisY = new Axis().setHasLines(true).setHasTiltedLabels(true).setName("심박수");
                 data.setAxisYLeft(axisY);
                 
-            // 없을 때
+            // Y 축이 필요 없을 때
             } else {
-                data.setAxisXBottom(null);
                 data.setAxisYLeft(null);
             }
 
             data.setBaseValue(Float.NEGATIVE_INFINITY);
             chart.setLineChartData(data);
-            
-            chart.setZoomEnabled(false);
-            chart.setScrollEnabled(false);
+            chart.setValueSelectionEnabled(true);
             
             previewData = new LineChartData(pre_data);
-            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
             
-
+            // preView 모양 변화 
+            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
             previewChart.setLineChartData(previewData);
             previewChart.setViewportChangeListener(new ViewportListener());
 
-            previewX(false);
-            //previewXY();
+            previewX(true); 
+            viewPortSetting();
+            
         }
+        
+        private void viewPortSetting(){
+            
+            final Viewport v = new Viewport(chart.getMaximumViewport());
+            v.bottom = -5;
+            v.top = 200;
+            // You have to set max and current viewports separately.
+            chart.setMaximumViewport(v);
+            // I changing current viewport with animation in this case.
+        }
+        
+        
+        
         private class ViewportListener implements ViewportChangeListener {
 
             @Override
@@ -675,17 +563,11 @@ public class LineChartActivity extends AppCompatActivity {
             }
 
         }
-        private void previewY() {
-            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            float dy = tempViewport.height() / 4;
-            tempViewport.inset(0, dy);
-            previewChart.setCurrentViewportWithAnimation(tempViewport);
-            previewChart.setZoomType(ZoomType.VERTICAL);
-        }
 
+        // X축 방향의 Zoon, parameter로 true를 주면 animation 포함됨
         private void previewX(boolean animate) {
             Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            float dx = tempViewport.width() / 4;
+            float dx = tempViewport.width() / 3;
             tempViewport.inset(dx, 0);
             if (animate) {
                 previewChart.setCurrentViewportWithAnimation(tempViewport);
@@ -695,42 +577,7 @@ public class LineChartActivity extends AppCompatActivity {
             previewChart.setZoomType(ZoomType.HORIZONTAL);
         }
 
-        private void previewXY() {
-            // Better to not modify viewport of any chart directly so create a copy.
-            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            // Make temp viewport smaller.
-            float dx = tempViewport.width() / 4;
-            float dy = tempViewport.height() / 4;
-            tempViewport.inset(dx, dy);
-            previewChart.setCurrentViewportWithAnimation(tempViewport);
-        }
 
-        /**
-         * Adds lines to data, after that data should be set again with
-         * {@link LineChartView#setLineChartData(LineChartData)}. Last 4th line has non-monotonically x values.
-         */
-        private void addLineToData() {
-            if (data.getLines().size() >= maxNumberOfLines) {
-                Toast.makeText(getActivity(), "Samples app uses max 4 lines!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                ++numberOfLines;
-            }
-
-            generateData();
-        }
-
-        private void toggleLines() {
-            hasLines = !hasLines;
-
-            generateData();
-        }
-
-        private void togglePoints() {
-            hasPoints = !hasPoints;
-
-            generateData();
-        }
 
         private void toggleCubic() {
             isCubic = !isCubic;
@@ -784,87 +631,17 @@ public class LineChartActivity extends AppCompatActivity {
 
         }
 
-        private void toggleFilled() {
-            isFilled = !isFilled;
-
-            generateData();
-        }
-
-        private void togglePointColor() {
-            pointsHaveDifferentColor = !pointsHaveDifferentColor;
-
-            generateData();
-        }
-
-        private void setCircles() {
-            shape = ValueShape.CIRCLE;
-
-            generateData();
-        }
-
-        private void setSquares() {
-            shape = ValueShape.SQUARE;
-
-            generateData();
-        }
-
-        private void setDiamonds() {
-            shape = ValueShape.DIAMOND;
-
-            generateData();
-        }
-
-        private void toggleLabels() {
-            hasLabels = !hasLabels;
-
-            if (hasLabels) {
-                hasLabelForSelected = false;
-                chart.setValueSelectionEnabled(hasLabelForSelected);
-            }
-
-            generateData();
-        }
-
-        private void toggleLabelForSelected() {
-            hasLabelForSelected = !hasLabelForSelected;
-
-            chart.setValueSelectionEnabled(hasLabelForSelected);
-
-            if (hasLabelForSelected) {
-                hasLabels = false;
-            }
-
-            generateData();
-        }
-
         private void toggleAxes() {
-            hasAxes = !hasAxes;
+            hasYaxis = !hasYaxis;
             generateData();
         }
 
-        private void toggleAxesNames() {
-            hasAxesNames = !hasAxesNames;
-            generateData();
-        }
-        /**
-         * To animate values you have to change targets values and then call {@link Chart#startDataAnimation()}
-         * method(don't confuse with View.animate()). If you operate on data that was set before you don't have to call
-         * {@link LineChartView#setLineChartData(LineChartData)} again.
-         */
-        private void prepareDataAnimation() {
-            for (Line line : data.getLines()) {
-                for (PointValue value : line.getValues()) {
-                    // Here I modify target only for Y values but it is OK to modify X targets as well.
-                    value.setTarget(value.getX(), (float) Math.random() * 100);
-                }
-            }
-        }
 
         private class ValueTouchListener implements LineChartOnValueSelectListener {
 
             @Override
             public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-                Toast.makeText(getActivity(), "Selected: " + value, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "심박수 : " + value.getY(), Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onValueDeselected() {
@@ -880,7 +657,7 @@ public class LineChartActivity extends AppCompatActivity {
 
     	mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
 
-    	StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH_GRAPH,
+    	StringRequest strReq = new StringRequest(Method.POST,"http://54.64.87.31/tizen/second_select.php",
     			new Response.Listener<String>() {
 
 
@@ -938,8 +715,8 @@ public class LineChartActivity extends AppCompatActivity {
     		protected Map<String, String> getParams() {
     			// Posting params to register url ( 해당 id && 해당 title인 row )
     			Map<String, String> params = new HashMap<String, String>();
-    			params.put("yourId", "quki");
-    			params.put("title", "차트샘플데이터");
+    			params.put("yourId", "aaaa");
+    			params.put("title", "ㄴㄴ");
     			return params;
     		}
 

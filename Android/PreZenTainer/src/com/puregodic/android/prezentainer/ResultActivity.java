@@ -37,6 +37,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +60,11 @@ import com.puregodic.android.prezentainer.network.AppController;
 
 public class ResultActivity extends AppCompatActivity {
 
+    private static final String TAG = ResultActivity.class.getSimpleName();
+ 
     private String title,yourId,date;
     private DialogHelper mDialogHelper;
-    private static final String TAG = ResultActivity.class.getSimpleName();
+    private String mFilePath;
     private static final int SEND_THREAD_INFOMATION = 1;
     
     @Override
@@ -74,20 +77,24 @@ public class ResultActivity extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         yourId = getIntent().getStringExtra("yourId");
         date = getIntent().getStringExtra("date");
+        // 녹음 파일 경로
+        String fileExtension = ".amr";
+        mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
         
         fetchDataByVolley();
         
-        
     }
     
-    public class PlaceholderFragment extends Fragment{
+    /* Fragment
+     * Chart, SeekBar 모두 PlaceholderFragment에서 작업*/
+    public class PlaceHolderFragment extends Fragment{
         
         private ArrayList<Float> heartRateList;
         private ArrayList<Float> eventTimeList; 
         
         private LineChartView chart;
         private LineChartData data;
-        private LineChartData pre_data;
+        private LineChartData preData;
         private PreviewLineChartView previewChart;
         private LineChartData previewData;
         Button buttonPlay;
@@ -98,33 +105,18 @@ public class ResultActivity extends AppCompatActivity {
         TextView textViewHR;
         String meanHeartRate = null;
         
-        
         private int numberOfLines = 2;
-        private int audio_time;
         
-        private boolean hasAxes = true;
-        private boolean hasAxesNames = true;
-        private boolean hasLines = true;
-        private boolean hasPoints = true;
+        private boolean hasYaxis = true;
         private ValueShape shape = ValueShape.CIRCLE;
-        private boolean isFilled = false;
-        private boolean hasLabels = false;
-        private boolean isCubic = false;
-        private boolean hasLabelForSelected = false;
-        private boolean pointsHaveDifferentColor;
-        
-        
         
         public final Handler timeHandler = new TimeHandler(this);
         
-        
-        
-        
-        public PlaceholderFragment() {
+        public PlaceHolderFragment() {
         }
         
         // Volley로 부터 받아온 ArrayList 초기화 작업
-        public PlaceholderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> eventTimeList) {
+        public PlaceHolderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> eventTimeList) {
             this.heartRateList = heartRateList;
             this.eventTimeList = eventTimeList;
         }
@@ -138,15 +130,17 @@ public class ResultActivity extends AppCompatActivity {
             chart = (LineChartView) rootView.findViewById(R.id.chart);
             previewChart = (PreviewLineChartView) rootView.findViewById(R.id.chart_preview);
             chart.setOnValueTouchListener(new ValueTouchListener());
+            textViewTime = (TextView) findViewById(R.id.textViewTime);
+            textViewHR = (TextView) findViewById(R.id.textViewHR);
             
-            // 데이터 차트에 배치
+            // 최초에에 chart에 뿌려 줄 data 생성 
             generateData();
             
-            // Disable viewpirt recalculations, see toggleCubic() method for more info.
+            // 자동으로 chart가 계산 되는 것 방지
             chart.setViewportCalculationEnabled(false);
             
-            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/melon/스폰서.mp3");
+            //아래부터 Audio 및 SeekBar작업
+            Uri audioPath = Uri.parse(mFilePath);
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -154,19 +148,17 @@ public class ResultActivity extends AppCompatActivity {
             buttonPlay = (Button) findViewById(R.id.buttonPlay);
             buttonStop = (Button) findViewById(R.id.buttonStop);
             seekbar = (SeekBar) findViewById(R.id.seekBar1);
-            audio_time=audio.getDuration()/1000;
+
             
-            textViewTime = (TextView) findViewById(R.id.textViewTime);
-            textViewHR = (TextView) findViewById(R.id.textViewHR);
             /**
-             * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정합니다
+             * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정
              */
             
             seekbar.incrementProgressBy(1);
             seekbar.setMax(audio.getDuration());
             
             /**
-             * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정합니다
+             * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
              */
             seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
                @Override
@@ -183,41 +175,53 @@ public class ResultActivity extends AppCompatActivity {
                public void onProgressChanged(SeekBar seekBar, int progress,
                      boolean fromUser) {
                        
-                   /**
-                    * 세번째로 넘어오는 boolean fromUser의 경우 true일때는 사용자가 직접 움직인경우,
-                    * false인경우에는 소스상, 어플상에서 움직인경우이며
-                    * 여기서는 사용자가 직접 움직인 경우에만 작동하도록 if문을 만들었다
+                   /*
+                    *          < currentSecond >
+                    * 1. millisecond -> index 변환
+                    * 2. progress/1000 (초) 
+                    * 3. (progress/1000)-1 (인덱스)
                     * 
-                    * 참고 : if문등 { } 괄호 안의 줄이 한줄일경우 생략이 가능합니다
-                    */
+                    *           < realIndex >
+                    * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
+                    * 2. 단, 일의 자리에서 내림
+                    * ex)  43 -> 40, 47 -> 45     
+                    *     
+                    * */
 
-                   //For safety create copy of the chart's data
-                   int mIndex=((progress/1000)-1);   //second->index 변환  progress/1000(초), (progress/1000)-1(인덱스)
-                   int rIndex=0;
-                   if(mIndex%5==0){
-                       rIndex=mIndex;
+                   int currentSecond = ((progress/1000)-1);   
+                   int xValue = 0;
+                   if( currentSecond % 5 == 0 ){
+                       xValue = currentSecond;
                    }
                    else{
-                       rIndex=((mIndex+1)/5)*5;
+                       xValue = currentSecond-(currentSecond % 5);
                    }
 
-                   Log.d("mindex!!", Integer.toString(mIndex));
-                   Log.d("rindex!!", Integer.toString(rIndex));
-                   
-                   LineChartData data = new LineChartData(chart.getLineChartData());
-                   //get Y value for point on the first line at index == progress - 1(because indexed from 0 to 9)
-                   float line0ValueY = data.getLines().get(0).getValues().get((rIndex/5)).getY();
+                   int lastXvalue = (data.getLines().get(0).getValues().size()-1)*5;
 
-                   Log.d("Value!!", data.getLines().get(0).toString());
-                   //update single point on the second line
-                   data.getLines().get(1).getValues().get(0).set(rIndex, line0ValueY);
-                   //replace chart data
+                   Log.d("mIndex!!", "currentsecond : "+currentSecond);
+                   Log.d("rIndex!!", "xValue : "+xValue);
+                   Log.d("LastIndex!!","LastIndex : "+lastXvalue);
+                   float line0ValueY = 0;
                    
-                   
+                   /*
+                    * progress로 ArrayList의 index를 참조할 때,
+                    * IndexOutOfBoudsException 방지를 위해
+                    * 
+                    * */
+                   if(xValue <= lastXvalue){
+                       Log.d("TRUE", "TRUE");
+                       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
+                       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+                   }else{
+                       xValue = 0;
+                       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
+                       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+                       Log.d("FAlSE", "FAlSE");
+                   }
                    chart.setLineChartData(data);
 
-
-                   
+                   // user가 클릭할 경우 해당 position으로 progressbar이동
                    if (fromUser)
                        audio.seekTo(progress);
                }
@@ -239,13 +243,6 @@ public class ResultActivity extends AppCompatActivity {
                     buttonStop();
                 }
             });
-            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            
-            
-            
-            
-            
-            
             
             return rootView;
         }
@@ -256,78 +253,58 @@ public class ResultActivity extends AppCompatActivity {
             finish();
             super.onDestroy();
         }
+        
+        // buttonPlay event callback
         public void buttonPlay(){
-            /**
-             * music.isPlaying()�씠 true : �쓬�븙�씠 �쁽�옱 �옱�깮以묒엯�땲�떎, false : �옱�깮以묒씠 �븘�떃�땲�떎
-             */
-            // �쓬�븙�쓣 �떎�뻾�빀�땲�떎
             if(audio.isPlaying()) {
-               //硫덉땄
                audio.pause();
                buttonPlay.setText("play");
             }
             else {
-               //�옱�깮
                audio.start();
                buttonPlay.setText("pause");
             }         
-            /**
-            * �벐�옒�뱶瑜� �룎�젮 1珥덈쭏�떎 SeekBar瑜� ��吏곸씠寃� �빀�땲�떎
-            */
             Thread();
          }
          
+        // buttonStop event callback
          public void buttonStop(){
-            //buttonStop �옱�깮�쓣 �셿�쟾�엳 硫덉땄
-
             audio.stop();
             try {
-               // �쓬�븙�쓣 �옱�깮�븷寃쎌슦瑜� ��鍮꾪빐 以�鍮꾪빀�땲�떎
-               // prepare()�� �삁�쇅媛� 2媛�吏��굹 �븘�슂�빀�땲�떎
+                // stream을 준비
                audio.prepare();
             } catch (IllegalStateException e) {
-               // TODO Auto-generated catch block
                e.printStackTrace();
             } catch (IOException e) {
-               // TODO Auto-generated catch block
                e.printStackTrace();
             }
-            // �쓬�븙 吏꾪뻾 �젙�룄瑜� 0, 利� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
             audio.seekTo(0);
-
-            // 踰꾪듉�쓽 湲��옄瑜� �떆�옉�쑝濡�, �떆�겕諛붾�� 泥섏쓬�쑝濡� �릺�룎由쎈땲�떎
             seekbar.setProgress(0);
             buttonPlay.setText("play");
-
          }
          
+         // audio의 시간을 측정하는 별도의 Thread
          public void Thread(){Runnable task = new Runnable() {
              public void run() {
-
+                 
+                 // SeekBar 갱신을 위한 Code를 넣어줌
                  while (audio.isPlaying()) {
                      try {
+                         // 1초 마다
                          Thread.sleep(1000);
                      } catch (InterruptedException e) {
-                         // TODO Auto-generated catch block
                          e.printStackTrace();
                      }
+                     // UI 갱신
                      seekbar.setProgress(audio.getCurrentPosition());
-                     Log.e("audio.getCurrentPosition()",
+                     
+                     Log.d("audio.getCurrentPosition()",
                              ":" + audio.getCurrentPosition());
-                     // textViewTime.setText(audio.getCurrentPosition()); 占쎈퓠占쎌쑎獄쏆뮇源�
 
-                     // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(audio.getCurrentPosition()占쎌뱽 占쎌뵠占쎌뒠占쎈퉸 獄쏅뗀以� 雅뚯눊�ц쳸�룇釉섓옙猷� 占쎈쭆占쎈뼄. 占쎈퉾占쎈굶筌랃옙
-                     // 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
-
-                     // 筌롫뗄�뻻筌욑옙 占쎈섯占쎈선占쎌궎疫뀐옙
                      Message msg = timeHandler.obtainMessage();
-
-                     // 筌롫뗄�뻻筌욑옙 ID 占쎄퐬占쎌젟
-                     msg.what = SEND_THREAD_INFOMATION;
-
-                     // 筌롫뗄�뻻筌욑옙 占쎌젟癰귨옙 占쎄퐬占쎌젟 (int 占쎌굨占쎈뻼)
-                     msg.arg1 = Integer.valueOf(audio.getCurrentPosition());
-                     // 占쎈퉾占쎈굶占쎌쑎嚥∽옙 筌롫뗄苑�筌욑옙 占쎌읈占쎈꽊
+                     
+                     msg.what = SEND_THREAD_INFOMATION; // 핸들러에 보내기 위한 식별 Id
+                     msg.arg1 = Integer.valueOf(audio.getCurrentPosition()); // 핸들러에 보내는 인자 값 Integer
                      timeHandler.sendMessage(msg);
 
                  }
@@ -336,34 +313,32 @@ public class ResultActivity extends AppCompatActivity {
          Thread thread = new Thread(task);
          thread.start();
          }
+         
+         // MainThread에 접근하기 위한 Handler
          public class TimeHandler extends Handler {
-              private final WeakReference<PlaceholderFragment> mActivity;
+              private final WeakReference<PlaceHolderFragment> mActivity;
              
-              public TimeHandler(PlaceholderFragment activity) {
-                  mActivity = new WeakReference<PlaceholderFragment>(activity);
+              public TimeHandler(PlaceHolderFragment activity) {
+                  mActivity = new WeakReference<PlaceHolderFragment>(activity);
               }
 
               @Override
               public void handleMessage(Message msg) {
+                  
+                  // msg = 현재 오디오 위치(Integer)
                   String stringTime = null;
                   String stringHR = null;
                   String stringWholeTime = null;
-                  PlaceholderFragment activity = mActivity.get();
-                  // 占쎈툡占쎌뒄占쎈씨占쎈뮉 �겫占썽겫占�(textViewTime.setText(audio.getCurrentPosition());占쎌뱽 獄쏅뗀以� 占쎈쑅占쎈즲
-                  // 揶쏉옙占쎈뮟, 占쎈퉾占쎈굶筌랃옙 占쎌굙占쎈뻻�몴占� 占쎌맄占쎈퉸 占쎈쑅占쎈꼦占쎌벉)
+                  PlaceHolderFragment activity = mActivity.get();
                   super.handleMessage(msg);
 
                   switch (msg.what) {
                   case SEND_THREAD_INFOMATION:
-                      //雅뚯눘�벥 setText占쎈뮉 獄쏆꼶諭띰옙�뻻 string占쎌몵嚥∽옙 獄쏅떽��占쎈선占쎄퐣 占쎌뵥占쎌쁽嚥∽옙 占쎌읈占쎈뼎 占쎈퉸占쎈튊占쎈립占쎈뼄.(int嚥∽옙 占쎈릭筌롳옙 error)
-                      //占쎈뻻揶쏄쑬而�饔낅뗄苑� 占쎈뮞占쎈뱜筌띻낯�몵嚥∽옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾
-                      stringTime = ChangeTime(msg.arg1);
-                      //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
-                      stringHR = FindHeartRateValue(heartRateList, msg.arg1);
-                      stringWholeTime = ChangeTime(audio.getDuration());
-                      activity.textViewHR.setText("   "+stringHR + " / " + FindMeanHeartRateValue(heartRateList));
-                      activity.textViewTime.setText("       "+stringTime + " / " + stringWholeTime);
-                      
+                      stringTime = changeTimeForHuman(msg.arg1);
+                      stringHR = currentHeartRateValue(heartRateList, msg.arg1);
+                      stringWholeTime = changeTimeForHuman(audio.getDuration());
+                      activity.textViewHR.setText("   "+stringHR + " / " + meanHeartRateValue(heartRateList));  // 현재심박수 / 평균 심박수
+                      activity.textViewTime.setText("       "+stringTime + " / " + stringWholeTime);  // 현재시간 / 총 오디오 길이
                       break;
                   default:
                       break;
@@ -373,37 +348,36 @@ public class ResultActivity extends AppCompatActivity {
               
           }
           
-          //占쎈뼎占쎌삢獄쏅베猷욑옙�땾 占쎈즸域뱀쥒而� �뤃�뗫릭占쎈뮉 占쎈맙占쎈땾
-          public String FindMeanHeartRateValue(ArrayList<Float> heartRateList) {
-              double heartRateSum = 0;
+          // 총 심박수의 평균 값 구하기
+          public String meanHeartRateValue(ArrayList<Float> heartRateList) {
+              float heartRateSum = 0;
               String meanHeartRate = null;
               for (int i = 0; i < heartRateList.size(); i++) {
                   heartRateSum += heartRateList.get(i); 
               }
-              meanHeartRate = Integer.toString((int)((double)(heartRateSum / heartRateList.size())));
+              meanHeartRate = Integer.toString((int)((heartRateSum / heartRateList.size())));
               return meanHeartRate;
           }
           
-          //占쎌겱占쎌삺 占쎌삺占쎄문占쎈뻻揶쏄쑴肉됵옙苑� 揶쏉옙占쎌삢 揶쏉옙繹먮슣�뒲 占쎈뼎占쎌삢獄쏅베猷욑옙�땾�몴占� 筌≪뼚釉섆틠�눖�뮉 占쎈맙占쎈땾
-          public String FindHeartRateValue(ArrayList<Float> heartRateList, int time) {
-              int HeartRateValueToInt = 0;
-              String HeartRateValueToString = null;
+          // 현재 시간에 해당하는 심박수 값 구하기
+          public String currentHeartRateValue(ArrayList<Float> heartRateList, int time) {
+              int heartRateValueToInt = 0;
+              String heartRateValueToString = null;
               
               if (time / (1000 * 5) > heartRateList.size() - 1) {
-                  HeartRateValueToInt = (int)((double)heartRateList.get(heartRateList.size() - 1));
-                  HeartRateValueToString = Integer.toString(HeartRateValueToInt);
-                  return HeartRateValueToString;
-              }
-              else {
-                  HeartRateValueToInt = (int)((double)heartRateList.get(time / (1000 * 5)));
-                  HeartRateValueToString = Integer.toString(HeartRateValueToInt);
+                  heartRateValueToInt =(int)((float)heartRateList.get(heartRateList.size() - 1));
+                  heartRateValueToString = Integer.toString(heartRateValueToInt);
+                  return heartRateValueToString;
+              }else {
+                  heartRateValueToInt = (int)((float)heartRateList.get(time / (1000 * 5)));
+                  heartRateValueToString = Integer.toString(heartRateValueToInt);
               }
               
-              return HeartRateValueToString; 
+              return heartRateValueToString; 
           }
           
-          //獄쏉옙�뵳�딄쉭�뚢뫀諭띄몴占� 癰귣떯由� 占쎈젶占쎈릭野껓옙 獄쏅떽�벊雅뚯눖�뮉 占쎈맙占쎈땾.
-          public String ChangeTime (int time) {
+          // milliseconds를 사람이 볼 수 있는 시간으로 변환 ex) 02:37
+          public String changeTimeForHuman (int time) {
               int secondTime = 0;
               int minuteTime = 0;
               int hourTime = 0;
@@ -438,12 +412,14 @@ public class ResultActivity extends AppCompatActivity {
               
               return stringTime;
           }
+          // 최초에에 chart에 뿌려 줄 data 생성 
           private void generateData() {
 
               List<Line> lines = new ArrayList<Line>();
-              List<Line> lines_for_pre_data = new ArrayList<Line>();  //미리보기 데이터를 위한 List
+              List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
               List<String> slideNum = new ArrayList<String>();
-              // 축 값 설정
+              
+              // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < eventTimeList.size(); ++j) {
                   slideNum.add(j+1+"번");
@@ -456,81 +432,82 @@ public class ResultActivity extends AppCompatActivity {
 
                   for (int j = 0; j < heartRateList.size(); ++j) {
 
-
                       if(i == 1 && j == 0) {
-                          //second line, first point, break because we want to add only one point to the second line, with the same Y value as the first point on the first line
                           values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
                           Log.d("!!!!!!!!!!!", ""+lines.get(0).getValues().get(0).getY());
                           break;
                       } else {
-                          values.add(new PointValue(j*5, heartRateList.get(j)));//adding point to the first line
+                          values.add(new PointValue(j*5, heartRateList.get(j))); //adding point to the first line
                       }
                   }
 
-                  Log.e("!!!!!!!!!!!", values.toString());
                   Line line = new Line(values);
                   line.setColor(ChartUtils.COLORS[i]);
+                  
+                  // progress에 따라 움직이는 Point
                   if(i==1){
                       line.setHasLabels(true);
                   }
+                  // 최초에 뿌려지는 chart의 line
                   else
                   {
-                      line.setShape(shape);
-                      line.setCubic(isCubic);
-                      line.setFilled(isFilled);
-                      line.setHasLabels(hasLabels);
-                      line.setHasLabelsOnlyForSelected(hasLabelForSelected);
-                      line.setHasLines(hasLines);
-                      line.setHasPoints(hasPoints);
-                      if (pointsHaveDifferentColor){
-                          line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-                      }
+                      line.setShape(shape); // point -> circle
+                      line.setCubic(true); // line -> curve
+                      line.setFilled(true); // area 채우기
+                      line.setHasLabels(false);
+                      line.setPointRadius(1);
+                      line.setHasLabelsOnlyForSelected(false); //눌렀을 때, 라벨 표시
                   }
                   lines.add(line);
-                  if(i==0){                                  //미리보기 데이터에는 심장박동수 라인만 넣기!
-                      lines_for_pre_data.add(line);
+                  if(i==0){       
+                    //미리보기 데이터에는 심장박동수 라인만 넣기!
+                      linesForPreData.add(line);
                   }
-                      
               }
 
-              data = new LineChartData(lines);
-              pre_data = new LineChartData(lines_for_pre_data);
-              // 축이 있을 때
-              if (hasAxes) {
-                  Axis axisX = new Axis().setHasLines(true);
-                  Axis axisY = new Axis().setHasLines(true);
-                  if (hasAxesNames) {
-                      axisX.setLineColor(ChartUtils.COLOR_RED);
-                      axisX.setValues(axisXvalue);
-                  }
-                  data.setAxisXBottom(axisX);
+              data = new LineChartData(lines); // 최초에 뿌려진 data chart
+              preData = new LineChartData(linesForPreData); // 미리보기 chart
+              
+              // X축은 무조건 설정
+              Axis axisX = new Axis()
+              .setHasLines(true)
+              .setLineColor(ChartUtils.COLOR_RED)
+              .setValues(axisXvalue); 
+              data.setAxisXBottom(axisX);
+              // Y 축을 갖고 싶을 때
+              if (hasYaxis) {
+                  
+                  Axis axisY = new Axis()
+                  .setHasLines(true)
+                  .setHasTiltedLabels(true)  // 글자 기울임
+                  .setName("심박수");
                   data.setAxisYLeft(axisY);
                   
-              // 없을 때
+               // Y 축이 필요 없을 때
               } else {
-                  data.setAxisXBottom(null);
                   data.setAxisYLeft(null);
               }
 
               data.setBaseValue(Float.NEGATIVE_INFINITY);
-              chart.setLineChartData(data);
               
+              chart.setLineChartData(data);
               chart.setZoomEnabled(false);
               chart.setScrollEnabled(false);
               
-              previewData = new LineChartData(pre_data);
+              // 미리 보기 설정
+              previewData = new LineChartData(preData);
               previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
-              
-
               previewChart.setLineChartData(previewData);
               previewChart.setViewportChangeListener(new ViewportListener());
 
-              previewX(false);
+              previewX(true);
+              viewPortSetting();
           }
           
+          // 미리보기 - X축 방향으로만 움직임, param으로 true를 주면 animation효과
           private void previewX(boolean animate) {
               Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-              float dx = tempViewport.width() / 4;
+              float dx = tempViewport.width() / 3;
               tempViewport.inset(dx, 0);
               if (animate) {
                   previewChart.setCurrentViewportWithAnimation(tempViewport);
@@ -538,6 +515,21 @@ public class ResultActivity extends AppCompatActivity {
                   previewChart.setCurrentViewport(tempViewport);
               }
               previewChart.setZoomType(ZoomType.HORIZONTAL);
+          }
+          
+          // View Port Setting x축 y축 범위 지정
+          private void viewPortSetting(){
+              
+              final Viewport v = new Viewport(chart.getMaximumViewport());
+              v.bottom = -5;
+              v.top = 200;
+              chart.setMaximumViewport(v);
+          }
+          
+          // Y축 없애는 option
+          private void toggleYaxis() {
+              hasYaxis = !hasYaxis;
+              generateData();
           }
           
           private class ViewportListener implements ViewportChangeListener {
@@ -560,29 +552,40 @@ public class ResultActivity extends AppCompatActivity {
               public void onValueDeselected() {
                   // TODO Auto-generated method stub
               }
-              
+          }
+          
+          @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+              inflater.inflate(R.menu.result, menu);
+              super.onCreateOptionsMenu(menu, inflater);
+        }
+
+          @Override
+          public boolean onOptionsItemSelected(MenuItem item) {
+              int id = item.getItemId();
+              if (id == R.id.action_reset) {
+                  generateData();
+                  return true;
+              }
+              if (id == R.id.action_toggle_axes) {
+                  toggleYaxis();
+                  return true;
+              }
+              return super.onOptionsItemSelected(item);
           }
         
     }
-
-
-
     
     private void fetchDataByVolley(){
         
 
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
-       
-        
-        StringRequest strReq = new StringRequest(Method.POST, "http://cyh1704.dothome.co.kr/tizen/second_select.php",
+        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH_GRAPH,
                 new Response.Listener<String>() {
-            
-            
 
                     @Override
                     public void onResponse(String response) {
-                        
                         
                         mDialogHelper.hidePdialog();
                         
@@ -615,7 +618,7 @@ public class ResultActivity extends AppCompatActivity {
                              // Set Fragment
                                 getSupportFragmentManager()
                                 .beginTransaction()
-                                .add(R.id.chartContainer, new PlaceholderFragment(heartRateList, eventTimeList))
+                                .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, eventTimeList))
                                 .commit();
                                 
                                 
@@ -636,11 +639,10 @@ public class ResultActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url ( 해당 id && 해당 title인 row )
                 Map<String, String> params = new HashMap<String, String>();
-                /*params.put("yourId", yourId);
+                params.put("yourId", yourId);
                 params.put("title", title);
-                */
-                params.put("yourId", "quki");
-                params.put("title", "차트샘플데이터");
+                //params.put("date", date);
+                
                 return params;
             }
 
@@ -661,25 +663,5 @@ public class ResultActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq);
         
     }
-    
-    
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.result, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
