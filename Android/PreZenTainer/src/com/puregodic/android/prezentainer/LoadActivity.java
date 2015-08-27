@@ -197,7 +197,6 @@ public class LoadActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         
                         mDialogHelper.hidePdialog();
-                        
                         try {
                             // String response -> JSON Array -> JSON Object 추출 -> 개별 항목 parsing
                             JSONArray jArray = new JSONArray(response);

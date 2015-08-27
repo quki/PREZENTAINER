@@ -311,14 +311,14 @@ public class AccessoryService extends SAAgent {
 		 // MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
 		    
 			if (channelId == CHANNEL_ID_EVENT) {
-			    final String direction =  new String(data);
+			    final String direction =  new String(data);  // 우측키 : "right", 좌측키 : "left"
 				new Thread(new Runnable() {
 					public void run() {
 						try {
 						    Log.e(TAG, direction);
-							// event 전달
+							// direction에 따른 event 전달, 이후 PC측에서 write된 direction을 바탕으로 event를 구별함
 							ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
-							mConnecToPcHelper.transferToPc(mDeviceName);
+							mConnecToPcHelper.transferToPc(mDeviceName, direction);
 							if(mConnectionHandler != null){
 							    final String unlockMessage =  new String("UNLOCK");
 							    Thread.sleep(1000);

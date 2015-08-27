@@ -47,8 +47,6 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
     public static final int REQUEST_DETAIL = 3;
     private static final String TAG = "==SETTING ACTIVITY==";
 
-    
-    
     private Button connectToGearBtn,connectToPcBtn,startBtn;
     private CheckBox timerCheckBox;
     private RadioGroup timerRadioGroup;
@@ -123,7 +121,9 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                     // 체크박스를 해제한 경우 timeInterval을 null로
                     timerRadioGroup.setVisibility(timerRadioGroup.INVISIBLE);
                     timerRadioGroup.clearCheck();
-                    timeInterval.clear();
+                    if(timeInterval != null)
+                    timeInterval = null;
+                    Toast.makeText(getApplicationContext(), ""+timeInterval, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -183,10 +183,10 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                 
                 @Override
                 public void run() {
-                    // 해당 Device 이름으로 연결
+                    // 해당 Device(PC) 이름으로 연결
                     ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
                     mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
-                    mConnecToPcHelper.connect(mDeviceName);
+                    mConnecToPcHelper.connectWithPc(mDeviceName);
                 }
             }).start();
         }
@@ -206,7 +206,7 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
 
         if (requestCode == REQUEST_ENABLE_BT) {
 
-            // OK 버튼을 눌렀을때
+            // 블루투스 연결 허락을 사용자에게 물어본 이후 동작
             if (resultCode == RESULT_OK) {
                 Toast.makeText(SettingActivity.this, "블루투스를 켰습니다", Toast.LENGTH_SHORT).show();
             } else {
@@ -282,8 +282,8 @@ public class SettingActivity extends AppCompatActivity implements BluetoothHelpe
                                             String timeJson = gson.toJson(timeInterval);
                                             sendDataToService(timeJson);
                                         }else{
-                                            // 체크박스를 단 한번도 누르지 않은 경우, 눌렀다가 해제한 경우 역시 ex) ["0"]
-                                            sendDataToService("0");
+                                            // 체크박스를 단 한번도 누르지 않은 경우, 눌렀다가 해제한 경우 "[]"을 전달
+                                            sendDataToService("[]");
                                         }
                                         
                                         // Start Activity로 나의 id와 PT 제목을 넘겨준다.
