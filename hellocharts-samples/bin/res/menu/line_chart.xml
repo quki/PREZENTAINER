@@ -1,0 +1,11 @@
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context="lecho.lib.hellocharts.samples.LineChartActivity">
+	<item android:id="@+id/action_reset"
+		android:title="Reset chart"/>
+	<item
+		android:id="@+id/action_toggle_axes"
+		android:title="Toggle axes"/>
+</menu>
