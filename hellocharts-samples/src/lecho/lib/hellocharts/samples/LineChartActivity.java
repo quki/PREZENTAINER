@@ -120,18 +120,11 @@ public class LineChartActivity extends AppCompatActivity {
             previewChart = (PreviewLineChartView) rootView.findViewById(R.id.chart_preview);
             chart.setOnValueTouchListener(new ValueTouchListener());
 
-
             generateData();
 
-            // Disable viewpirt recalculations, see toggleCubic() method for more info.
             chart.setViewportCalculationEnabled(false);
 
-            // 설정
-           // resetViewport();
-            
-            
-            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            Uri audioPath = Uri.parse("/sdcard/Download/이유갓지않은이유.mp3");
+            Uri audioPath = Uri.parse("/sdcard/prezentainer/ㄴㄴ2015년 7월 26일 19시 56분.amr");
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
             
             audio.setLooping(true);
@@ -236,10 +229,6 @@ public class LineChartActivity extends AppCompatActivity {
                     buttonStop();
                 }
             });
-            ///////////////////////////////////////////SeekBar///////////////////////////////////////////////////////////
-            
-            
-            
             
             return rootView;
         }
@@ -486,7 +475,6 @@ public class LineChartActivity extends AppCompatActivity {
             	Log.e("!!!!!!!!!!!", values.toString());
             	Line line = new Line(values);
             	line.setColor(ChartUtils.COLORS[i]);
-            	
             	// Point
             	if(i==1){
             		line.setHasLabels(true);
@@ -529,6 +517,8 @@ public class LineChartActivity extends AppCompatActivity {
             data.setBaseValue(Float.NEGATIVE_INFINITY);
             chart.setLineChartData(data);
             chart.setValueSelectionEnabled(true);
+            chart.setZoomEnabled(false);  // Zoom disabled
+            chart.setScrollEnabled(false); // Scroll disabled
             
             previewData = new LineChartData(pre_data);
             
@@ -545,7 +535,7 @@ public class LineChartActivity extends AppCompatActivity {
         private void viewPortSetting(){
             
             final Viewport v = new Viewport(chart.getMaximumViewport());
-            v.bottom = -5;
+            v.bottom = 50;
             v.top = 200;
             // You have to set max and current viewports separately.
             chart.setMaximumViewport(v);

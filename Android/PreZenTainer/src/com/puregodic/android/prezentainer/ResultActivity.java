@@ -41,6 +41,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -524,6 +525,7 @@ public class ResultActivity extends AppCompatActivity {
               v.bottom = -5;
               v.top = 200;
               chart.setMaximumViewport(v);
+              chart.setCurrentViewport(v);
           }
           
           // Y축 없애는 option
