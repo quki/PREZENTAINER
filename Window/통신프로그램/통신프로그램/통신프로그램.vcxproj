@@ -59,7 +59,7 @@
       <AdditionalDependencies>User32.lib;</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
-      <ForceSymbolReferences>__DllMainCRTStartup@12</ForceSymbolReferences>
+      <ForceSymbolReferences>__DllMainCRTStartup@12 </ForceSymbolReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
