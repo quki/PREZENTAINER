@@ -40,6 +40,9 @@ define({
     recordingInterval = null, isRecording = false, recordingTime = 0, exitInProgress = false;
 
     var eventTimeArray = new Array(),
+        rightEventTimeArray = new Array(),
+        eventTimeObject = new Object(),
+        leftEventTimeArray =  new Array(),
         currentEventTime = null,
         jsonInfoET =null;
     //////////////////////////////////////////////////RECORDING////////////////////////////////////////////////////////////////////////
@@ -216,6 +219,48 @@ define({
         return time;
     }
     
+    /*
+     * 
+     * JSON Object를 생성해서 right / left를 구분
+     * 
+     * { 
+
+        "right" : [ 3972,6794,12456,19789 ],
+
+​         "left" : [4524,10032,15764]
+
+        }
+
+     * 
+     * 
+     */
+    
+    // Event가 일어난 시점(milliseconds)을 배열에 넣는다. ex [6294,8254,10234]
+    function pushEventTimeToArray(direction){
+      currentEventTime = timer.getTimeElapsed();
+      
+      if(direction === "right"){
+        
+        rightEventTimeArray.push(currentEventTime);
+        console.log("rightEventTimeArray : "+rightEventTimeArray);
+        
+      }else if(direction === "leftt"){
+        
+        leftEventTimeArray.push(currentEventTime);
+        console.log("leftEventTimeArray : "+leftEventTimeArray);
+        
+      }
+    }
+    
+    
+    function makeJsonObjEventTime(){
+      
+      eventTimeObject.right = rightEventTimeArray;
+      eventTimeObject.left = leftEventTimeArray;
+      return eventTimeObject;
+    }
+    
+    
     function makeJsonEventTime(){
       
       try {
@@ -232,7 +277,7 @@ define({
     function sendJsonEventTime(){
       
       try {
-          jsonInfoET = JSON.stringify(eventTimeArray);
+          jsonInfoET = JSON.stringify(makeJsonObjEventTime);
           mSASocket.sendData(CHANNELID_EVENTTIME, jsonInfoET);
           console.log("Event Time sent : " + jsonInfoET);
           eventTimeArray = [];
@@ -311,7 +356,9 @@ define({
       startTimeWatch();
       updateAfterStart();
       setStart();
-      p_makeJsonEventTime=makeJsonEventTime;
+      //p_makeJsonEventTime=makeJsonEventTime;
+      // pointer로 pushEventTimeToArray함수 메모리 공간 참조
+      p_pushEventTimeToArray = pushEventTimeToArray; 
     }
 
     function onStopBtnClick() {
@@ -321,8 +368,8 @@ define({
     }
     
     function onPcEventBtnClick(){
-      eventtopc("leftt");
-      makeJsonEventTime();
+      eventtopc("right");
+      //makeJsonEventTime();
       
     }
 
