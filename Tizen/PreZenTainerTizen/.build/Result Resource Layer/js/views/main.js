@@ -39,12 +39,8 @@ define({
     RECORDING_INTERVAL_STEP = 100,
     recordingInterval = null, isRecording = false, recordingTime = 0, exitInProgress = false;
 
-    var eventTimeArray = new Array(),
-        rightEventTimeArray = new Array(),
-        eventTimeObject = new Object(),
-        leftEventTimeArray =  new Array(),
-        currentEventTime = null,
-        jsonInfoET =null;
+    var rightEventTimeArray = new Array(),
+        leftEventTimeArray =  new Array();
     //////////////////////////////////////////////////RECORDING////////////////////////////////////////////////////////////////////////
     
     // 처음시작할때 recording 상태로 만들어준다. ----> toggleRecording();
@@ -237,7 +233,7 @@ define({
     
     // Event가 일어난 시점(milliseconds)을 배열에 넣는다. ex [6294,8254,10234]
     function pushEventTimeToArray(direction){
-      currentEventTime = timer.getTimeElapsed();
+      var currentEventTime = timer.getTimeElapsed();
       
       if(direction === "right"){
         
@@ -254,34 +250,23 @@ define({
     
     
     function makeJsonObjEventTime(){
-      
+      var eventTimeObject = new Object();
       eventTimeObject.right = rightEventTimeArray;
       eventTimeObject.left = leftEventTimeArray;
       return eventTimeObject;
-    }
-    
-    
-    function makeJsonEventTime(){
-      
-      try {
-        currentEventTime = timer.getTimeElapsed();
-        eventTimeArray.push(currentEventTime);
-        console.log(eventTimeArray);
-      } catch (e) {
-        console.error('makeJsonEventTimeError : '+e);
-      }
-      
     }
     
   //time event JSON을 ANDROID로 보내기
     function sendJsonEventTime(){
       
       try {
-          jsonInfoET = JSON.stringify(makeJsonObjEventTime);
+          var jsonInfoET = JSON.stringify(makeJsonObjEventTime());
           mSASocket.sendData(CHANNELID_EVENTTIME, jsonInfoET);
           console.log("Event Time sent : " + jsonInfoET);
-          eventTimeArray = [];
-          console.log("eventTimeArray Initialize : " + eventTimeArray);
+          // JSON Array Initialize...
+          rightEventTimeArray = [];
+          leftEventTimeArray = [];
+          console.log("eventTimeArray Initialize Success : " + rightEventTimeArray + leftEventTimeArray);
       } catch (err) {
         console.log("exception [" + err.name + "] msg[" + err.message + "]");
       }
@@ -356,7 +341,6 @@ define({
       startTimeWatch();
       updateAfterStart();
       setStart();
-      //p_makeJsonEventTime=makeJsonEventTime;
       // pointer로 pushEventTimeToArray함수 메모리 공간 참조
       p_pushEventTimeToArray = pushEventTimeToArray; 
     }
@@ -369,8 +353,6 @@ define({
     
     function onPcEventBtnClick(){
       eventtopc("right");
-      //makeJsonEventTime();
-      
     }
 
     // Registers event listeners

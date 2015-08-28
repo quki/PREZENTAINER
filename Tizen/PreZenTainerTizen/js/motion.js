@@ -139,7 +139,6 @@ function motionSensor() {
 		 console.log('call right function');
 		 navigator.vibrate(1000);  //나중에 뺄 코드
 		 eventtopc("right"); //오른쪽 이벤트!
-		 //p_makeJsonEventTime();
 		 motion_check=1;
 	}
 	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&               //왼쪽이벤트
@@ -149,7 +148,6 @@ function motionSensor() {
 		console.log('call left function');
 		navigator.vibrate(1000);  //나중에 뺄 코드
 		eventtopc("leftt"); //왼쪽 이벤트!
-		//p_makeJsonEventTime();
 		motion_check=1;
 	}
 	accelX = 0;

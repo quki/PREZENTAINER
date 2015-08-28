@@ -163,7 +163,7 @@ public class ResultActivity extends AppCompatActivity {
             
             // 최초에에 chart에 뿌려 줄 data 생성 
             generateData();
-            //viewPortSetting();
+            
             // 자동으로 chart가 계산 되는 것 방지
             chart.setViewportCalculationEnabled(false);
             
@@ -611,9 +611,15 @@ public class ResultActivity extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             Log.d("PARSING", jObj.toString());
                             
-                                JSONArray time = new JSONArray(jObj.getString("time"));
+                                /*JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
-                                
+                                Log.d("PARSING", time.toString());
+                                Log.d("PARSING", hbr.toString());*/
+                                /*Log.d("PARSING", time.toString());
+                                JSONArray hbrRight = (JSONArray)time.get("right");
+                                JSONArray hbrLeft = (JSONArray)time.get("left");
+                                Log.d("PARSING", hbrRight.toString());
+                                Log.d("PARSING", hbrLeft.toString());
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
                                 ArrayList<Float> eventTimeList= new ArrayList<Float>(); 
                                 
@@ -623,7 +629,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 
                                 for(int i = 0; i<time.length(); i++){
-                                    float eventTimeValue = Float.parseFloat(time.get(i).toString());
+                                    float eventTimeValue = Float.parseFloat(hbrRight.get(i).toString());
                                     eventTimeList.add(eventTimeValue);
                                  }
                                 
@@ -635,7 +641,7 @@ public class ResultActivity extends AppCompatActivity {
                                 getSupportFragmentManager()
                                 .beginTransaction()
                                 .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, eventTimeList))
-                                .commit();
+                                .commit();*/
                                 
                                 
                         } catch (JSONException e) {
