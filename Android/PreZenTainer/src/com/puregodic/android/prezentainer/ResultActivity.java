@@ -614,25 +614,24 @@ public class ResultActivity extends AppCompatActivity {
                            
                             
                            /* 
+                            *                       < JSON Object >
+                            *           {
                             * 
-                            * {
-                            * 
-                            *   "time":"{"right":[8113,11380,13672],"left":[17250,19736,21428]}", 
-                            *   "hbr":"[73,76]"
+                            *               "time":"{"right":[8113,11380,13672],"left":[17250,19736,21428]}", 
+                            *               "hbr":"[73,76]"
                             *   
-                            * }
-                            *  ERROR : Unterminated object at character 를 해결하기 위해
-                            * 에서 "right" -> 'right' , "left" -> 'left'
+                            *           }
+                            *           
+                            *               ERROR : Unterminated object at character 를 해결하기 위해
+                            *                        "right" -> 'right' , "left" -> 'left'
                             * 
                             * */
                             response = response.replaceAll("\"right\"","\'right\'").replaceAll("\"left\"", "\'left\'");
-                            Log.e("CHANGED", response);
+                            Log.e("CHANGED_RESPONSE", response);
                             
                                 JSONObject jObj = new JSONObject(response);
                                 JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
-                                Log.d("PARSING", time.toString());
-                                Log.d("PARSING", hbr.toString());
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
                                 
@@ -654,12 +653,12 @@ public class ResultActivity extends AppCompatActivity {
                                     leftEventTimeList.add(eventTimeValue);
                                  }
                                 
-                                Log.d("PARSING", heartRateList.toString());
+                                Log.d("HRLIST", heartRateList.toString());
                                 Log.d("RIGHTLIST", rightEventTimeList.toString());
                                 Log.d("LEFTLIST", leftEventTimeList.toString());
                                 
                                 
-                             // Set Fragment
+                                // Set Fragment
                                 getSupportFragmentManager()
                                 .beginTransaction()
                                 .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, rightEventTimeList,leftEventTimeList))
@@ -681,7 +680,7 @@ public class ResultActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url ( 해당 id && 해당 title인 row )
+                // Posting params to Fetch data url ( 해당 id && 해당 title && 해당 시간 인 table의 row )
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 params.put("title", title);
