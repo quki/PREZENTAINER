@@ -200,7 +200,7 @@
 </Reference>
 <Reference URI="js%2Fviews%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>yw7R/VnmbytDJdzPBUSAqqeOqFaXAGtkogBALyVPNPE=</DigestValue>
+<DigestValue>/pNkumnQiWIxMNZnc1/GN7fYZMvCv+lOELZY+/PYagk=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1107,11 +1107,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-S69pHAiWIBuydI4vey+z5ieLY6XF/tRyh0nvGcE3Tt72YF2jYZ2zFCwrGuEtAzhM9M/IWRv/V84B
-zzSuFyie8QncmNyyHFIGjQb/GEX8qzfXFbHHBnNzCn0YkL1osGWwpkgmra2aSXFa/G8wy2WWkxm2
-IwnayH4EASTMf2DvPV+bLHe7Sik+jwGMOcN+FuI28aRMVVH3y0utbMreiLbTmVZ5tOEsIqycVTgg
-aQIf5VMMy3kZaJtA/dPc6r2557b/pjr/HuFYT1f4g2cpBwNU/4D10r0k7sThspn3eM7g2asyqb/F
-AMClgL1+ujwiHmgcWW5PdoQtSDSV2mc0mRo9qA==
+RElJ0/hrYvgI5iL8DFHC+QxEtYSoR/tM13SdrYHp0eKWG3M0wBCjIvg2yuXLaeA4mh/9E70OXuOG
+uZ6kHGO9d9D3CMB1wDsKz5xiJ4zJf+HFXRNBUF9hsChwiAqXb8ua8yJ5Inu2tnqIlanG92XNfL9g
+ufHCllCiUBqjpioxyvX9GIod/yKaHDVd40NHHaKshlYeo9LMeeVtrQOXeLWZQMojLM95cCA2kBKi
+VwD9LvkoD1h2u0lTNQWEgFOX9WuGc4MTfloID3+js3v16p0i4eQWYJ5S+CJ6GrX2RrS3YX0CTprB
+X6bhRE9C8nb/EF2eKYkS0uoAgzNCFwnfUuI32w==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

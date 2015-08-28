@@ -54,6 +54,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
@@ -94,7 +96,7 @@ public class ResultActivity extends AppCompatActivity {
     public class PlaceHolderFragment extends Fragment{
         
         private ArrayList<Float> heartRateList;
-        private ArrayList<Float> eventTimeList; 
+        private ArrayList<Float> rightEventTimeList, leftEventTimeList; 
         
         private LineChartView chart;
         private LineChartData data;
@@ -123,9 +125,10 @@ public class ResultActivity extends AppCompatActivity {
         }
         
         // Volley로 부터 받아온 ArrayList 초기화 작업
-        public PlaceHolderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> eventTimeList) {
+        public PlaceHolderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> rightEventTimeList, ArrayList<Float> leftEventTimeList) {
             this.heartRateList = heartRateList;
-            this.eventTimeList = eventTimeList;
+            this.rightEventTimeList = rightEventTimeList;
+            this.leftEventTimeList = leftEventTimeList;
         }
 
         @Override
@@ -431,9 +434,9 @@ public class ResultActivity extends AppCompatActivity {
               
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
-              for (int j = 0; j < eventTimeList.size(); ++j) {
+              for (int j = 0; j < rightEventTimeList.size(); ++j) {
                   slideNum.add(j+1+"번");
-                  axisXvalue.add(new AxisValue(eventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
+                  axisXvalue.add(new AxisValue(rightEventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
               }
               for(int i=0; i<axisXvalue.size(); i++){
                   Log.d("axisXvalue", ""+axisXvalue.get(i));
@@ -606,42 +609,47 @@ public class ResultActivity extends AppCompatActivity {
                         mDialogHelper.hidePdialog();
                         
                         try {
-                            
                             // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
-                            JSONObject jObj = new JSONObject(response);
-                            Log.d("PARSING", jObj.toString());
-                            
-                                /*JSONObject time = new JSONObject(jObj.getString("time"));
+                            Log.d("PARSING", response);
+                            response = response.replaceAll("\"right\"","\'right\'").replaceAll("\"left\"", "\'left\'");
+                            Log.e("CHANGED", response);
+                                JSONObject jObj = new JSONObject(response);
+                                Log.e("PARSING", ""+jObj);
+                                JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
                                 Log.d("PARSING", time.toString());
-                                Log.d("PARSING", hbr.toString());*/
-                                /*Log.d("PARSING", time.toString());
-                                JSONArray hbrRight = (JSONArray)time.get("right");
-                                JSONArray hbrLeft = (JSONArray)time.get("left");
-                                Log.d("PARSING", hbrRight.toString());
-                                Log.d("PARSING", hbrLeft.toString());
+                                Log.d("PARSING", hbr.toString());
+                                Log.d("PARSING", time.toString());
+                                JSONArray timeRight = (JSONArray)time.get("right");
+                                JSONArray timeLeft = (JSONArray)time.get("left");
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
-                                ArrayList<Float> eventTimeList= new ArrayList<Float>(); 
+                                ArrayList<Float> rightEventTimeList= new ArrayList<Float>();
+                                ArrayList<Float> leftEventTimeList= new ArrayList<Float>(); 
                                 
                                 for(int i = 0; i<hbr.length(); i++){
                                     float heartRateValue = Float.parseFloat(hbr.get(i).toString());
                                    heartRateList.add(heartRateValue);
                                 }
                                 
-                                for(int i = 0; i<time.length(); i++){
-                                    float eventTimeValue = Float.parseFloat(hbrRight.get(i).toString());
-                                    eventTimeList.add(eventTimeValue);
+                                for(int i = 0; i<timeRight.length(); i++){
+                                    float eventTimeValue = Float.parseFloat(timeRight.get(i).toString());
+                                    rightEventTimeList.add(eventTimeValue);
+                                 }
+                                for(int i = 0; i<timeLeft.length(); i++){
+                                    float eventTimeValue = Float.parseFloat(timeLeft.get(i).toString());
+                                    leftEventTimeList.add(eventTimeValue);
                                  }
                                 
                                 Log.d("PARSING", heartRateList.toString());
-                                Log.d("PARSING", eventTimeList.toString());
+                                Log.d("RIGHTLIST", rightEventTimeList.toString());
+                                Log.d("LEFTLIST", leftEventTimeList.toString());
                                 
                                 
                              // Set Fragment
                                 getSupportFragmentManager()
                                 .beginTransaction()
-                                .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, eventTimeList))
-                                .commit();*/
+                                .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, rightEventTimeList,leftEventTimeList))
+                                .commit();
                                 
                                 
                         } catch (JSONException e) {

@@ -4,7 +4,7 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>PGg/t2bdLHdyQMd5R09/SnDfVYk5/sBuLcVNxiQSqQc=</DigestValue>
+<DigestValue>atLBECbT8CHYJVY7VSefkHElvfqjgFxoIUlgs4NGogg=</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -204,7 +204,7 @@
 </Reference>
 <Reference URI="js%2Fviews%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>yw7R/VnmbytDJdzPBUSAqqeOqFaXAGtkogBALyVPNPE=</DigestValue>
+<DigestValue>/pNkumnQiWIxMNZnc1/GN7fYZMvCv+lOELZY+/PYagk=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1111,11 +1111,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-R5zoDqmC8gTAWBAbvgDWKgFB/On5vATDOAaceKdvFOTVN0yQQlBxJJhXzWlU9bvaqGaw3p1eC0qA
-nrQeejy98dg5LOCMRn5Js2NGESOL4j00VxzjUlPJIWBqIYTG75H5zzO3IE8Q/lEKobjK8om4l875
-g7ulYywNvzWe7vHb8mf7xGxvalnOgs9kSHqjOFSeZpzmlKO4ZwrHBSfLao5y6r3ROEKhaTg8MUw+
-IId8xWo57AB67j3q9bLAKMLS180Ds+3DY7yCwO4aZU5ez7I6SEERuohslCst/R8QL5DwDV5/Cuor
-tk8EcHpauiSq08jmP+aaAvqaE4N13WAbPeB4+g==
+b7ygamoDXFnEVjaakwegavQCyY6x0qiYbc8Uv3+Ba7q+Bo4Lc7Sty3GXxxs7ei/1LvMgi5Q4buRb
+2z00czve/Ln6iWCLWH5qGgnioHe/ZrBPxDJDlv027ex1Fmu39AEZfTQxwLBJoqDlZdgXM2weZNpt
+XU2k+m+sWOBsgPPAFYmEuY1eicTij0if4y2slXbGI4ysdyJ/lDdIZE/y7PD7Y/htOprSHRNDKvIz
+6bvZElRvS5B6WRUrsomAe9RgBcVpdNW3TnuIVpuF9Gwbu6UPbBlcAceUG5dCQ5NrSjcR0/VQMmFF
+qYgf0eY39aC9gkTTrM8/PruVY1jhRHkUqmjyTg==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

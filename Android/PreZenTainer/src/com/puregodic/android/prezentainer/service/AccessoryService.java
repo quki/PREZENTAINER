@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -339,7 +342,7 @@ public class AccessoryService extends SAAgent {
 			    
 				
 			}else if (channelId == CHANNEL_ID_EVENTTIME){
-			    
+
 			       jsonET = new String(data);
 			       Log.v(TAG, jsonET);
 			        

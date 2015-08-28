@@ -250,7 +250,8 @@ define({
     
     
     function makeJsonObjEventTime(){
-      var eventTimeObject = new Object();
+      // JSON Obj
+      var eventTimeObject = {};
       eventTimeObject.right = rightEventTimeArray;
       eventTimeObject.left = leftEventTimeArray;
       return eventTimeObject;
