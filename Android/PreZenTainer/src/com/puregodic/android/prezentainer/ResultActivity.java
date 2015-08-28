@@ -1,6 +1,7 @@
 
 package com.puregodic.android.prezentainer;
 
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
@@ -529,6 +530,19 @@ public class ResultActivity extends AppCompatActivity {
               chart.setMaximumViewport(maxViewport);
               previewChart.setMaximumViewport(maxViewport);
               
+<<<<<<< HEAD
+=======
+          }
+          // 현재 보여질 Viewport 값 지정
+          private void currentViewport(){
+
+              currentViewport.left=0;
+              currentViewport.bottom=50;
+              currentViewport.top=150;
+              currentViewport.right = maxViewport.width() / 3;
+              previewChart.setCurrentViewportWithAnimation(currentViewport);
+              chart.setCurrentViewportWithAnimation(currentViewport);
+>>>>>>> d5f679a6c7edd92103d97f7b2dfc9392cfe5dc0b
           }
           // 현재 보여질 Viewport 값 지정
           private void currentViewport(){
@@ -540,6 +554,7 @@ public class ResultActivity extends AppCompatActivity {
               previewChart.setCurrentViewportWithAnimation(currentViewport);
               chart.setCurrentViewportWithAnimation(currentViewport);
           }
+          
           
           
           // Y축 없애는 option
