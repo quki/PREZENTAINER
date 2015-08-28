@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.puregodic.android.prezentainer.ResultActivity" >
+
+    <item android:id="@+id/action_reset"
+		android:title="새로고침"/>
+	<item
+		android:id="@+id/action_toggle_axes"
+		android:title="축 없애기"/>
+
+</menu>
