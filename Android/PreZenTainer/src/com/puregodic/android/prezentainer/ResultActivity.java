@@ -432,6 +432,27 @@ public class ResultActivity extends AppCompatActivity {
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
               List<String> slideNum = new ArrayList<String>();
               
+
+              for(int i=0 ; i<leftEventTimeList.size(); i++)
+              {
+            	  for(int j=0 ; j<rightEventTimeList.size(); j++)
+            	  {
+            		  if(leftEventTimeList.get(i) < rightEventTimeList.get(j))
+            		  {
+            			  rightEventTimeList.remove(j-1);
+            			  leftEventTimeList.set(i, Float.valueOf(-1));
+            			  break;
+            		  }
+            	  }
+              }
+
+              for(int i=0 ; i<leftEventTimeList.size(); i++)
+              {
+            	  if(leftEventTimeList.get(i).compareTo(Float.valueOf(-1))!=0 && !rightEventTimeList.isEmpty())
+            	  {
+            		  rightEventTimeList.remove(rightEventTimeList.size()-1);
+            	  }
+              }
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < rightEventTimeList.size(); ++j) {
