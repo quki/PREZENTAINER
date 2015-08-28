@@ -139,7 +139,6 @@ function motionSensor() {
 		 console.log('call right function');
 		 navigator.vibrate(1000);  //나중에 뺄 코드
 		 eventtopc("right"); //오른쪽 이벤트!
-		 p_makeJsonEventTime();
 		 motion_check=1;
 	}
 	if (accelX < averageX_left+5 && accelX > averageX_left-5 &&               //왼쪽이벤트
@@ -149,7 +148,6 @@ function motionSensor() {
 		console.log('call left function');
 		navigator.vibrate(1000);  //나중에 뺄 코드
 		eventtopc("leftt"); //왼쪽 이벤트!
-		p_makeJsonEventTime();
 		motion_check=1;
 	}
 	accelX = 0;
@@ -274,9 +272,11 @@ function is_motion() {   //back버튼 눌렀을 때
 	$('#test_left_motion_btn').attr('disabled','disabled');
 	
 	document.getElementById("test_right_motion").innerHTML="Off";
+	document.getElementById("right_motion").innerHTML="Off";
 	right_motion_enable=0;
 	
 	document.getElementById("test_left_motion").innerHTML="Off";
+	document.getElementById("left_motion").innerHTML="Off";
 	left_motion_enable=0;
 	
 	

@@ -1,6 +1,7 @@
 
 package com.puregodic.android.prezentainer;
 
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
@@ -114,6 +115,9 @@ public class ResultActivity extends AppCompatActivity {
         private boolean hasYaxis = true;
         private ValueShape shape = ValueShape.CIRCLE;
         
+        // Viewport는 쉽게 말해 화면 (View)라고 생각하면 된다. 주로 보여지는 범위를 지정할 때 주로 사용된다.
+        private Viewport maxViewport,currentViewport;
+        
         public final Handler timeHandler = new TimeHandler(this);
         
         public PlaceHolderFragment() {
@@ -137,7 +141,8 @@ public class ResultActivity extends AppCompatActivity {
             textViewTime = (TextView) findViewById(R.id.textViewTime);
             textViewHR = (TextView) findViewById(R.id.textViewHR);
             
-            
+            maxViewport = new Viewport(chart.getMaximumViewport());
+            currentViewport = new Viewport(chart.getCurrentViewport());
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
@@ -159,7 +164,7 @@ public class ResultActivity extends AppCompatActivity {
             
             // 최초에에 chart에 뿌려 줄 data 생성 
             generateData();
-            viewPortSetting();
+            
             // 자동으로 chart가 계산 되는 것 방지
             chart.setViewportCalculationEnabled(false);
             
@@ -508,43 +513,35 @@ public class ResultActivity extends AppCompatActivity {
               previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
               previewChart.setLineChartData(previewData);
               previewChart.setViewportChangeListener(new ViewportListener());
+              previewChart.setZoomType(ZoomType.HORIZONTAL); // X축 방향으로만 움직임
+              
+              maxViewport();
+              currentViewport();
+          }
+          
+          
+          // 최대 Viewport 값 지정
+          private void maxViewport(){
+              
+              maxViewport.top = 150;
+              maxViewport.bottom = 50;
+              maxViewport.left=0;
+              maxViewport.right = audioSize/1000;
+              chart.setMaximumViewport(maxViewport);
+              previewChart.setMaximumViewport(maxViewport);
+              
+          }
+          // 현재 보여질 Viewport 값 지정
+          private void currentViewport(){
 
-              previewX(true);
-              
+              currentViewport.left=0;
+              currentViewport.bottom=50;
+              currentViewport.top=150;
+              currentViewport.right = maxViewport.width() / 3;
+              previewChart.setCurrentViewportWithAnimation(currentViewport);
+              chart.setCurrentViewportWithAnimation(currentViewport);
           }
           
-          /*
-           * View Port Setting x축 y축 범위 지정 (미리보기)
-           * X축 방향으로만 움직임, param으로 true를 주면 animation효과
-           * 
-           * */
-          private void previewX(boolean animate) {
-              Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-              tempViewport.top = 150;
-              tempViewport.bottom = 50;
-              tempViewport.left=0;
-              tempViewport.right = audioSize/1000;
-              if (animate) {
-                  previewChart.setMaximumViewport(tempViewport);  // 설정한 ViewPort 값을 최대로 지정한다
-                  previewChart.setCurrentViewportWithAnimation(tempViewport); // 현재 보여지는 창을 설정한 최대 ViewPort로 한다
-              } else {
-                  previewChart.setMaximumViewport(tempViewport);
-                  previewChart.setCurrentViewport(tempViewport);
-              }
-              previewChart.setZoomType(ZoomType.HORIZONTAL);
-          }
-          
-          // View Port Setting x축 y축 범위 지정
-          private void viewPortSetting(){
-              
-              final Viewport v = new Viewport(chart.getMaximumViewport());
-              v.bottom = 50;
-              v.top = 150;
-              v.left=0;
-              v.right = audioSize/1000;
-              chart.setMaximumViewport(v);
-              chart.setCurrentViewportWithAnimation(v);
-          }
           
           // Y축 없애는 option
           private void toggleYaxis() {
@@ -615,9 +612,15 @@ public class ResultActivity extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             Log.d("PARSING", jObj.toString());
                             
-                                JSONArray time = new JSONArray(jObj.getString("time"));
+                                /*JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
-                                
+                                Log.d("PARSING", time.toString());
+                                Log.d("PARSING", hbr.toString());*/
+                                /*Log.d("PARSING", time.toString());
+                                JSONArray hbrRight = (JSONArray)time.get("right");
+                                JSONArray hbrLeft = (JSONArray)time.get("left");
+                                Log.d("PARSING", hbrRight.toString());
+                                Log.d("PARSING", hbrLeft.toString());
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
                                 ArrayList<Float> eventTimeList= new ArrayList<Float>(); 
                                 
@@ -627,7 +630,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 
                                 for(int i = 0; i<time.length(); i++){
-                                    float eventTimeValue = Float.parseFloat(time.get(i).toString());
+                                    float eventTimeValue = Float.parseFloat(hbrRight.get(i).toString());
                                     eventTimeList.add(eventTimeValue);
                                  }
                                 
@@ -639,7 +642,7 @@ public class ResultActivity extends AppCompatActivity {
                                 getSupportFragmentManager()
                                 .beginTransaction()
                                 .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, eventTimeList))
-                                .commit();
+                                .commit();*/
                                 
                                 
                         } catch (JSONException e) {
