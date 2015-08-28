@@ -629,20 +629,33 @@ public class ResultActivity extends AppCompatActivity {
                         
                         mDialogHelper.hidePdialog();
                         
+                        // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                         try {
-                            // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
+
+                            
+                            
+                            /* 
+                             *                       < JSON Object >
+                             *           {
+                             * 
+                             *               "time":"{"right":[8113,11380,13672],"left":[17250,19736,21428]}", 
+                             *               "hbr":"[73,76]"
+                             *   
+                             *           }
+                             *           
+                             *               ERROR : Unterminated object at character 
+                             *                        "right" -> 'right' , "left" -> 'left'
+                             * 
+                             * */
                             Log.d("PARSING", response);
                             response = response.replaceAll("\"right\"","\'right\'").replaceAll("\"left\"", "\'left\'");
-                            Log.e("CHANGED", response);
+                            Log.e("CHANGED_RESPONSE", response);
                                 JSONObject jObj = new JSONObject(response);
-                                Log.e("PARSING", ""+jObj);
                                 JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
-                                Log.d("PARSING", time.toString());
-                                Log.d("PARSING", hbr.toString());
-                                Log.d("PARSING", time.toString());
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
+                                
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
                                 ArrayList<Float> rightEventTimeList= new ArrayList<Float>();
                                 ArrayList<Float> leftEventTimeList= new ArrayList<Float>(); 
@@ -661,7 +674,7 @@ public class ResultActivity extends AppCompatActivity {
                                     leftEventTimeList.add(eventTimeValue);
                                  }
                                 
-                                Log.d("PARSING", heartRateList.toString());
+                                Log.d("HRLIST", heartRateList.toString());
                                 Log.d("RIGHTLIST", rightEventTimeList.toString());
                                 Log.d("LEFTLIST", leftEventTimeList.toString());
                                 
