@@ -611,17 +611,31 @@ public class ResultActivity extends AppCompatActivity {
                         try {
                             // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                             Log.d("PARSING", response);
+                           
+                            
+                           /* 
+                            * 
+                            * {
+                            * 
+                            *   "time":"{"right":[8113,11380,13672],"left":[17250,19736,21428]}", 
+                            *   "hbr":"[73,76]"
+                            *   
+                            * }
+                            *  ERROR : Unterminated object at character 를 해결하기 위해
+                            * 에서 "right" -> 'right' , "left" -> 'left'
+                            * 
+                            * */
                             response = response.replaceAll("\"right\"","\'right\'").replaceAll("\"left\"", "\'left\'");
                             Log.e("CHANGED", response);
+                            
                                 JSONObject jObj = new JSONObject(response);
-                                Log.e("PARSING", ""+jObj);
                                 JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
                                 Log.d("PARSING", time.toString());
                                 Log.d("PARSING", hbr.toString());
-                                Log.d("PARSING", time.toString());
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
+                                
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
                                 ArrayList<Float> rightEventTimeList= new ArrayList<Float>();
                                 ArrayList<Float> leftEventTimeList= new ArrayList<Float>(); 
