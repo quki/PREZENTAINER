@@ -432,6 +432,27 @@ public class ResultActivity extends AppCompatActivity {
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
               List<String> slideNum = new ArrayList<String>();
               
+
+              for(int i=0 ; i<leftEventTimeList.size(); i++)
+              {
+            	  for(int j=0 ; j<rightEventTimeList.size(); j++)
+            	  {
+            		  if(leftEventTimeList.get(i) < rightEventTimeList.get(j))
+            		  {
+            			  rightEventTimeList.remove(j-1);
+            			  leftEventTimeList.set(i, Float.valueOf(-1));
+            			  break;
+            		  }
+            	  }
+              }
+
+              for(int i=0 ; i<leftEventTimeList.size(); i++)
+              {
+            	  if(leftEventTimeList.get(i).compareTo(Float.valueOf(-1))!=0 && !rightEventTimeList.isEmpty())
+            	  {
+            		  rightEventTimeList.remove(rightEventTimeList.size()-1);
+            	  }
+              }
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < rightEventTimeList.size(); ++j) {
@@ -611,30 +632,17 @@ public class ResultActivity extends AppCompatActivity {
                         try {
                             // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                             Log.d("PARSING", response);
-                           
-                            
-                           /* 
-                            *                       < JSON Object >
-                            *           {
-                            * 
-                            *               "time":"{"right":[8113,11380,13672],"left":[17250,19736,21428]}", 
-                            *               "hbr":"[73,76]"
-                            *   
-                            *           }
-                            *           
-                            *               ERROR : Unterminated object at character 를 해결하기 위해
-                            *                        "right" -> 'right' , "left" -> 'left'
-                            * 
-                            * */
                             response = response.replaceAll("\"right\"","\'right\'").replaceAll("\"left\"", "\'left\'");
-                            Log.e("CHANGED_RESPONSE", response);
-                            
+                            Log.e("CHANGED", response);
                                 JSONObject jObj = new JSONObject(response);
+                                Log.e("PARSING", ""+jObj);
                                 JSONObject time = new JSONObject(jObj.getString("time"));
                                 JSONArray hbr = new JSONArray(jObj.getString("hbr"));
+                                Log.d("PARSING", time.toString());
+                                Log.d("PARSING", hbr.toString());
+                                Log.d("PARSING", time.toString());
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
-                                
                                 ArrayList<Float> heartRateList= new ArrayList<Float>();
                                 ArrayList<Float> rightEventTimeList= new ArrayList<Float>();
                                 ArrayList<Float> leftEventTimeList= new ArrayList<Float>(); 
@@ -653,12 +661,12 @@ public class ResultActivity extends AppCompatActivity {
                                     leftEventTimeList.add(eventTimeValue);
                                  }
                                 
-                                Log.d("HRLIST", heartRateList.toString());
+                                Log.d("PARSING", heartRateList.toString());
                                 Log.d("RIGHTLIST", rightEventTimeList.toString());
                                 Log.d("LEFTLIST", leftEventTimeList.toString());
                                 
                                 
-                                // Set Fragment
+                             // Set Fragment
                                 getSupportFragmentManager()
                                 .beginTransaction()
                                 .add(R.id.chartContainer, new PlaceHolderFragment(heartRateList, rightEventTimeList,leftEventTimeList))
@@ -680,7 +688,7 @@ public class ResultActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to Fetch data url ( 해당 id && 해당 title && 해당 시간 인 table의 row )
+                // Posting params to register url ( 해당 id && 해당 title인 row )
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 params.put("title", title);
