@@ -703,7 +703,7 @@ public class ResultActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 params.put("title", title);
-                //params.put("date", date);
+                params.put("date", date);
                 
                 return params;
             }

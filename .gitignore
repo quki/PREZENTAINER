@@ -79,5 +79,6 @@ proguard/
 ### Android Patch ###
 gen-external-apklibs
 *.wgt
-Tizen/PreZenTainerTizen/.build/
 *.info
+*.rds_delta
+.build/

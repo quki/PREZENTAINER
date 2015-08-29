@@ -441,11 +441,11 @@ function left_enable_motion(){
 	
 }
 
+//window.addEventListener("devicemotion", onDeviceMotion, true);
 
 //Initialize function
 window.onload = function () {
-    // TODO:: Do your initialization job
-	//window.addEventListener("devicemotion", onDeviceMotion, true);
+	
 	load_setLocalStorage();
     console.log("init() called");
     // add eventListener for tizenhwkey
