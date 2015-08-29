@@ -33,9 +33,6 @@ var accelXArr = new Array(userInputIndex);
 var accelYArr = new Array(userInputIndex);
 var accelZArr = new Array(userInputIndex);
 
-function buttonSetting() {
-	window.addEventListener("devicemotion", onDeviceMotion, true);
-}
 
 function showResult() {
 	$("#count").html(arrayIndex+"/5");
@@ -448,7 +445,7 @@ function left_enable_motion(){
 //Initialize function
 window.onload = function () {
     // TODO:: Do your initialization job
-	window.addEventListener("devicemotion", onDeviceMotion, true);
+	//window.addEventListener("devicemotion", onDeviceMotion, true);
 	load_setLocalStorage();
     console.log("init() called");
     // add eventListener for tizenhwkey
