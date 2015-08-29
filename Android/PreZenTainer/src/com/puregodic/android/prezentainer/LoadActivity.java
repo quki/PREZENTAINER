@@ -61,7 +61,6 @@ public class LoadActivity extends AppCompatActivity {
         
         Intent intent = getIntent();
         yourId = intent.getStringExtra("yourId");
-        Toast.makeText(getApplicationContext(), yourId, Toast.LENGTH_SHORT).show();
         
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         
@@ -197,21 +196,28 @@ public class LoadActivity extends AppCompatActivity {
                         try {
                             // String response -> JSON Array -> JSON Object 추출 -> 개별 항목 parsing
                             JSONArray jArray = new JSONArray(response);
-                            Log.e("PARSING", jArray.toString());
-                            for(int i = 0; i<jArray.length(); i++){
-                                JSONObject jObj = (JSONObject)jArray.get(i);
-                                String title = jObj.getString("title");
-                                String date = jObj.getString("date");
-                                LoadPtTitleData mData =  new LoadPtTitleData();
-                                mData.setTitle(title);
-                                mData.setDate(date);
-                                mDataList.add(mData);
+                            
+                            if(jArray.length()==0){
+                                finish();
+                                Toast.makeText(LoadActivity.this, "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Log.e("PARSING", jArray.toString());
+                                for(int i = 0; i<jArray.length(); i++){
+                                    JSONObject jObj = (JSONObject)jArray.get(i);
+                                    String title = jObj.getString("title");
+                                    String date = jObj.getString("date");
+                                    LoadPtTitleData mData =  new LoadPtTitleData();
+                                    mData.setTitle(title);
+                                    mData.setDate(date);
+                                    mDataList.add(mData);
+                                    mAdapter.notifyDataSetChanged();
+                                }
                             }
 
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException : " + e.getMessage());
                         }
-                        mAdapter.notifyDataSetChanged();
+                        
                     }
                 }, new Response.ErrorListener() {
 
