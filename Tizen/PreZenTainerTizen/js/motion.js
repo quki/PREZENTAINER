@@ -441,7 +441,7 @@ function left_enable_motion(){
 	
 }
 
-//window.addEventListener("devicemotion", onDeviceMotion, true);
+window.addEventListener("devicemotion", onDeviceMotion, true);
 
 //Initialize function
 window.onload = function () {
