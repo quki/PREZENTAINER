@@ -17,7 +17,7 @@ define({
 
         var e = req.core.event,
             dateHelper = req.helpers.date,
-            min = 30,
+            min = 60,
             MAX_RECORDING_TIME = min*60000,
             AUDIO_LENGTH_CHECK_INTERVAL = 10,
 
