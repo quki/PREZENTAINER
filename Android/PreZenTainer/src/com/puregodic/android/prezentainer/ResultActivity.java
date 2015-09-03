@@ -67,7 +67,7 @@ public class ResultActivity extends AppCompatActivity {
     private String mFilePath;
     private static final int SEND_THREAD_INFOMATION = 1;
     private TextView pptTitle;
-    
+
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- toolbar -->
+    <color name="toolbar">#30415C</color>
+    <color name="toolbar_nav">#2C3A4A</color>
+
+    <!--main-->
+    <color name="mainblue">#2196F3</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#222222</color>
+    <color name="shadow">#32000000</color>
+
+
+    <!-- button -->
+    <color name="idle">#4FC3F7</color>
+    <color name="error">#F44336</color>
+    <color name="complete">#4CAF50</color>
+
+    <!-- clickstate -->
+    <color name="clickstate">#C5CAE9</color>
+    
+    <!-- swipe -->
+    <color name="color1">#ff92ff2f</color>
+    <color name="color2">#ffffbc00</color>
+    <color name="color3">#ff12ffa0</color>
+    <color name="color4">#ffff6724</color>
+    
+
+    <!--login-->
+    <color name="bg_login">#2196F3</color>
+    <color name="bg_edittext_login">#D90c7cd5</color>
+    <color name="input_login">#222222</color>
+    <color name="input_login_hint">#BFE0E0E0</color>
+    <color name="btn_login_text">#0a6ebd</color>
+    <color name="btn_login_bg">#eceef1</color>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- cardview -->
+    <color name="white_drawer">#FFFFFF</color>
+    <color name="dark_black">#000000</color>
+    
+    
+</resources>

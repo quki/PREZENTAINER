@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<ImageView android:id="@+id/imageSample"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_gmail"
+		android:layout_marginLeft="10dp"
+		android:layout_marginTop="10dp"
+		/>
+
+	<LinearLayout 
+	    android:orientation="vertical"
+		android:layout_margin="10dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+	<TextView
+		android:id="@+id/loadPtTitle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="피티이름"
+		android:textSize="24sp" />
+	<TextView 
+	    android:id="@+id/loadCurrDate" 
+	    android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+		android:text="2015년 7월 31일 16시 17분"
+	     android:textAppearance="?android:attr/textAppearanceSmall"/>
+	</LinearLayout>
+</LinearLayout>

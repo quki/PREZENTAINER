@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/CardViewActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/DetailSettingActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/FileTransferRequestedActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/HomeActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/LoadActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/SettingActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/SettingBluetoothActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/SplashActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/adapter/LoadPtTitleAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/adapter/LoadPtTitleData.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/adapter/PairedDeviceAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/connecthelper/ConnecToPcHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/decoration/CustomItemAnimator.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/decoration/DividerItemDecoration.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/decoration/PendingItemAnimator.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/dialog/DialogHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/login/LoginActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/login/RegisterActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/login/SessionManager.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/network/AppConfig.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/network/AppController.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/puregodic/android/prezentainer/service/AccessoryService.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values-v19" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values-v21" charset="x-windows-949" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
