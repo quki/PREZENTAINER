@@ -205,6 +205,7 @@ public class LoadActivity extends Fragment {
                                         .beginTransaction()
                                         .replace(R.id.container_body, new SettingActivity())
                                         .commit();
+                                getActivity().setTitle("시작하기");
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
                                 Log.e("PARSING", jArray.toString());

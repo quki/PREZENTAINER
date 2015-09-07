@@ -159,7 +159,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();               // set the toolbar title
-            getSupportActionBar().setTitle(title);
+            setTitle(title);
         }
     }
 
