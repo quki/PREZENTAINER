@@ -44,6 +44,7 @@
         <item>@string/nav_item_homePage</item>
     </string-array>
     <string name="title_activity_pairing">패어링</string>
+    <string name="title_activity_mypage">Mypage</string>
     
 
 </resources>
