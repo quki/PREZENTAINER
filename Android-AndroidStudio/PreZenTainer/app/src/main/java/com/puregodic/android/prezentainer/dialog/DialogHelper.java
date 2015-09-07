@@ -26,6 +26,5 @@ public class DialogHelper {
             pDialog.dismiss();
         }
     }
-    
 
 }

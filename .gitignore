@@ -1,19 +1,16 @@
 
-*.bak
-
 # Created by https://www.gitignore.io/api/eclipse,android
 
 ### Eclipse ###
 *.pydevproject
 .metadata
-.gradle
+gen/
 bin/
 tmp/
 *.tmp
 *.bak
 *.swp
 *~.nib
-local.properties
 .settings/
 .loadpath
 
@@ -56,10 +53,6 @@ local.properties
 # Java class files
 *.class
 
-# Generated files
-bin/
-gen/
-
 # Gradle files
 .gradle/
 build/
@@ -82,3 +75,25 @@ gen-external-apklibs
 *.info
 *.rds_delta
 .build/
+
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+
+# files for the dex VM
+*.dex
+
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+
+# Android Studio
+*.iml
+.idea
+#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
+.gradle
+build/

@@ -1,27 +1,21 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +35,16 @@ import com.puregodic.android.prezentainer.login.RegisterActivity;
 import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
-public class LoadActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class LoadActivity extends Fragment {
     
     
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -52,65 +55,67 @@ public class LoadActivity extends AppCompatActivity {
     private String yourId;
     private ArrayList<LoadPtTitleData> mDataList = new ArrayList<LoadPtTitleData>();
     private RecyclerView.Adapter mAdapter;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_load);
-        
-        mDialogHelper = new DialogHelper(this);
-        
-        Intent intent = getIntent();
+    }
+
+    @Override
+    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState){
+        View rootView = inflater.inflate(R.layout.activity_load, container, false);
+        // Inflate the layout for this fragment
+        mDialogHelper = new DialogHelper(getActivity());
+
+        Intent intent = getActivity().getIntent();
         yourId = intent.getStringExtra("yourId");
-        
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(rootView.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        
-        mAdapter = new LoadPtTitleAdapter(this, mDataList);
+
+        mAdapter = new LoadPtTitleAdapter(rootView.getContext(), mDataList);
         mRecyclerView.setAdapter(mAdapter);
-        
+
         RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+                new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
         // this is the default; this call is actually only necessary with custom ItemAnimators
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         setDataByVolley();
-        
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new ClickListener() {
-            
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new ClickListener() {
+
             @Override
             public void onLongClick(View view, int position) {
                 // TODO Auto-generated method stub
             }
-            
+
             @Override
             public void onClick(View view, int position) {
-                
+
                 final String ptTitle = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
                 final String currDate = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
-                Toast.makeText(LoadActivity.this, ptTitle+currDate+yourId, Toast.LENGTH_SHORT).show();
- 
-                startActivity(new Intent(LoadActivity.this,ResultActivity.class)
-                .putExtra("yourId",yourId)               
-                .putExtra("title", ptTitle)
-                .putExtra("date", currDate));
+                Toast.makeText(getActivity(), ptTitle+currDate+yourId, Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(getActivity(),ResultActivity.class)
+                        .putExtra("yourId",yourId)
+                        .putExtra("title", ptTitle)
+                        .putExtra("date", currDate));
             }
         }));
-     
-        
+
+
+
+        return rootView;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.load, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -198,8 +203,10 @@ public class LoadActivity extends AppCompatActivity {
                             JSONArray jArray = new JSONArray(response);
                             
                             if(jArray.length()==0){
-                                finish();
-                                Toast.makeText(LoadActivity.this, "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
+                                Fragment fragment = new LoadActivity();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                                Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
                                 Log.e("PARSING", jArray.toString());
                                 for(int i = 0; i<jArray.length(); i++){
@@ -252,6 +259,14 @@ public class LoadActivity extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq);
         
+    }
+    @Override
+    public void onAttach (Activity activity){
+        super.onAttach(activity);
+    }
+    @Override
+    public void onDetach () {
+        super.onDetach();
     }
     
 }

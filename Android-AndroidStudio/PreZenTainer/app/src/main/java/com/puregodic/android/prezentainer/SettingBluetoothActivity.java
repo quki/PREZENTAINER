@@ -1,9 +1,6 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -30,6 +27,9 @@ import com.puregodic.android.prezentainer.adapter.PairedDeviceAdapter;
 import com.puregodic.android.prezentainer.adapter.PairedDeviceData;
 import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class SettingBluetoothActivity extends AppCompatActivity implements BluetoothHelper, SwipeRefreshLayout.OnRefreshListener {
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -52,33 +52,19 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_bluetooth);
-        
+
+        isEnabledAdapter();
+
         returnDeviceNameIntent = new Intent();
         returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
         setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
         listViewFound = (ListView)findViewById(R.id.listViewFound);
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
         
         btnSearch = (Button)findViewById(R.id.btnSearch);
-
-        /*swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorScheme( R.color.color1, R.color.color2, R.color.color3, R.color.color4);
-        
-        *//**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         *//*
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        //mBluetoothAdapter.startDiscovery();
-                                    }
-                                }
-        );*/
 
     }
 
@@ -91,7 +77,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             @Override
             public void onClick(View v) {
 
-                
+
                 Intent i = new Intent(SettingBluetoothActivity.this, CardViewActivity.class);
                 startActivity(i);
                /* mBluetoothAdapter.startDiscovery();
@@ -99,7 +85,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
         });
 
-        isEnabledAdapter();
+
         listPairedDevices();
 
         
@@ -140,6 +126,8 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     @Override
     public void isEnabledAdapter() {
 
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, SettingActivity.REQUEST_ENABLE_BT);
@@ -154,8 +142,10 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             // OK 버튼을 눌렀을때
             if (resultCode == RESULT_OK) {
                 Toast.makeText(SettingBluetoothActivity.this, "블루투스를 켰습니다", Toast.LENGTH_SHORT).show();
+                listPairedDevices();
             } else {
                 Toast.makeText(SettingBluetoothActivity.this, "블루투스를 꼭 켜주세요", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
         

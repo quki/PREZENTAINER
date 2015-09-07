@@ -1,19 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-		<item name="android:navigationBarColor">#FFFFFF</item>
-		<item name="colorAccent">#FF4081</item>
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorControlHighlight">#000000</item>
-        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="Toolbar">
-
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
-    </style>
-
 </resources>

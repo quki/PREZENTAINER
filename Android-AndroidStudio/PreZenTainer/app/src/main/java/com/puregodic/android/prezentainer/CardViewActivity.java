@@ -1,8 +1,6 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.util.Calendar;
-
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +12,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class CardViewActivity extends AppCompatActivity {
     
@@ -36,7 +36,6 @@ public class CardViewActivity extends AppCompatActivity {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.app_name, R.string.app_name);
         mDrawer.setDrawerListener(mToggle);
-        setTitleColor(Color.WHITE);
         setTitle("Android Support");
         
        

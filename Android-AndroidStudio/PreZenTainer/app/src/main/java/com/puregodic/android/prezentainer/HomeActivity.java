@@ -3,21 +3,29 @@ package com.puregodic.android.prezentainer;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.puregodic.android.prezentainer.NavigationAdapter.FragmentDrawer;
 import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.SessionManager;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
+    private FragmentDrawer drawerFragment;
+    private Fragment fragment = null;
 
     private String yourId;
 
@@ -25,24 +33,33 @@ public class HomeActivity extends AppCompatActivity {
     
     private Toolbar mToolbar;
 
+    private boolean isTwo = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        
-        mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setTitleTextColor(Color.WHITE);
-        setTitleColor(Color.WHITE);
 
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        drawerFragment = (FragmentDrawer)getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setDrawerListener(this);
 
         Intent intent = getIntent();
         yourId = intent.getStringExtra("yourId");
 
-        if (yourId != null)
+        if (yourId != null){
+            fragment = new SettingActivity();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();               // set the toolbar title
             setTitle(yourId+" 님");
+        }
+
         else {
             Toast.makeText(this, "다시 로그인 해주세요", Toast.LENGTH_SHORT).show();
             setTitle("계정 오류");
@@ -54,26 +71,6 @@ public class HomeActivity extends AppCompatActivity {
 
         if (!session.isLoggedIn()) {
             logoutUser();
-        }
-
-    }
-
-    // Click Event Handler Call Back
-    public void myOnClick(View v) {
-        switch (v.getId()) {
-            case R.id.homeStartBtn: {
-                Intent i = new Intent(HomeActivity.this, SettingActivity.class);
-                i.putExtra("yourId", yourId);
-                startActivity(i);
-                break;
-            }
-            case R.id.homeLoadBtn: {
-                Intent i = new Intent(HomeActivity.this, LoadActivity.class);
-                i.putExtra("yourId", yourId);
-                startActivity(i);
-                break;
-            }
-
         }
 
     }
@@ -132,4 +129,74 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        displayView(position);
+    }
+
+    private void displayView(int position) {
+
+        String title = getString(R.string.app_name);
+        switch (position) {
+            case 0:
+                fragment = new SettingActivity();
+                title = getString(R.string.title_activity_setting);
+                break;
+            case 1:
+                fragment = new LoadActivity();
+                title = getString(R.string.title_activity_load);
+                break;
+            case 2:
+              //  fragment = new MessagesFragment();
+              //  title = getString(R.string.title_messages);
+                break;
+            default:
+                break;
+        }
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();               // set the toolbar title
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+    // back button 눌러서 종료
+
+    @Override
+    public void onBackPressed() {
+
+        if(!isTwo){
+            Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
+                    .show();
+            MyKillTimer mKillTimer = new MyKillTimer(2000,1);
+            mKillTimer.start();
+
+        }else{
+            //android.os.Process.killProcess(android.os.Process.myPid());
+            finish();
+        }
+
+    }
+
+    public class MyKillTimer extends CountDownTimer {
+
+        public MyKillTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+            isTwo = true;
+        }
+
+        @Override
+        public void onFinish() {
+            isTwo = false;
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.i("Test", "isTwo" + isTwo);
+        }
+
+    }
 }

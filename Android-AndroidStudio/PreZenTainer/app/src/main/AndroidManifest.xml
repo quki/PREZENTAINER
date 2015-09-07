@@ -19,12 +19,15 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".network.AppController"
         android:allowBackup="true"
         android:icon="@drawable/prezentainer"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:name=".network.AppController">
+        android:theme="@style/MyMaterialTheme" >
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name" >
@@ -104,6 +107,10 @@
             android:name=".ResultActivity"
             android:label="@string/title_activity_result"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PairingActivity"
+            android:label="@string/title_activity_pairing" >
         </activity>
     </application>
 
