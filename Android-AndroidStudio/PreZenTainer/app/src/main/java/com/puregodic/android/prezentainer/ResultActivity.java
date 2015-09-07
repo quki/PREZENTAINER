@@ -262,8 +262,10 @@ public class ResultActivity extends AppCompatActivity {
 
         @Override
         public void onDestroy() {
-            audio.stop();
-            finish();
+            if(audio!=null){
+                audio.stop();
+                finish();
+            }
             super.onDestroy();
         }
         

@@ -201,7 +201,10 @@ public class LoadActivity extends Fragment {
                             JSONArray jArray = new JSONArray(response);
                             
                             if(jArray.length()==0){
-                                getFragmentManager().beginTransaction().replace(R.id.container_body, new SettingActivity()).commit();
+                                getFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.container_body, new SettingActivity())
+                                        .commit();
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
                                 Log.e("PARSING", jArray.toString());
