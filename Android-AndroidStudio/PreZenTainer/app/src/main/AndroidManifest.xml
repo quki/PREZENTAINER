@@ -112,6 +112,10 @@
             android:name=".PairingActivity"
             android:label="@string/title_activity_pairing" >
         </activity>
+        <activity
+            android:name=".Mypage"
+            android:label="@string/title_activity_mypage" >
+        </activity>
     </application>
 
 </manifest>

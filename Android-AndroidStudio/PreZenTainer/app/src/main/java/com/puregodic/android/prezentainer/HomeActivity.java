@@ -148,8 +148,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_activity_load);
                 break;
             case 2:
-              //  fragment = new MessagesFragment();
-              //  title = getString(R.string.title_messages);
+                fragment = new Mypage();
+                title = "개발자페이지";
                 break;
             default:
                 break;
