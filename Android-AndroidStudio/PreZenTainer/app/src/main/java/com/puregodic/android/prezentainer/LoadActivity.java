@@ -2,7 +2,6 @@
 package com.puregodic.android.prezentainer;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -102,7 +101,6 @@ public class LoadActivity extends Fragment {
 
                 final String ptTitle = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
                 final String currDate = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
-                Toast.makeText(getActivity(), ptTitle+currDate+yourId, Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(getActivity(),ResultActivity.class)
                         .putExtra("yourId",yourId)
@@ -203,8 +201,6 @@ public class LoadActivity extends Fragment {
                             JSONArray jArray = new JSONArray(response);
                             
                             if(jArray.length()==0){
-                                Fragment fragment = new LoadActivity();
-                                FragmentManager fragmentManager = getSupportFragmentManager();
 
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{

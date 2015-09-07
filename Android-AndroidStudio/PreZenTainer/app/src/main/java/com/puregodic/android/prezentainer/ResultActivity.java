@@ -1,32 +1,6 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import lecho.lib.hellocharts.gesture.ZoomType;
-import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
-import lecho.lib.hellocharts.listener.ViewportChangeListener;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.ValueShape;
-import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.LineChartView;
-import lecho.lib.hellocharts.view.PreviewLineChartView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +32,32 @@ import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.network.AppConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.ViewportChangeListener;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.LineChartView;
+import lecho.lib.hellocharts.view.PreviewLineChartView;
+
 public class ResultActivity extends AppCompatActivity {
 
     private static final String TAG = ResultActivity.class.getSimpleName();
@@ -72,7 +72,6 @@ public class ResultActivity extends AppCompatActivity {
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        
         pptTitle = (TextView)findViewById(R.id.pptTitle);
         mDialogHelper = new DialogHelper(this);
         
@@ -82,10 +81,10 @@ public class ResultActivity extends AppCompatActivity {
         // 녹음 파일 경로
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
-        
         pptTitle.setText(title);
         
         fetchDataByVolley();
+
         
     }
     
@@ -140,120 +139,124 @@ public class ResultActivity extends AppCompatActivity {
             chart.setOnValueTouchListener(new ValueTouchListener());
             textViewTime = (TextView) findViewById(R.id.textViewTime);
             textViewHR = (TextView) findViewById(R.id.textViewHR);
-            
+            buttonPlay = (Button) findViewById(R.id.buttonPlay);
+            buttonStop = (Button) findViewById(R.id.buttonStop);
+            seekbar = (SeekBar) findViewById(R.id.seekBar1);
+
             maxViewport = new Viewport(chart.getMaximumViewport());
             currentViewport = new Viewport(chart.getCurrentViewport());
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
-            
-            audio.setLooping(true);
-            
-            buttonPlay = (Button) findViewById(R.id.buttonPlay);
-            buttonStop = (Button) findViewById(R.id.buttonStop);
-            seekbar = (SeekBar) findViewById(R.id.seekBar1);
 
-            
-            /**
-             * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정
-             */
-            audioSize = audio.getDuration();
-            seekbar.incrementProgressBy(1);
-            seekbar.setMax(audioSize);
-            
-            // 최초에에 chart에 뿌려 줄 data 생성 
-            generateData();
-            
-            // 자동으로 chart가 계산 되는 것 방지
-            chart.setViewportCalculationEnabled(false);
-            
-            
-            /**
-             * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
-             */
-            seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-               @Override
-               public void onStopTrackingTouch(SeekBar seekBar) {
-                  // TODO Auto-generated method stub
-               }
-               
-               @Override
-               public void onStartTrackingTouch(SeekBar seekBar) {
-                  // TODO Auto-generated method stub
-               }
-               
-               @Override
-               public void onProgressChanged(SeekBar seekBar, int progress,
-                     boolean fromUser) {
-                       
+            if(audio != null){
+
+                audio.setLooping(true);
+                /**
+                 * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정
+                 */
+                audioSize = audio.getDuration();
+                seekbar.incrementProgressBy(1);
+                seekbar.setMax(audioSize);
+                // 최초에에 chart에 뿌려 줄 data 생성
+                generateData();
+
+                // 자동으로 chart가 계산 되는 것 방지
+                chart.setViewportCalculationEnabled(false);
+
+
+                /**
+                 * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
+                 */
+                seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress,
+                                                  boolean fromUser) {
+
                    /*
                     *          < currentSecond >
                     * 1. millisecond -> index 변환
-                    * 2. progress/1000 (초) 
+                    * 2. progress/1000 (초)
                     * 3. (progress/1000)-1 (인덱스)
-                    * 
+                    *
                     *           < realIndex >
                     * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
                     * 2. 단, 일의 자리(5단위)에서 내림
-                    * ex)  43 -> 40, 47 -> 45     
-                    *     
+                    * ex)  43 -> 40, 47 -> 45
+                    *
                     * */
 
-                   int currentSecond = ((progress/1000)-1);   
-                   int xValue = 0;
-                   if( currentSecond % 5 == 0 ){
-                       xValue = currentSecond;
-                   }
-                   else{
-                       xValue = currentSecond-(currentSecond % 5);
-                   }
+                        int currentSecond = ((progress/1000)-1);
+                        int xValue = 0;
+                        if( currentSecond % 5 == 0 ){
+                            xValue = currentSecond;
+                        }
+                        else{
+                            xValue = currentSecond-(currentSecond % 5);
+                        }
 
-                   int lastXvalue = (data.getLines().get(0).getValues().size()-1)*5;
+                        int lastXvalue = (data.getLines().get(0).getValues().size()-1)*5;
 
-                   Log.d("mIndex!!", "currentsecond : "+currentSecond);
-                   Log.d("rIndex!!", "xValue : "+xValue);
-                   Log.d("LastIndex!!","LastIndex : "+lastXvalue);
-                   float line0ValueY = 0;
-                   
+                        Log.d("mIndex!!", "currentsecond : "+currentSecond);
+                        Log.d("rIndex!!", "xValue : "+xValue);
+                        Log.d("LastIndex!!","LastIndex : "+lastXvalue);
+                        float line0ValueY = 0;
+
                    /*
                     * progress로 ArrayList의 index를 참조할 때,
                     * IndexOutOfBoudsException 방지를 위해
-                    * 
+                    *
                     * */
-                   if(xValue <= lastXvalue){
-                       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
-                       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
-                   }else{
-                       xValue = 0;
-                       line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
-                       data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
-                   }
-                   chart.setLineChartData(data);
+                        if(xValue <= lastXvalue){
+                            line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
+                            data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+                        }else{
+                            xValue = 0;
+                            line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
+                            data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
+                        }
+                        chart.setLineChartData(data);
 
-                   // user가 클릭할 경우 해당 position으로 progressbar이동
-                   if (fromUser)
-                       audio.seekTo(progress);
-               }
-            });
-            
-            
-            buttonPlay.setOnClickListener(new View.OnClickListener() {
-                
-                @Override
-                public void onClick(View v) {
-                    buttonPlay();
-                }
-            });
-            
-            buttonStop.setOnClickListener(new View.OnClickListener() {
-                
-                @Override
-                public void onClick(View v) {
-                    buttonStop();
-                }
-            });
-            
+                        // user가 클릭할 경우 해당 position으로 progressbar이동
+                        if (fromUser)
+                            audio.seekTo(progress);
+                    }
+                });
+
+                buttonPlay.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        buttonPlay();
+                    }
+                });
+
+                buttonStop.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        buttonStop();
+                    }
+                });
+
+
+            }else{
+                // 사용자가 녹음파일을 폰에서 삭제한 경우 강제 종료
+                Toast.makeText(ResultActivity.this, "녹음파일이 없네요", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
             return rootView;
         }
 
@@ -615,7 +618,6 @@ public class ResultActivity extends AppCompatActivity {
     }
     
     private void fetchDataByVolley(){
-        
 
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
