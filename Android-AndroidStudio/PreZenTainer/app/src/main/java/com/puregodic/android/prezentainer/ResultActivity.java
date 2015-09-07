@@ -472,7 +472,6 @@ public class ResultActivity extends AppCompatActivity {
 
                       if(i == 1 && j == 0) {
                           values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
-                          Log.d("!!!!!!!!!!!", ""+lines.get(0).getValues().get(0).getY());
                           break;
                       } else {
                           values.add(new PointValue(j*5, heartRateList.get(j))); //adding point to the first line
