@@ -27,7 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.HomeActivity;
 import com.puregodic.android.prezentainer.R;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.network.AppConfig;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mDialogHelper.showPdialog("회원정보 등록 중 ...", false);
 
-        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_REGISTER,
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_REGISTER,
                 new Response.Listener<String>() {
 
                     @Override

@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.puregodic.android.prezentainer.NavigationAdapter.FragmentDrawer;
+import com.puregodic.android.prezentainer.navigationadapter.FragmentDrawer;
 import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.SessionManager;
 

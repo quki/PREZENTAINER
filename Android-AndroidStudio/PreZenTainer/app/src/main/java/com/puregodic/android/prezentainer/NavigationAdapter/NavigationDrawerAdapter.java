@@ -1,4 +1,4 @@
-package com.puregodic.android.prezentainer.NavigationAdapter;
+package com.puregodic.android.prezentainer.navigationadapter;
 
 
 import android.content.Context;
@@ -13,7 +13,7 @@ import com.puregodic.android.prezentainer.R;
 import java.util.Collections;
 import java.util.List;
 
-import com.puregodic.android.prezentainer.NavigationModel.NavDrawerItem;
+import com.puregodic.android.prezentainer.navigationmodel.NavDrawerItem;
 
 
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.MyViewHolder> {

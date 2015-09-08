@@ -27,7 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.HomeActivity;
 import com.puregodic.android.prezentainer.R;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.network.AppConfig;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
 public class LoginActivity extends AppCompatActivity {
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         
         
         StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_REGISTER, new Response.Listener<String>() {
+                NetworkConfig.URL_REGISTER, new Response.Listener<String>() {
  
                     @Override
                     public void onResponse(String response) {

@@ -1,4 +1,4 @@
-package com.puregodic.android.prezentainer.connecthelper;
+package com.puregodic.android.prezentainer.bluetooth;
 
 public interface ConnectionActionPc {
     

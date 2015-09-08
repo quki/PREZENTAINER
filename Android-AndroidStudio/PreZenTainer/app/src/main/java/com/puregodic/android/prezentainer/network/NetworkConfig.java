@@ -1,6 +1,6 @@
 package com.puregodic.android.prezentainer.network;
 
-public class AppConfig {
+public class NetworkConfig {
     // Server user login url
     public static String URL_LOGIN = "http://54.64.87.31/logregi/index.php";
 

@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
+
 import java.util.ArrayList;
 
 /**
@@ -46,7 +48,7 @@ public class PairingFragment extends Fragment {
         if(name==null){
             name = "이름없음";
         }
-        int type = device.getType();
+        int type = device.getBluetoothClass().getMajorDeviceClass();
         Toast.makeText(getActivity(), "name : " + name + "\ntype : " + type, Toast.LENGTH_SHORT).show();
         deviceCount++;
 
@@ -173,21 +175,21 @@ public class PairingFragment extends Fragment {
 
     private void setIconImage(ImageView i , int type){
 
-
-
         switch(type){
-            case 1 : {
-                break;
-            }
-            case 2 : {
+            case BluetoothConfig.NOTEBOOK : {
                 i.setImageResource(R.drawable.ic_notebook);
                 break;
             }
-            case 3 : {
+            case BluetoothConfig.PHONE:  {
+                i.setImageResource(R.drawable.ic_paired_default_phone);
+                break;
+            }
+            case BluetoothConfig.WATCH : {
                 i.setImageResource(R.drawable.ic_watch);
                 break;
             }
-            case 4 : {
+            case BluetoothConfig.HEADPHONE : {
+                i.setImageResource(R.drawable.ic_launcher);
                 break;
             }
 

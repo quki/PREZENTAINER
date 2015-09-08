@@ -29,7 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.network.AppConfig;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
 import org.json.JSONArray;
@@ -622,7 +622,7 @@ public class ResultActivity extends AppCompatActivity {
 
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
-        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH_GRAPH,
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_FETCH_GRAPH,
                 new Response.Listener<String>() {
 
                     @Override

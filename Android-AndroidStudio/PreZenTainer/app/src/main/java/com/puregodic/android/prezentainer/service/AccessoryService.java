@@ -18,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
-import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
-import com.puregodic.android.prezentainer.network.AppConfig;
+import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
@@ -171,7 +171,7 @@ public class AccessoryService extends SAAgent {
 					
                     mFileAction.onFileActionTransferComplete();
                     
-					StringRequest str = new StringRequest(Method.POST,AppConfig.URL_INSERT,
+					StringRequest str = new StringRequest(Method.POST, NetworkConfig.URL_INSERT,
                             new Response.Listener<String>() {
 
                         @Override
