@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.puregodic.android.prezentainer.SettingActivity">
+    tools:context="com.puregodic.android.prezentainer.SettingFragment">
 
     <EditText
         android:id="@+id/ptTitleEditText"
@@ -71,10 +71,6 @@
             android:layout_height="64dp"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:drawableLeft="@drawable/ic_btn_watch"
-            android:drawablePadding="30dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="60dp"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:cpb_cornerRadius="48dp"
@@ -82,9 +78,7 @@
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
             app:cpb_selectorIdle="@drawable/button_circular_idle"
-            app:cpb_textComplete="연결완료"
-            app:cpb_textError="Error"
-            app:cpb_textIdle="기어와 연결하기" />
+             />
 
         <com.dd.CircularProgressButton
             android:id="@+id/connectToPcBtn"
@@ -92,21 +86,14 @@
             android:layout_height="64dp"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:drawableLeft="@drawable/ic_btn_laptop"
-            android:drawablePadding="30dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="60dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:cpb_cornerRadius="48dp"
             app:cpb_paddingProgress="10dp"
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
             app:cpb_selectorIdle="@drawable/button_circular_idle"
-            app:cpb_textComplete="연결완료"
-            app:cpb_textError="Error"
-            app:cpb_textIdle="PC와 연결하기" />
-
+            />
         <Button
             android:id="@+id/startBtn"
             android:layout_width="320dp"
@@ -123,6 +110,20 @@
         android:id="@+id/txtsendJson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/errorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#f50057"
+            android:textSize="15sp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

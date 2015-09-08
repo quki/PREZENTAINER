@@ -80,20 +80,12 @@
             android:value="wgt" />
 
         <activity
-            android:name=".SettingActivity"
-            android:label="@string/title_activity_setting" >
-        </activity>
-        <activity
             android:name=".DetailSettingActivity"
             android:label="@string/title_activity_detail_setting" >
         </activity>
         <activity
             android:name=".SettingBluetoothActivity"
             android:label="@string/title_activity_setting_bluetooth" >
-        </activity>
-        <activity
-            android:name=".LoadActivity"
-            android:label="@string/title_activity_load" >
         </activity>
         <activity
             android:name=".login.RegisterActivity"
@@ -111,10 +103,6 @@
         <activity
             android:name=".PairingActivity"
             android:label="@string/title_activity_pairing" >
-        </activity>
-        <activity
-            android:name=".Mypage"
-            android:label="@string/title_activity_mypage" >
         </activity>
     </application>
 

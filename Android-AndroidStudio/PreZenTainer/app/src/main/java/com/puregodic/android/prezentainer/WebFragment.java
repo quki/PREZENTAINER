@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-public class Mypage extends Fragment {
+public class WebFragment extends Fragment {
 
     @Override
     public void onCreate (Bundle savedInstanceState){
@@ -26,6 +26,4 @@ public class Mypage extends Fragment {
         webView.loadUrl("http://www.google.com");
         return rootView;
     }
-
-
 }

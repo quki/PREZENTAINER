@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.puregodic.android.prezentainer.LoadActivity">
+    tools:context="com.puregodic.android.prezentainer.LoadFragment">
 
     <!-- A RecyclerView with some commonly used attributes -->
 <android.support.v7.widget.RecyclerView

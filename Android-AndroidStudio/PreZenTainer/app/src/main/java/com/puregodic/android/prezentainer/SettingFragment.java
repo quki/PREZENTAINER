@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -40,7 +43,12 @@ import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 
 import java.util.ArrayList;
 
-public class SettingActivity extends Fragment implements BluetoothHelper{
+public class SettingFragment extends Fragment implements BluetoothHelper{
+
+    private static final int BUTTON_STATE_ERROR = -1;
+    private static final int BUTTON_STATE_COMPLETE = 100;
+    private static final int BUTTON_STATE_PROGRESS = 50;
+    private static final int BUTTON_STATE_IDLE = 0;
 
     private AccessoryService mAccessoryService = null;
     private Boolean isBound = false;
@@ -59,7 +67,7 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
     private CircularProgressButton connectToGearBtn;
     private CircularProgressButton connectToPcBtn;
-
+    private TextView errorMessage;
     // private final IncomingHandler mHandler = new IncomingHandler(this);
     private String mDeviceName ;
 
@@ -72,7 +80,7 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
     private String yourId;
 
-    public SettingActivity() {
+    public SettingFragment() {
         // Required empty public constructor
     }
     @Override
@@ -102,7 +110,10 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
         connectToPcBtn = (CircularProgressButton)rootView.findViewById(R.id.connectToPcBtn);
         connectToGearBtn.setIndeterminateProgressMode(true); // progress mode On !
         connectToPcBtn.setIndeterminateProgressMode(true); // progress mode On !
+        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_IDLE);
+        setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        errorMessage = (TextView) rootView.findViewById(R.id.errorMessage);
 
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
         rootView.setOnTouchListener(new View.OnTouchListener() {
@@ -189,23 +200,16 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
         connectToGearBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                /*
-                *  progress = 0 : Default상태
-                *  progress = -1 : Error상태
-                *  progress = 50 : 진행 중인 상태
-                *  progress = 100 : 완료
-                *
-                * */
 
-                if (connectToGearBtn.getProgress() == 0) {
-                    connectToGearBtn.setProgress(50);
+                if (connectToGearBtn.getProgress() == BUTTON_STATE_IDLE) {
+                    setCircularProgressBtn(connectToGearBtn,BUTTON_STATE_PROGRESS);
                     startConnection();
-                } else if (connectToGearBtn.getProgress() == 100) {
-                    connectToGearBtn.setProgress(0);
-                }else if(connectToGearBtn.getProgress() == -1){
-                    connectToGearBtn.setProgress(0);
+                } else if (connectToGearBtn.getProgress() == BUTTON_STATE_COMPLETE) {
+                    setCircularProgressBtn(connectToGearBtn,BUTTON_STATE_IDLE);
+                }else if(connectToGearBtn.getProgress() == BUTTON_STATE_ERROR){
+                    setCircularProgressBtn(connectToGearBtn,BUTTON_STATE_IDLE);
                 } else {
-                    connectToGearBtn.setProgress(0);
+                    setCircularProgressBtn(connectToGearBtn,BUTTON_STATE_IDLE);
                 }
             }
 
@@ -213,18 +217,18 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
         connectToPcBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if (connectToPcBtn.getProgress() == 0) {
+                if (connectToPcBtn.getProgress() == BUTTON_STATE_IDLE) {
 
                     // device name 요청
                     Intent requestDeviceNameIntent = new Intent(getActivity(), SettingBluetoothActivity.class);
                     startActivityForResult(requestDeviceNameIntent, REQUEST_DEVICENAME);
-                   // Toast.makeText(getActivity(), Integer.toString(REQUEST_DEVICENAME), Toast.LENGTH_SHORT).show();
-                } else if (connectToPcBtn.getProgress() == 100) {
-                    connectToPcBtn.setProgress(0);
-                }else if(connectToPcBtn.getProgress() == -1){
-                    connectToPcBtn.setProgress(0);
+
+                } else if (connectToPcBtn.getProgress() == BUTTON_STATE_COMPLETE) {
+                    setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
+                }else if(connectToPcBtn.getProgress() == BUTTON_STATE_ERROR){
+                    setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
                 } else {
-                    connectToPcBtn.setProgress(0);
+                    setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_IDLE);
                 }
             }
 
@@ -388,7 +392,7 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        connectToGearBtn.setProgress(50);
+                        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_PROGRESS);
                         setEnabledStartBtn();
                     }
                 });
@@ -405,8 +409,8 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        connectToGearBtn.setProgress(-1);
-                        connectToGearBtn.setErrorText("기어와의 블루투스 연결을 \n확인하세요");
+                        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
+                        errorMessage.append("기어와의 블루투스 연결을 확인하세요");
                         setEnabledStartBtn();
 
                     }
@@ -424,7 +428,7 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        connectToGearBtn.setProgress(50);
+                        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_PROGRESS);
                         setEnabledStartBtn();
                     }
                 });
@@ -437,7 +441,8 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                 getActivity().runOnUiThread( new Runnable() {
                     public void run() {
-                        connectToGearBtn.setProgress(100);
+                        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_COMPLETE);
+                        errorMessage.setText(null);
                         setEnabledStartBtn();
                     }
                 });
@@ -453,8 +458,8 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        connectToGearBtn.setProgress(-1);
-                        connectToGearBtn.setErrorText("기어 측 어플이\n실행되었는지 확인하세요");
+                        setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
+                        errorMessage.append("기어 측 어플이 실행되었는지 확인하세요");
                         setEnabledStartBtn();
                     }
                 });
@@ -475,7 +480,7 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        connectToPcBtn.setProgress(50);
+                        setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_PROGRESS);
                         setEnabledStartBtn();
 
                     }
@@ -491,9 +496,8 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        //hidepDialog();
-                        //connectToPcBtn.setText("PC와 연결되었습니다");
-                        connectToPcBtn.setProgress(100);
+                        setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_COMPLETE);
+                        errorMessage.setText(null);
                         setEnabledStartBtn();
                     }
                 });
@@ -509,10 +513,8 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
 
                     @Override
                     public void run() {
-                        //hidepDialog();
-                        //connectToPcBtn.setText("PC 측 프로그램이 실행되었는지 확인하세요");
-                        connectToPcBtn.setProgress(-1);
-                        connectToPcBtn.setErrorText("PC 측 어플이\n실행되었는지 확인하세요");
+                        setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_ERROR);
+                        errorMessage.append("PC 측 프로그램이 실행되었는지 확인하세요");
                         setEnabledStartBtn();
                     }
                 });
@@ -521,6 +523,76 @@ public class SettingActivity extends Fragment implements BluetoothHelper{
         };
     }
 
+private void setCircularProgressBtn(final CircularProgressButton circularBtn, final int id){
+
+
+    Handler mHandler = new Handler();
+    circularBtn.setProgress(id);
+
+    int height = getImageResource(circularBtn).getIntrinsicHeight();
+    int width = getImageResource(circularBtn).getIntrinsicWidth();
+    getImageResource(circularBtn).setBounds(0, 0, width, height);
+    int padding_dp = 60;  // 6 dps
+    final float scale = getResources().getDisplayMetrics().density;
+    final int padding_px = (int) (padding_dp * scale + 0.5f);
+
+
+    mHandler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+
+            // (start,top,end,bottom)
+            circularBtn.setPaddingRelative(padding_px, 0, padding_px, 0);
+            circularBtn.setCompoundDrawablesWithIntrinsicBounds(getImageResource(circularBtn), null, null, null);
+
+            switch (id){
+
+                case BUTTON_STATE_IDLE:{
+                    if(circularBtn.equals(connectToGearBtn)){
+                        circularBtn.setText("기어와 연결하기");
+                    }else if(circularBtn.equals(connectToPcBtn)){
+                        circularBtn.setText("PC와 연결하기");
+                    }
+                    break;
+                }
+                case BUTTON_STATE_ERROR:{
+                    if(circularBtn.equals(connectToGearBtn)){
+                        circularBtn.setText("연결실패");
+                    }else if(circularBtn.equals(connectToPcBtn)){
+                        circularBtn.setText("연결실패");
+                    }
+                    break;
+                }
+                case BUTTON_STATE_PROGRESS :{
+                    circularBtn.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+                    break;
+                }
+                case BUTTON_STATE_COMPLETE :{
+                    if(circularBtn.equals(connectToGearBtn)){
+                        circularBtn.setText("연결완료");
+                    }else if(circularBtn.equals(connectToPcBtn)){
+                        circularBtn.setText("연결완료");
+                    }
+                    break;
+                }
+
+            }
+
+        }
+    }, 500);
+}
+
+    private Drawable getImageResource(CircularProgressButton c) {
+
+        Drawable icon = null;
+
+        if (c == connectToGearBtn) {
+            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_btn_watch);
+        } else if (c == connectToPcBtn) {
+            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_btn_laptop);
+        }
+        return icon;
+    }
 
     // 시작 버튼 활성화
     private void setEnabledStartBtn(){

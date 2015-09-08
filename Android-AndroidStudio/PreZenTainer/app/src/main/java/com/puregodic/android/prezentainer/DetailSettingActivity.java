@@ -1,8 +1,6 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.util.ArrayList;
-
 import android.app.ActionBar.LayoutParams;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 
 
@@ -127,7 +127,6 @@ public class DetailSettingActivity extends AppCompatActivity {
 
                 }
 
-                //Intent intent = new Intent(DetailSettingActivity.this, SettingActivity.class);
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra("timeInterval", timeInterval);
                 setResult(REQUEST_DETAIL, intent);
