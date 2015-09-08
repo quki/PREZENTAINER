@@ -63,6 +63,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/anim_layout_controller"
         android:orientation="vertical">
 
         <com.dd.CircularProgressButton
@@ -77,8 +78,7 @@
             app:cpb_paddingProgress="10dp"
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle"
-             />
+            app:cpb_selectorIdle="@drawable/button_circular_idle" />
 
         <com.dd.CircularProgressButton
             android:id="@+id/connectToPcBtn"
@@ -92,8 +92,8 @@
             app:cpb_paddingProgress="10dp"
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle"
-            />
+            app:cpb_selectorIdle="@drawable/button_circular_idle" />
+
         <Button
             android:id="@+id/startBtn"
             android:layout_width="320dp"
@@ -115,14 +115,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        >
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/errorMessage"
+            android:id="@+id/errorMessageGear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#f50057"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/errorMessagePc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#f50057"
+            android:textSize="15sp" />
+
     </LinearLayout>
 
     <LinearLayout
