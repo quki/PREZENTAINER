@@ -6,8 +6,6 @@
 	<solid android:color="@color/bg_edittext_login" >
 	</solid>
 
-	<!-- view border color and width -->
-
 	<!-- Here is the corner radius -->
 	<corners android:radius="48dp" >
 	</corners>

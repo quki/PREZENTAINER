@@ -3,29 +3,13 @@
 
     <!-- Define the background properties like color etc -->
     <item android:id="@android:id/background">
-        <shape>
-            <gradient
-                android:startColor="#000001"
-                android:centerColor="#0b131e"
-                android:centerY="1.0"
-                android:endColor="#0d1522"
-                android:angle="270"
-                />
-        </shape>
+        <color android:color="@color/bg_edittext_login"/>
     </item>
 
     <!-- Define the progress properties like start color, end color etc -->
     <item android:id="@android:id/progress">
         <clip>
-            <shape>
-                <gradient
-                    android:startColor="#007A00"
-                    android:centerColor="#007A00"
-                    android:centerY="1.0"
-                    android:endColor="#06101d"
-                    android:angle="270"
-                    />
-            </shape>
+                <color android:color="@color/colorAccent"/>
         </clip>
     </item>
 </layer-list>

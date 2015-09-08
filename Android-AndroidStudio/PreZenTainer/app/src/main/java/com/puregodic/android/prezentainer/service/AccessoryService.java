@@ -1,10 +1,5 @@
 package com.puregodic.android.prezentainer.service;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -19,8 +14,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
 import com.samsung.android.sdk.accessory.SAAgent;
@@ -28,6 +23,11 @@ import com.samsung.android.sdk.accessory.SAPeerAgent;
 import com.samsung.android.sdk.accessory.SASocket;
 import com.samsung.android.sdk.accessoryfiletransfer.SAFileTransfer;
 import com.samsung.android.sdk.accessoryfiletransfer.SAFileTransfer.EventListener;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccessoryService extends SAAgent {
 
@@ -247,8 +247,7 @@ public class AccessoryService extends SAAgent {
 
 				mConnectionsMap.put(mConnectionHandler.mConnectionId, mConnectionHandler);
 				Log.d(TAG, "Connection  Success");
-				Toast.makeText(mContext, "Connection 완료 !!", Toast.LENGTH_SHORT).show();
-				
+
 			} else {
 				Log.e(TAG, "SASocket object is null");
 			}

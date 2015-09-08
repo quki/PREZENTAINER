@@ -12,7 +12,7 @@
 	<ProgressBar
 		android:id="@+id/mProgressBar"
 		style="?android:attr/progressBarStyleHorizontal"
-		android:background="@drawable/progressbar_filetransfer"
+		android:progressDrawable="@drawable/progressbar_filetransfer"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
@@ -28,6 +28,7 @@
 	<Button android:id="@+id/showBtn"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:textColor="@drawable/button_text"
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true"
 		android:background="@drawable/button_start"

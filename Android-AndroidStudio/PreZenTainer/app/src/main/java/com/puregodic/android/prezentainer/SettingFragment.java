@@ -172,8 +172,9 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                                         mDeviceName = null;
 
                                     }else{
-
-                                        getActivity().finish();
+                                        isPcConnected=false;
+                                        isGearConnected=false;
+                                        setEnabledStartBtn();
                                         Toast.makeText(getActivity(), "설정을 다시 진행해주세요",Toast.LENGTH_SHORT).show();
                                     }
 
