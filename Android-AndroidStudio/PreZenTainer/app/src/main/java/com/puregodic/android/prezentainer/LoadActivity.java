@@ -31,7 +31,7 @@ import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
-import com.puregodic.android.prezentainer.network.AppConfig;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
 
 import org.json.JSONArray;
@@ -189,7 +189,7 @@ public class LoadActivity extends Fragment {
         
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
-        StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FETCH,
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_FETCH,
                 new Response.Listener<String>() {
 
                     @Override
@@ -205,6 +205,7 @@ public class LoadActivity extends Fragment {
                                         .beginTransaction()
                                         .replace(R.id.container_body, new SettingActivity())
                                         .commit();
+                                getActivity().setTitle("시작하기");
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
                                 Log.e("PARSING", jArray.toString());

@@ -7,6 +7,7 @@
 
     <!--main-->
     <color name="mainblue">#2196F3</color>
+    <color name="mainblue_dark">#1976D2</color>
     <color name="white">#ffffff</color>
     <color name="black">#222222</color>
     <color name="shadow">#32000000</color>
@@ -42,9 +43,6 @@
     <!--home Ui-->
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#C51162</color>
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#FF80AB</color>
 
 

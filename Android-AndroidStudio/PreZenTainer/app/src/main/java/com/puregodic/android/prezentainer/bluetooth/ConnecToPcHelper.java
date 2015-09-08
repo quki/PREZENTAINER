@@ -1,5 +1,5 @@
 
-package com.puregodic.android.prezentainer.connecthelper;
+package com.puregodic.android.prezentainer.bluetooth;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

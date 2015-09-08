@@ -1,4 +1,4 @@
-package com.puregodic.android.prezentainer.NavigationModel;
+package com.puregodic.android.prezentainer.navigationmodel;
 
 /**
  * Created by SAMSUNG on 2015-09-04.

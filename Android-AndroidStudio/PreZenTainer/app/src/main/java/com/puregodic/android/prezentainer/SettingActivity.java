@@ -32,9 +32,9 @@ import android.widget.Toast;
 import com.dd.CircularProgressButton;
 import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
-import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
-import com.puregodic.android.prezentainer.connecthelper.ConnecToPcHelper;
-import com.puregodic.android.prezentainer.connecthelper.ConnectionActionPc;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
+import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
+import com.puregodic.android.prezentainer.bluetooth.ConnectionActionPc;
 import com.puregodic.android.prezentainer.service.AccessoryService;
 import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 

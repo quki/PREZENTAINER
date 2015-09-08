@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.puregodic.android.prezentainer.NavigationAdapter.FragmentDrawer;
+import com.puregodic.android.prezentainer.navigationadapter.FragmentDrawer;
 import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.SessionManager;
 
@@ -159,7 +159,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();               // set the toolbar title
-            getSupportActionBar().setTitle(title);
+            setTitle(title);
         }
     }
 

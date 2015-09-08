@@ -4,12 +4,9 @@ package com.puregodic.android.prezentainer;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,12 +21,12 @@ import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.adapter.PairedDeviceAdapter;
 import com.puregodic.android.prezentainer.adapter.PairedDeviceData;
-import com.puregodic.android.prezentainer.connecthelper.BluetoothHelper;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-public class SettingBluetoothActivity extends AppCompatActivity implements BluetoothHelper, SwipeRefreshLayout.OnRefreshListener {
+public class SettingBluetoothActivity extends AppCompatActivity implements BluetoothHelper {
 
     private BluetoothAdapter mBluetoothAdapter;
 
@@ -39,7 +35,6 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     private ListView listViewPaired,listViewFound;
     
     private Button btnSearch;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     private String mDeviceName;
 
@@ -62,8 +57,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
         listViewFound = (ListView)findViewById(R.id.listViewFound);
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
-        
+
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
     }
@@ -80,46 +74,11 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
                 Intent i = new Intent(SettingBluetoothActivity.this, CardViewActivity.class);
                 startActivity(i);
-               /* mBluetoothAdapter.startDiscovery();
-                btnSearch.setEnabled(false);*/
             }
         });
 
-
         listPairedDevices();
 
-        
-
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                    
-                    // 새로운 기기를 찾았을 때...
-                    BluetoothDevice devicesFound = intent
-                            .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    listFoundDevices(devicesFound);
-
-                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                    
-                    //swipeRefreshLayout.setRefreshing(false);
-                   // btnSearch.setEnabled(true);
-                    foundDeviceArrayList.clear();
-                }
-            }
-        };
-        
-        // IntentFilter 이벤트를 모니터링
-        // 새로운기기를 찾았을 때, 탐색을 끝냈을 때, 상태 변화 감지
-        IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        IntentFilter deviveDiscoveryFinishedFilter = new IntentFilter(
-                BluetoothAdapter.ACTION_DISCOVERY_FINISHED); // 탐색을 끝냈을때
-        // 리시버와 intentfilter를 등록한다. 이는 해당 이벤트를 BroadcastReceiver로 통보하도록 요구!
-        registerReceiver(mBroadcastReceiver, deviceFoundFilter);
-        registerReceiver(mBroadcastReceiver, deviveDiscoveryFinishedFilter);
-        
         super.onPostCreate(savedInstanceState);
     }
 
@@ -151,12 +110,6 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         
         super.onActivityResult(requestCode, resultCode, intent);
     }
-    // SwipeRefresh
-    @Override
-    public void onRefresh() {
-       // mBluetoothAdapter.startDiscovery();        
-    }
-
     // List Devices paired
     private void listPairedDevices() {
         
@@ -214,34 +167,8 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
 
         });
-       // swipeRefreshLayout.setRefreshing(false);
     }
 
-    // List Devices found
-    private void listFoundDevices(BluetoothDevice device) {
-        
-       // swipeRefreshLayout.setRefreshing(true);
-        
-        foundDeviceArrayList.add(device.getName().toString());
-        
-        ArrayAdapter<String> mAdpat = new ArrayAdapter<String>(this, R.layout.list_items_found,foundDeviceArrayList);
-        
-        listViewFound.setAdapter(mAdpat);
-        listViewFound.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-               // String mmfoundDeviceName = (String)parent.getItemAtPosition(position);
-                //Toast.makeText(getApplicationContext(), mmfoundDeviceName, Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
-
-    
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

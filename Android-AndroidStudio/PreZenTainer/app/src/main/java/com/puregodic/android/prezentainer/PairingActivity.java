@@ -89,7 +89,7 @@ public class PairingActivity extends AppCompatActivity {
                     checkedTextView.setChecked(false);
                     if (mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
 
-                        Toast.makeText(PairingActivity.this, "끄고 싶은데", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PairingActivity.this, "/'예\' 버튼을 누르면 내 기기 검색 허용을 차단합니다", Toast.LENGTH_SHORT).show();
                         Intent cancelDiscoverableIntent = new
                                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                         cancelDiscoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1);
@@ -104,7 +104,7 @@ public class PairingActivity extends AppCompatActivity {
                     checkedTextView.setChecked(true);
 
                     if (mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_NONE) {
-                        Toast.makeText(PairingActivity.this, "내 디바이스를 패어링된놈이고 나발이고 검색불가 !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PairingActivity.this, "내 디바이스를 패어링된 기기 역시 검색불가", Toast.LENGTH_SHORT).show();
 
                         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                         startActivityForResult(discoverableIntent, REQUEST_DISCOVERABLE);
@@ -165,12 +165,7 @@ public class PairingActivity extends AppCompatActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
 
-        if (mBluetoothAdapter.isEnabled()) {
-
-            Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어있습니다.",
-                    Toast.LENGTH_SHORT).show();
-
-        } else {
+        if (!mBluetoothAdapter.isEnabled()) {
 
             Toast.makeText(getApplicationContext(), "블루투스를 켜주세요.",
                     Toast.LENGTH_SHORT).show();
@@ -210,7 +205,6 @@ public class PairingActivity extends AppCompatActivity {
                     //broadcast intent 에는 현재 스캔모드와 이전 스캔 모드가 엑스트라로 포함된다.
                     int preScanMode = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_SCAN_MODE, -1);
                     int scanMode = intent.getIntExtra(BluetoothAdapter.EXTRA_SCAN_MODE, -1);
-                    Toast.makeText(PairingActivity.this, "스캔모드 체인지/// 이전모드 : " + preScanMode + "\n///현재모드 : " + scanMode, Toast.LENGTH_LONG).show();
                 } else if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)){
 
 
@@ -218,7 +212,7 @@ public class PairingActivity extends AppCompatActivity {
                     final int prevState	= intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
 
                     if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
-                        Toast.makeText(PairingActivity.this, "연결완료", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PairingActivity.this, "연결 완료", Toast.LENGTH_SHORT).show();
                         finish();
 
                     } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED){
@@ -258,7 +252,7 @@ public class PairingActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(PairingActivity.this, "블루투스를 켰습니다\n작업을 시작하세요", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "블루투스를 반드시 켜야만 합니다.",
+                Toast.makeText(this, "블루투스를 반드시 켜야만 해요.",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -294,7 +288,6 @@ public class PairingActivity extends AppCompatActivity {
         for(BluetoothDevice pariedDevice : pairedDevices){
 
             if(pariedDevice.equals(deviceFound)){
-                Toast.makeText(PairingActivity.this,"이미 패어링 되어있음", Toast.LENGTH_SHORT).show();
                 isPaired = true;
             }
         }

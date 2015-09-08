@@ -1,7 +1,5 @@
 package com.puregodic.android.prezentainer.adapter;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.puregodic.android.prezentainer.R;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
+
+import java.util.ArrayList;
 
 
 public class PairedDeviceAdapter extends BaseAdapter{
@@ -19,10 +20,7 @@ public class PairedDeviceAdapter extends BaseAdapter{
     private LayoutInflater inflater;
     private ArrayList<PairedDeviceData> pairedDevicesList ;
     private Activity activity;
-    private final int NOTEBOOK = 256;
-    private final int PHONE = 512;
-    private final int WATCH = 1792;
-    private final int HEADPHONE = 1024;
+
     
     public PairedDeviceAdapter(Activity activity, ArrayList<PairedDeviceData> pairedDevicesList){
         this.activity = activity;
@@ -62,16 +60,16 @@ public class PairedDeviceAdapter extends BaseAdapter{
         textViewPairedAdress.setText(String.valueOf(pairedDevicesList.get(position).type));
         
         switch (pairedDevicesList.get(position).type) {
-            case NOTEBOOK:
+            case BluetoothConfig.NOTEBOOK:
                 image.setImageResource(R.drawable.ic_notebook);
                 break;
-            case WATCH:
+            case BluetoothConfig.WATCH:
                 image.setImageResource(R.drawable.ic_watch);
                 break;
-            case PHONE:
+            case BluetoothConfig.PHONE:
                 image.setImageResource(R.drawable.ic_phone);
                 break;
-            case HEADPHONE:
+            case BluetoothConfig.HEADPHONE:
                 image.setImageResource(R.drawable.ic_launcher);
                 break;
         }
