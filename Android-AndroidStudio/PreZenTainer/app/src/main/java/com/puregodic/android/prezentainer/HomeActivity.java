@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         yourId = intent.getStringExtra("yourId");
 
         if (yourId != null){
-            fragment = new SettingActivity();
+            fragment = new SettingFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
@@ -140,15 +140,15 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = new SettingActivity();
+                fragment = new SettingFragment();
                 title = getString(R.string.title_activity_setting);
                 break;
             case 1:
-                fragment = new LoadActivity();
+                fragment = new LoadFragment();
                 title = getString(R.string.title_activity_load);
                 break;
             case 2:
-                fragment = new Mypage();
+                fragment = new WebFragment();
                 title = "개발자페이지";
                 break;
             default:

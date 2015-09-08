@@ -89,7 +89,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, SettingActivity.REQUEST_ENABLE_BT);
+            startActivityForResult(enableBtIntent, SettingFragment.REQUEST_ENABLE_BT);
         }
     }
 

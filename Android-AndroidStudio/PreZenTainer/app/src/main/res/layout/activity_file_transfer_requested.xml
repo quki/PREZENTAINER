@@ -11,7 +11,8 @@
 	tools:context="com.puregodic.android.prezentainer.FileTransferRequestedActivity">
 	<ProgressBar
 		android:id="@+id/mProgressBar"
-		style="@android:style/Widget.ProgressBar.Horizontal"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:background="@drawable/progressbar_filetransfer"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
