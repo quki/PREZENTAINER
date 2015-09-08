@@ -362,6 +362,33 @@ public class ResultActivity extends AppCompatActivity {
               }
               
           }
+        // 최고 심박수의 평균 값 구하기
+        public String HighHeartRateValue(ArrayList<Float> heartRateList) {
+            float  HighHeartRateValue= 0;
+            String result = null;
+            HighHeartRateValue=heartRateList.get(0);
+            for (int i = 1; i < heartRateList.size(); i++) {
+                if(HighHeartRateValue < heartRateList.get(i))
+                {
+                    HighHeartRateValue=heartRateList.get(i);
+                }
+            }
+            result = Integer.toString((int)(HighHeartRateValue));
+            return result;
+        }
+
+        // 최저 심박수의 평균 값 구하기
+        public String LowHeartRateValue(ArrayList<Float> heartRateList) {
+            float  LowHeartRateValue= 0;
+            String result = null;
+            for (int i = 0; i < heartRateList.size(); i++) {
+                LowHeartRateValue += heartRateList.get(i);
+            }
+            meanHeartRate = Integer.toString((int)((HighHeartRateValue / heartRateList.size())));
+            return meanHeartRate;
+        }
+
+
           
           // 총 심박수의 평균 값 구하기
           public String meanHeartRateValue(ArrayList<Float> heartRateList) {
