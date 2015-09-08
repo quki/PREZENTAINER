@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-	<TextView 
-    	android:id="@+id/pptTitle"
+    <TextView
+        android:id="@+id/pptTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -13,46 +13,112 @@
         android:id="@+id/chartContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.85" />
-     <LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" 
-	    android:weightSum="10">
-	    <TextView
-	    	android:text="심박수/평균심박수"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="5"/>
-	    
-	    <TextView
-	        android:text="재생시간/총재생시간"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="5"/>
-	    
+        android:layout_weight="0.65" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="40">
+        <TextView
+            android:text="현재심박수"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:autoText="false"
+            android:gravity="center" />
+        <TextView
+            android:text="최고심박수"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+        <TextView
+            android:text="최저심박수"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+        <TextView
+            android:text="평균심박수"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+
     </LinearLayout>
-   
-    
 
     <LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" 
-	    android:weightSum="10">
-	    <TextView
-	        android:id="@+id/textViewTime"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="5"/>
-	    
-	    <TextView
-	        android:id="@+id/textViewHR"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="5"/>
-	    
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="40">
+        <TextView
+            android:id="@+id/Heartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/HighHeartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/LowHeartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/AverageHeartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <TextView
+            android:text="현재시간/총재생시간"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.15"
+            android:gravity="center" />
+        <TextView
+            android:text="Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <TextView
+            android:id="@+id/RunningTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center" />
+
+    </LinearLayout>
+
 
     <SeekBar
         android:id="@+id/seekBar1"

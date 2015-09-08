@@ -65,8 +65,9 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
 
-    private CircularProgressButton connectToGearBtn,connectToPcBtn;
-    private TextView errorMessageGear,errorMessagePc;
+    private CircularProgressButton connectToGearBtn;
+    private CircularProgressButton connectToPcBtn;
+    private TextView errorMessage;
     // private final IncomingHandler mHandler = new IncomingHandler(this);
     private String mDeviceName ;
 
@@ -112,8 +113,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_IDLE);
         setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        errorMessageGear = (TextView) rootView.findViewById(R.id.errorMessageGear);
-        errorMessagePc= (TextView) rootView.findViewById(R.id.errorMessagePc);
+        errorMessage = (TextView) rootView.findViewById(R.id.errorMessage);
 
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
         rootView.setOnTouchListener(new View.OnTouchListener() {
@@ -411,7 +411,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     @Override
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
-                        errorMessageGear.setText("기어와의 블루투스 연결을 확인하세요");
+                        errorMessage.append("기어와의 블루투스 연결을 확인하세요");
                         setEnabledStartBtn();
 
                     }
@@ -443,7 +443,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                 getActivity().runOnUiThread( new Runnable() {
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_COMPLETE);
-                        errorMessageGear.setText(null);
+                        errorMessage.setText(null);
                         setEnabledStartBtn();
                     }
                 });
@@ -460,7 +460,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     @Override
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
-                        errorMessageGear.setText("기어 측 어플이 실행되었는지 확인하세요");
+                        errorMessage.append("기어 측 어플이 실행되었는지 확인하세요");
                         setEnabledStartBtn();
                     }
                 });
@@ -498,7 +498,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     @Override
                     public void run() {
                         setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_COMPLETE);
-                        errorMessagePc.setText(null);
+                        errorMessage.setText(null);
                         setEnabledStartBtn();
                     }
                 });
@@ -515,7 +515,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     @Override
                     public void run() {
                         setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_ERROR);
-                        errorMessagePc.setText("PC 측 프로그램이 실행되었는지 확인하세요");
+                        errorMessage.append("PC 측 프로그램이 실행되었는지 확인하세요");
                         setEnabledStartBtn();
                     }
                 });
