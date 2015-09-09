@@ -148,13 +148,17 @@ public class ResultActivity extends AppCompatActivity {
             AverageHeartrate = (TextView) findViewById(R.id.AverageHeartrate);
             RunningTime = (TextView) findViewById(R.id.RunningTime);
             Score = (TextView) findViewById(R.id.Score);
-
             buttonPlay = (Button) findViewById(R.id.buttonPlay);
             buttonStop = (Button) findViewById(R.id.buttonStop);
             seekbar = (SeekBar) findViewById(R.id.seekBar1);
 
             maxViewport = new Viewport(chart.getMaximumViewport());
             currentViewport = new Viewport(chart.getCurrentViewport());
+
+            AverageHeartrate.setText(""+meanHeartRateValue(heartRateList));// 평균 심박수
+            HighHeartrate.setText(HighHeartRateValue(heartRateList));   // 최고 심박수
+            LowHeartrate.setText(LowHeartRateValue(heartRateList));     // 최저 심박수
+            Score.setText(standardDeviation(heartRateList));            // 점수
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
@@ -281,6 +285,7 @@ public class ResultActivity extends AppCompatActivity {
         
         // buttonPlay event callback
         public void buttonPlay(){
+
             if(audio.isPlaying()) {
                audio.pause();
                buttonPlay.setText("play");
@@ -364,10 +369,7 @@ public class ResultActivity extends AppCompatActivity {
                       stringWholeTime = changeTimeForHuman(audio.getDuration());
 
                       activity.Heartrate.setText(stringHR);                                // 현재 심박수
-                      activity.AverageHeartrate.setText(meanHeartRateValue(heartRateList));// 평균 심박수
-                      activity.HighHeartrate.setText(HighHeartRateValue(heartRateList));   // 최고 심박수
-                      activity.LowHeartrate.setText(LowHeartRateValue(heartRateList));     // 최저 심박수
-                      activity.Score.setText(standardDeviation(heartRateList));            // 점수
+
                       activity.RunningTime.setText(stringTime + " / " + stringWholeTime);  // 현재시간 / 총 오디오 길이
 
                       break;
@@ -744,9 +746,9 @@ public class ResultActivity extends AppCompatActivity {
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
                                 
-                                ArrayList<Float> heartRateList= new ArrayList<Float>();
-                                ArrayList<Float> rightEventTimeList= new ArrayList<Float>();
-                                ArrayList<Float> leftEventTimeList= new ArrayList<Float>(); 
+                                ArrayList<Float> heartRateList= new ArrayList<>();
+                                ArrayList<Float> rightEventTimeList= new ArrayList<>();
+                                ArrayList<Float> leftEventTimeList= new ArrayList<>();
 
                             // Heart Rate가 넘어오지 않는 경우 방지
                             if(hbr.length() != 0){

@@ -52,5 +52,12 @@
     <color name="white_drawer">#FFFFFF</color>
     <color name="dark_black">#000000</color>
 
-
+        <string-array name="score_bg">
+            <item>#24c6d5</item>
+            <item>#57dd86</item>
+            <item>#ad7dcf</item>
+            <item>#ff484d</item>
+            <item>#fcba59</item>
+            <item>#24c6d5</item>
+        </string-array>
 </resources>

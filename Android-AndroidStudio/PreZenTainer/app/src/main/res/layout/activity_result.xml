@@ -56,6 +56,7 @@
             android:id="@+id/Heartrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="100"
             android:layout_weight="10"
             android:gravity="center" />
         <TextView
@@ -63,18 +64,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="10"
+            android:text="100"
             android:gravity="center" />
         <TextView
             android:id="@+id/LowHeartrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="10"
+            android:text="100"
             android:gravity="center" />
         <TextView
             android:id="@+id/AverageHeartrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="10"
+            android:text="100"
             android:gravity="center" />
 
     </LinearLayout>
@@ -109,12 +113,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:text="100"
             android:gravity="center" />
         <TextView
             android:id="@+id/Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:text="100"
             android:gravity="center" />
 
     </LinearLayout>

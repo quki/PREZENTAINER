@@ -31,8 +31,8 @@ import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -208,14 +208,34 @@ public class LoadFragment extends Fragment {
                                 getActivity().setTitle("시작하기");
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
+
+                                // 파싱 : PT제목, PT저장 시간, 심박수 JSONArray
                                 Log.e("PARSING", jArray.toString());
                                 for(int i = 0; i<jArray.length(); i++){
                                     JSONObject jObj = (JSONObject)jArray.get(i);
                                     String title = jObj.getString("title");
                                     String date = jObj.getString("date");
+                                    String hbr = jObj.getString("hbr");
+                                    JSONArray jArrayHbr = null;
+                                    // Heart Rate가 측정 안 된 경우 방지
+                                    if(hbr.equals("undefined")){
+                                        jArrayHbr = new JSONArray("[60]");
+                                    }else{
+                                        jArrayHbr = new JSONArray(jObj.getString("hbr"));
+                                    }
+                                    // 받은 심박수 배열을 ArrayList로 변경, 이후 setData
+                                    ArrayList<Float> heartRateList = new ArrayList<>();
+
+                                        for(int j = 0; j<jArrayHbr.length(); j++){
+                                            float heartRateValue = Float.parseFloat(jArrayHbr.get(j).toString());
+                                            heartRateList.add(heartRateValue);
+                                        }
+
+                                    // 파싱한 데이터들을 클래스(LoadPtTitleData) 내부 field로 관리
                                     LoadPtTitleData mData =  new LoadPtTitleData();
                                     mData.setTitle(title);
                                     mData.setDate(date);
+                                    mData.setHbr(heartRateList);
                                     mDataList.add(mData);
                                     mAdapter.notifyDataSetChanged();
                                 }
@@ -258,7 +278,7 @@ public class LoadFragment extends Fragment {
         
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq);
-        
+
     }
     @Override
     public void onAttach (Activity activity){

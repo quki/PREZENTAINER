@@ -5,14 +5,16 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
-	<ImageView android:id="@+id/imageSample"
+	<TextView
+		android:id="@+id/score"
+		android:text="70"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:src="@drawable/ic_gmail"
-		android:layout_marginLeft="10dp"
-		android:layout_marginTop="10dp"
-		/>
-
+		android:padding="25dp"
+		android:layout_margin="5dp"
+		android:layout_alignParentLeft="true"
+		android:textSize="20dp"
+		android:textStyle="bold" />
 	<LinearLayout 
 	    android:orientation="vertical"
 		android:layout_margin="10dp"
