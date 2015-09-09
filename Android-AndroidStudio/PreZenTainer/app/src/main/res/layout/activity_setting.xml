@@ -63,6 +63,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/anim_layout_controller"
         android:orientation="vertical">
 
         <com.dd.CircularProgressButton
@@ -103,26 +104,32 @@
             android:background="@drawable/button_start"
             android:text="시작하기"
             android:textColor="@drawable/button_text"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtsendJson"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:orientation="vertical"
         >
 
         <TextView
-            android:id="@+id/errorMessage"
+            android:id="@+id/errorMessageGear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:textColor="#f50057"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/errorMessagePc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="#f50057"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
