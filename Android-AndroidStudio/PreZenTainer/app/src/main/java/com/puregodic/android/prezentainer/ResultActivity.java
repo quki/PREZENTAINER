@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+import com.puregodic.android.prezentainer.calculator.HeartRateCalculator;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
@@ -100,16 +101,18 @@ public class ResultActivity extends AppCompatActivity {
         private LineChartData preData;
         private PreviewLineChartView previewChart;
         private LineChartData previewData;
+        private HeartRateCalculator heartCalcultor;
+
         Button buttonPlay;
         Button buttonStop;
         SeekBar seekbar;
         MediaPlayer audio;
-        TextView Heartrate;
-        TextView HighHeartrate;
-        TextView LowHeartrate;
-        TextView AverageHeartrate;
-        TextView RunningTime;
-        TextView Score;
+        TextView heartRate;
+        TextView highHeartrate;
+        TextView lowHeartrate;
+        TextView averageHeartrate;
+        TextView runningTime;
+        TextView score;
 
         int audioSize;
         private int numberOfLines = 2;
@@ -142,12 +145,12 @@ public class ResultActivity extends AppCompatActivity {
             previewChart = (PreviewLineChartView) rootView.findViewById(R.id.chart_preview);
             chart.setOnValueTouchListener(new ValueTouchListener());
 
-            Heartrate = (TextView) findViewById(R.id.Heartrate);
-            HighHeartrate = (TextView) findViewById(R.id.HighHeartrate);
-            LowHeartrate = (TextView) findViewById(R.id.LowHeartrate);
-            AverageHeartrate = (TextView) findViewById(R.id.AverageHeartrate);
-            RunningTime = (TextView) findViewById(R.id.RunningTime);
-            Score = (TextView) findViewById(R.id.Score);
+            heartRate = (TextView) findViewById(R.id.heartRate);
+            highHeartrate = (TextView) findViewById(R.id.highHeartrate);
+            lowHeartrate = (TextView) findViewById(R.id.lowHeartrate);
+            averageHeartrate = (TextView) findViewById(R.id.averageHeartrate);
+            runningTime = (TextView) findViewById(R.id.runningTime);
+            score = (TextView) findViewById(R.id.score);
 
             buttonPlay = (Button) findViewById(R.id.buttonPlay);
             buttonStop = (Button) findViewById(R.id.buttonStop);
@@ -155,6 +158,14 @@ public class ResultActivity extends AppCompatActivity {
 
             maxViewport = new Viewport(chart.getMaximumViewport());
             currentViewport = new Viewport(chart.getCurrentViewport());
+
+            //heartRate정보 출력
+            heartCalcultor = new HeartRateCalculator(heartRateList);
+            averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// 평균 심박수
+            highHeartrate.setText(heartCalcultor.HighHeartRateValue());   // 최고 심박수
+            lowHeartrate.setText(heartCalcultor.LowHeartRateValue());     // 최저 심박수
+            score.setText(heartCalcultor.standardDeviation());            // 점수
+
             
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
@@ -360,15 +371,11 @@ public class ResultActivity extends AppCompatActivity {
                   switch (msg.what) {
                   case SEND_THREAD_INFOMATION:
                       stringTime = changeTimeForHuman(msg.arg1);
-                      stringHR = currentHeartRateValue(heartRateList, msg.arg1);
+                      stringHR = heartCalcultor.currentHeartRateValue(msg.arg1);
                       stringWholeTime = changeTimeForHuman(audio.getDuration());
 
-                      activity.Heartrate.setText(stringHR);                                // 현재 심박수
-                      activity.AverageHeartrate.setText(meanHeartRateValue(heartRateList));// 평균 심박수
-                      activity.HighHeartrate.setText(HighHeartRateValue(heartRateList));   // 최고 심박수
-                      activity.LowHeartrate.setText(LowHeartRateValue(heartRateList));     // 최저 심박수
-                      activity.Score.setText(standardDeviation(heartRateList));            // 점수
-                      activity.RunningTime.setText(stringTime + " / " + stringWholeTime);  // 현재시간 / 총 오디오 길이
+                      activity.heartRate.setText(stringHR);                                // 현재 심박수
+                      activity.runningTime.setText(stringTime + " / " + stringWholeTime);  // 현재시간 / 총 오디오 길이
 
                       break;
                   default:
@@ -379,104 +386,7 @@ public class ResultActivity extends AppCompatActivity {
               
           }
 
-        // 최고 심박수의 평균 값 구하기
-        public String HighHeartRateValue(ArrayList<Float> heartRateList) {
-            float  HighHeartRateValue= 0;
-            String result = null;
-            HighHeartRateValue=heartRateList.get(0);
-            for (int i = 1; i < heartRateList.size(); i++) {
-                if(HighHeartRateValue < heartRateList.get(i))
-                {
-                    HighHeartRateValue=heartRateList.get(i);
-                }
-            }
-            result = Integer.toString((int)(HighHeartRateValue));
-            return result;
-        }
 
-        // 최저 심박수의 평균 값 구하기
-        public String LowHeartRateValue(ArrayList<Float> heartRateList) {
-            float  LowHeartRateValue= 0;
-            String result = null;
-            LowHeartRateValue=heartRateList.get(0);
-            for (int i = 1; i < heartRateList.size(); i++) {
-                if(LowHeartRateValue > heartRateList.get(i))
-                {
-                    LowHeartRateValue=heartRateList.get(i);
-                }
-            }
-            result = Integer.toString((int)(LowHeartRateValue));
-            return result;
-        }
-
-
-
-
-        // 총 심박수의 평균 값 구하기
-        public int meanHeartRateValue(ArrayList<Float> heartRateList) {
-            float heartRateSum = 0;
-            String meanHeartRate = null;
-            for (int i = 0; i < heartRateList.size(); i++) {
-                heartRateSum += heartRateList.get(i);
-            }
-            return ((int)(heartRateSum / heartRateList.size()));
-        }
-
-        //표준편차를 이용한 ppt점수
-        public String standardDeviation(ArrayList<Float> heartRateList) {
-            float sum=0;
-            double standardDeviationValue=0;
-            String result=null;
-            int average=meanHeartRateValue(heartRateList);
-
-            for (int i = 0; i < heartRateList.size(); i++ )
-            {
-                sum += (heartRateList.get(i) - average) * (heartRateList.get(i) - average);
-            }
-
-
-            standardDeviationValue = Math.sqrt((double)sum/heartRateList.size());
-            int score;
-
-            if(standardDeviationValue <= 5){
-                score=100;
-            }
-            else if(5 < standardDeviationValue && standardDeviationValue <= 10){
-                score=90;
-            }
-            else if(10 < standardDeviationValue && standardDeviationValue <= 20){
-                score=80;
-            }
-            else if(20 < standardDeviationValue && standardDeviationValue <= 30){
-                score=70;
-            }
-            else if(30 < standardDeviationValue && standardDeviationValue <= 40){
-                score=60;
-            }
-            else{
-                score=50;
-            }
-
-            result = Integer.toString(score);
-            return result;
-        }
-          
-          // 현재 시간에 해당하는 심박수 값 구하기
-          public String currentHeartRateValue(ArrayList<Float> heartRateList, int time) {
-              int heartRateValueToInt = 0;
-              String heartRateValueToString = null;
-              
-              if (time / (1000 * 5) > heartRateList.size() - 1) {
-                  heartRateValueToInt =(int)((float)heartRateList.get(heartRateList.size() - 1));
-                  heartRateValueToString = Integer.toString(heartRateValueToInt);
-                  return heartRateValueToString;
-              }else {
-                  heartRateValueToInt = (int)((float)heartRateList.get(time / (1000 * 5)));
-                  heartRateValueToString = Integer.toString(heartRateValueToInt);
-              }
-              
-              return heartRateValueToString; 
-          }
           
           // milliseconds를 사람이 볼 수 있는 시간으로 변환 ex) 02:37
           public String changeTimeForHuman (int time) {
@@ -516,7 +426,6 @@ public class ResultActivity extends AppCompatActivity {
           }
           // 최초에에 chart에 뿌려 줄 data 생성 
           private void generateData() {
-              
 
               List<Line> lines = new ArrayList<Line>();
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
