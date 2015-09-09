@@ -1,7 +1,5 @@
 package com.puregodic.android.prezentainer.network;
 
-import java.lang.reflect.Field;
-
 import android.app.Application;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -9,6 +7,8 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
+import java.lang.reflect.Field;
 
 public class AppController extends Application{
 
@@ -22,9 +22,10 @@ public class AppController extends Application{
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-       initDefaultTypeface();
+        initDefaultTypeface();
     }
-    
+
+
     public static synchronized AppController getInstance() {
         return mInstance;
     }

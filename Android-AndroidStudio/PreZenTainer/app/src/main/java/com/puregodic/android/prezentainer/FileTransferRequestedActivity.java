@@ -1,29 +1,29 @@
 
 package com.puregodic.android.prezentainer;
 
-import java.io.File;
-
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.service.AccessoryService;
 import com.puregodic.android.prezentainer.service.AccessoryService.MyBinder;
 import com.puregodic.android.prezentainer.service.FileAction;
+
+import java.io.File;
 
 public class FileTransferRequestedActivity extends AppCompatActivity {
 
@@ -36,30 +36,36 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
     private Context mCtxt;
 
     private String mFileExtension;
-    private AlertDialog mAlert;
-    private ProgressBar mProgressBar;
-    private TextView fileTransferStatus;
+    private TextView fileTransferStatus,alarmInfo,ptTitle;
     private Button showBtn;
-    private String title,yourId;
+    private String title,yourId,alarmTime;
     private AccessoryService mAccessoryService;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_transfer_requested);
+
+        //파일 전송 진행 사항 progress dialog
+        mProgressDialog = new ProgressDialog(FileTransferRequestedActivity.this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setMessage("녹음파일 전송중...");
        
         title = getIntent().getStringExtra("title");
         yourId = getIntent().getStringExtra("yourId");
-       
+        alarmTime = getIntent().getStringExtra("alarmTime");
         isUp = true;
         mCtxt = getApplicationContext();
 
         fileTransferStatus = (TextView)findViewById(R.id.fileTransferStatus);
-        mProgressBar = (ProgressBar)findViewById(R.id.mProgressBar);
+        ptTitle = (TextView)findViewById(R.id.ptTitle);
+        alarmInfo = (TextView)findViewById(R.id.alarmInfo);
         showBtn = (Button)findViewById(R.id.showBtn);
-        mProgressBar.setMax(100);
         showBtn.setEnabled(false);
-        fileTransferStatus.setText("제목 : "+title+"\n사용자 : "+yourId);
+
+        ptTitle.setText(title);
+        alarmInfo.setText(alarmTime);
 
         // SD카드 존재유무 확인
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -162,28 +168,39 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 mAccessoryService.receiveFile(mTransId, DIR_PATH + mFileName, true);
                 Log.i(TAG, "Transfer accepted");
 
-                showQuitDialog();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mProgressDialog.show();
+                    }
+                });
 
             }
 
             @Override
             public void onFileActionProgress(final long progress) {
+
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fileTransferStatus.setText("전송 중 입니다... " + progress + " / 100");
-                        mProgressBar.setProgress((int)progress);
+
+                            mProgressDialog.setProgress((int) progress);
                     }
                 });
             }
 
             @Override
             public void onFileActionTransferComplete() {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fileTransferStatus.setText("전송 완료 !"+title+mDate+yourId);
-                        mAlert.dismiss();
+
+                        mProgressDialog.dismiss();
+                        setIcon(ContextCompat.getDrawable(FileTransferRequestedActivity.this, R.drawable.ic_check));
+                        fileTransferStatus.setText("프레젠테이션 결과 확인 준비 완료");
                         showBtn.setEnabled(true);
                     }
                 });
@@ -191,14 +208,13 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 
             @Override
             public void onFileActionError() {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mAlert != null && mAlert.isShowing()) {
-                            mAlert.dismiss();
-                        }
+                        mProgressDialog.dismiss();
+                        setIcon(ContextCompat.getDrawable(FileTransferRequestedActivity.this, R.drawable.ic_alert));
                         fileTransferStatus.setText("전송 중 오류가 발생했습니다.");
-                        mProgressBar.setProgress(0);
                     }
                 });
             }
@@ -222,31 +238,11 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
         }
     };
 
-    // Alert Dialog
-    private void showQuitDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder alertbox = new AlertDialog.Builder(
-                        FileTransferRequestedActivity.this);
-                alertbox = new AlertDialog.Builder(FileTransferRequestedActivity.this);
-                alertbox.setMessage("[" + DIR_PATH + "] 취소하시겠습니까?");
-                alertbox.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        try {
-                            mAccessoryService.cancelFileTransfer(mTransId);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(mCtxt, "IllegalArgumentException", Toast.LENGTH_SHORT).show();
-                        }
-                        mAlert.dismiss();
-                        mProgressBar.setProgress(0);
-                    }
-                });
-                alertbox.setCancelable(false);
-                mAlert = alertbox.create();
-                mAlert.show();
-            }
-        });
+    private void setIcon(Drawable icon){
+        int height = icon.getIntrinsicHeight();
+        int width = icon.getIntrinsicWidth();
+        icon.setBounds(0, 0, width, height);
+        fileTransferStatus.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
     }
+
 }

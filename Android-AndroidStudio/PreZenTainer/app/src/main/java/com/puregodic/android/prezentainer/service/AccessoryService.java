@@ -1,10 +1,5 @@
 package com.puregodic.android.prezentainer.service;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -19,8 +14,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.FileTransferRequestedActivity;
 import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
 import com.samsung.android.sdk.accessory.SAAgent;
@@ -28,6 +23,11 @@ import com.samsung.android.sdk.accessory.SAPeerAgent;
 import com.samsung.android.sdk.accessory.SASocket;
 import com.samsung.android.sdk.accessoryfiletransfer.SAFileTransfer;
 import com.samsung.android.sdk.accessoryfiletransfer.SAFileTransfer.EventListener;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccessoryService extends SAAgent {
 
@@ -75,21 +75,21 @@ public class AccessoryService extends SAAgent {
 		} catch (SsdkUnsupportedException e) {
 			if (e.getType() == SsdkUnsupportedException.DEVICE_NOT_SUPPORTED) {
 				Toast.makeText(getBaseContext(),
-						"Cannot initialize, DEVICE_NOT_SUPPORTED",
+						"SAP를 지원하지 않는 단말입니다",
 						Toast.LENGTH_SHORT).show();
 			} else if (e.getType() == SsdkUnsupportedException.LIBRARY_NOT_INSTALLED) {
 				Toast.makeText(getBaseContext(),
-						"Cannot initialize, LIBRARY_NOT_INSTALLED.",
+						"유심 등록이 안되어있거나 Framework를 지원하지 않습니다",
 						Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(getBaseContext(), "Cannot initialize, UNKNOWN.",
+				Toast.makeText(getBaseContext(), "SAP통신에 오류가 있습니다",
 						Toast.LENGTH_SHORT).show();
 			}
 
 			e.printStackTrace();
 			return;
 		} catch (Exception e1) {
-			Toast.makeText(getBaseContext(), "Cannot initialize, SA.",
+			Toast.makeText(getBaseContext(), "SAP통신 초기화에 오류가 있습니다",
 					Toast.LENGTH_SHORT).show();
 			e1.printStackTrace();
 			return;
@@ -247,8 +247,7 @@ public class AccessoryService extends SAAgent {
 
 				mConnectionsMap.put(mConnectionHandler.mConnectionId, mConnectionHandler);
 				Log.d(TAG, "Connection  Success");
-				Toast.makeText(mContext, "Connection 완료 !!", Toast.LENGTH_SHORT).show();
-				
+
 			} else {
 				Log.e(TAG, "SASocket object is null");
 			}
@@ -305,13 +304,15 @@ public class AccessoryService extends SAAgent {
 					+ errorCode);
 		}
 
+		// 기어로부터 받는 모든 데이터를 onReceive에서 받음
 		@Override
 		public void onReceive(int channelId, byte[] data) {
 		    
-		 // MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다.
-		    
+		 	// MAP 에서 해당 Connection ID값을 id로 value값을 찾아낸다
+
 			if (channelId == CHANNEL_ID_EVENT) {
-			    final String direction =  new String(data);  // 우측키 : "right", 좌측키 : "left"
+				// 우측키 : "right", 좌측키 : "left"
+			    final String direction =  new String(data);
 				new Thread(new Runnable() {
 					public void run() {
 						try {

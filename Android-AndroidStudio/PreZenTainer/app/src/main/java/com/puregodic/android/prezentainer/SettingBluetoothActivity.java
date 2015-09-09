@@ -32,7 +32,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     private BroadcastReceiver mBroadcastReceiver;
 
-    private ListView listViewPaired,listViewFound;
+    private ListView listViewPaired;
     
     private Button btnSearch;
 
@@ -40,8 +40,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     Intent returnDeviceNameIntent;
     
-    ArrayList<String> foundDeviceArrayList = new ArrayList<String>();
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
 
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
-        listViewFound = (ListView)findViewById(R.id.listViewFound);
 
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
@@ -64,8 +62,8 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        
-        
+
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -113,12 +111,9 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     // List Devices paired
     private void listPairedDevices() {
         
-        //swipeRefreshLayout.setRefreshing(true);
         // pair된 기기들을 Set화 시킴
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         ArrayList<PairedDeviceData> pairedDeviceArrayList = new ArrayList<PairedDeviceData>();
-        
-        
 
         // pair된 device를 list
         for (BluetoothDevice pairedDevice : pairedDevices) {

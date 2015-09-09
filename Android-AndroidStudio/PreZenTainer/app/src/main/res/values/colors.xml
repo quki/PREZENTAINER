@@ -8,7 +8,9 @@
     <!--main-->
     <color name="mainblue">#2196F3</color>
     <color name="mainblue_dark">#1976D2</color>
-    <color name="white">#ffffff</color>
+    <color name="white">#FFFFFF</color>
+    <color name="lightgrey">#E0E0E0</color>
+    <color name="bluegrey">#CFD8DC</color>
     <color name="black">#222222</color>
     <color name="shadow">#32000000</color>
 
@@ -16,7 +18,8 @@
     <!-- button -->
     <color name="idle">#4FC3F7</color>
     <color name="error">#F44336</color>
-    <color name="complete">#4CAF50</color>
+    <color name="error_dark">#ffcd0a51</color>
+    <color name="complete">#64DD17</color>
 
     <!-- clickstate -->
     <color name="clickstate">#C5CAE9</color>
@@ -45,18 +48,9 @@
     <color name="colorPrimaryDark">#C51162</color>
     <color name="colorAccent">#FF80AB</color>
 
-
-
-
-
-
-
-
-
-
     <!-- cardview -->
     <color name="white_drawer">#FFFFFF</color>
     <color name="dark_black">#000000</color>
-    
-    
+
+
 </resources>
