@@ -93,7 +93,10 @@ public class LoadFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                // TODO Auto-generated method stub
+                String title = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
+                String date = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
+                Toast.makeText(getActivity(),title+"\n"+date, Toast.LENGTH_SHORT).show();
+                //deleteDataByVolley(title,date);
             }
 
             @Override
@@ -215,10 +218,9 @@ public class LoadFragment extends Fragment {
                                     JSONObject jObj = (JSONObject)jArray.get(i);
                                     String title = jObj.getString("title");
                                     String date = jObj.getString("date");
-                                    String hbr = jObj.getString("hbr");
-                                    JSONArray jArrayHbr = null;
-                                    // Heart Rate가 측정 안 된 경우 방지
-                                    if(hbr.equals("undefined")){
+                                    JSONArray jArrayHbr;
+                                    // HeartRate가 아예 측정이 안된 경우, undefined 예외 처리
+                                    if(jObj.getString("hbr").equals("undefined")){
                                         jArrayHbr = new JSONArray("[60]");
                                     }else{
                                         jArrayHbr = new JSONArray(jObj.getString("hbr"));
@@ -276,6 +278,58 @@ public class LoadFragment extends Fragment {
 
         };
         
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq);
+
+    }
+    // 해당 계정 & PT 제목 & PT 저장 날짜 일치하는 data 삭제
+    private void deleteDataByVolley(final String title, final String date){
+
+        mDialogHelper.showPdialog("데이터를 삭제 중 입니다...", true);
+
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_DELETE,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        mDialogHelper.hidePdialog();
+                        Toast.makeText(getActivity(),title + "\n삭제 완료", Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                mDialogHelper.hidePdialog();
+                Toast.makeText(getActivity(),title + "\n삭제 실패", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("yourId", yourId);
+                params.put("title", title);
+                params.put("date", date);
+                return params;
+            }
+
+            // Setting Encoding at Volley
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String utf8String = new String(response.data, "UTF-8");
+                    return Response.success(new String(utf8String), HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                }
+            }
+
+        };
+
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq);
 

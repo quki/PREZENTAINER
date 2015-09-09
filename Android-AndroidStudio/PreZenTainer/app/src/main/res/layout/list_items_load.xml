@@ -2,18 +2,20 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
+	android:gravity="center_vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
 	<TextView
 		android:id="@+id/score"
 		android:text="70"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="25dp"
-		android:layout_margin="5dp"
-		android:layout_alignParentLeft="true"
-		android:textSize="20dp"
+		android:textColor="@color/white"
+		android:layout_width="60dp"
+		android:layout_height="60dp"
+		android:layout_margin="10dp"
+		android:background="@drawable/score"
+		android:textSize="25sp"
+		android:gravity="center"
 		android:textStyle="bold" />
 	<LinearLayout 
 	    android:orientation="vertical"
@@ -30,6 +32,7 @@
 	    android:id="@+id/loadCurrDate" 
 	    android:layout_width="wrap_content"
 	     android:layout_height="wrap_content"
+		android:layout_marginTop="7dp"
 		android:text="2015년 7월 31일 16시 17분"
 	     android:textAppearance="?android:attr/textAppearanceSmall"/>
 	</LinearLayout>

@@ -53,11 +53,11 @@
     <color name="dark_black">#000000</color>
 
         <string-array name="score_bg">
-            <item>#24c6d5</item>
-            <item>#57dd86</item>
-            <item>#ad7dcf</item>
-            <item>#ff484d</item>
-            <item>#fcba59</item>
-            <item>#24c6d5</item>
+            <item>#304FFE</item>
+            <item>#009688</item>
+            <item>#4CAF50</item>
+            <item>#CDDC39</item>
+            <item>#FF9800</item>
+            <item>#FF5722</item>
         </string-array>
 </resources>

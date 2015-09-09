@@ -1,5 +1,7 @@
 package com.puregodic.android.prezentainer.adapter;
 
+import com.puregodic.android.prezentainer.calculator.HeartRateCalculator;
+
 import java.util.ArrayList;
 
 public class LoadPtTitleData {
@@ -26,8 +28,8 @@ public class LoadPtTitleData {
         return title;
     }
     public String getScore(){
-        score = ""+60;
-        //점수 연산 코드
+
+        score = new HeartRateCalculator(hbr).standardDeviation();
         return score;
     }
 
