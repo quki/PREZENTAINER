@@ -78,8 +78,7 @@
             app:cpb_paddingProgress="10dp"
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle"
-             />
+            app:cpb_selectorIdle="@drawable/button_circular_idle" />
 
         <com.dd.CircularProgressButton
             android:id="@+id/connectToPcBtn"
@@ -93,8 +92,8 @@
             app:cpb_paddingProgress="10dp"
             app:cpb_selectorComplete="@drawable/button_circular_complete"
             app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle"
-            />
+            app:cpb_selectorIdle="@drawable/button_circular_idle" />
+
         <Button
             android:id="@+id/startBtn"
             android:layout_width="320dp"
@@ -104,7 +103,7 @@
             android:background="@drawable/button_start"
             android:text="시작하기"
             android:textColor="@drawable/button_text"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
 
@@ -112,24 +111,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/errorMessageGear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:drawableLeft="@drawable/ic_watch_error"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
             android:textColor="#f50057"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/errorMessagePc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/ic_laptop_error"
+            android:drawablePadding="10dp"
+            android:gravity="center"
             android:textColor="#f50057"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout

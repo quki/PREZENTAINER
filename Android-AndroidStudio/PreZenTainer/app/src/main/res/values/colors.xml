@@ -18,7 +18,8 @@
     <!-- button -->
     <color name="idle">#4FC3F7</color>
     <color name="error">#F44336</color>
-    <color name="complete">#4CAF50</color>
+    <color name="error_dark">#ffcd0a51</color>
+    <color name="complete">#64DD17</color>
 
     <!-- clickstate -->
     <color name="clickstate">#C5CAE9</color>

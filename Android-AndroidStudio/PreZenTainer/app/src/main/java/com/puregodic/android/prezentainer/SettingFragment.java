@@ -76,6 +76,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     // ArrayList To JSON
     private Gson gson = new Gson();
     String gsonString;
+    private String alarmTime;
 
     private String yourId;
 
@@ -158,15 +159,19 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                                             // timeInterval(ArrayList) -> JSONArray -> String ex) "["2","3","5"]"
                                             String timeJson = gson.toJson(timeInterval);
                                             sendDataToService(timeJson);
+                                            alarmTime = timeInterval.get(0)+"분";
+
                                         }else{
                                             // 체크박스를 단 한번도 누르지 않은 경우, 눌렀다가 해제한 경우 "[]"을 전달
                                             sendDataToService("[]");
+                                            alarmTime = "알람설정 없음";
                                         }
 
                                         // Start Activity로 나의 id와 PT 제목을 넘겨준다.
                                         startActivity(new Intent(getActivity(), FileTransferRequestedActivity.class)
                                                 .putExtra("yourId", yourId)
-                                                .putExtra("title", mPtTitle));
+                                                .putExtra("title", mPtTitle)
+                                                .putExtra("alarmTime",alarmTime));
 
                                         mDeviceName = null;
 
@@ -411,6 +416,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
                         errorMessageGear.setText("기어와의 블루투스 연결을 확인하세요");
+                        errorMessageGear.setVisibility(View.VISIBLE);
                         setEnabledStartBtn();
 
                     }
@@ -443,6 +449,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_COMPLETE);
                         errorMessageGear.setText(null);
+                        errorMessageGear.setVisibility(View.INVISIBLE);
                         setEnabledStartBtn();
                     }
                 });
@@ -460,6 +467,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     public void run() {
                         setCircularProgressBtn(connectToGearBtn, BUTTON_STATE_ERROR);
                         errorMessageGear.setText("기어 측 어플이 실행되었는지 확인하세요");
+                        errorMessageGear.setVisibility(View.VISIBLE);
                         setEnabledStartBtn();
                     }
                 });
@@ -498,6 +506,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     public void run() {
                         setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_COMPLETE);
                         errorMessagePc.setText(null);
+                        errorMessagePc.setVisibility(View.INVISIBLE);
                         setEnabledStartBtn();
                     }
                 });
@@ -515,6 +524,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     public void run() {
                         setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_ERROR);
                         errorMessagePc.setText("PC 측 프로그램이 실행되었는지 확인하세요");
+                        errorMessagePc.setVisibility(View.VISIBLE);
                         setEnabledStartBtn();
                     }
                 });
@@ -523,63 +533,63 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
         };
     }
 
-private void setCircularProgressBtn(final CircularProgressButton circularBtn, final int id){
+    private void setCircularProgressBtn(final CircularProgressButton circularBtn, final int id) {
 
 
-    Handler mHandler = new Handler();
-    circularBtn.setProgress(id);
+        Handler mHandler = new Handler();
+        circularBtn.setProgress(id);
 
-    int height = getImageResource(circularBtn).getIntrinsicHeight();
-    int width = getImageResource(circularBtn).getIntrinsicWidth();
-    getImageResource(circularBtn).setBounds(0, 0, width, height);
-    int padding_dp = 60;  // 6 dps
-    final float scale = getResources().getDisplayMetrics().density;
-    final int padding_px = (int) (padding_dp * scale + 0.5f);
+        int height = getImageResource(circularBtn).getIntrinsicHeight();
+        int width = getImageResource(circularBtn).getIntrinsicWidth();
+        getImageResource(circularBtn).setBounds(0, 0, width, height);
+        int padding_dp = 60;  // 6 dps
+        final float scale = getResources().getDisplayMetrics().density;
+        final int padding_px = (int) (padding_dp * scale + 0.5f);
 
 
-    mHandler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-            // (start,top,end,bottom)
-            circularBtn.setPaddingRelative(padding_px, 0, padding_px, 0);
-            circularBtn.setCompoundDrawablesWithIntrinsicBounds(getImageResource(circularBtn), null, null, null);
+                // (start,top,end,bottom)
+                circularBtn.setPaddingRelative(padding_px, 0, padding_px, 0);
+                circularBtn.setCompoundDrawablesWithIntrinsicBounds(getImageResource(circularBtn), null, null, null);
 
-            switch (id){
+                switch (id) {
 
-                case BUTTON_STATE_IDLE:{
-                    if(circularBtn.equals(connectToGearBtn)){
-                        circularBtn.setText("기어와 연결하기");
-                    }else if(circularBtn.equals(connectToPcBtn)){
-                        circularBtn.setText("PC와 연결하기");
+                    case BUTTON_STATE_IDLE: {
+                        if (circularBtn.equals(connectToGearBtn)) {
+                            circularBtn.setText("기어와 연결하기");
+                        } else if (circularBtn.equals(connectToPcBtn)) {
+                            circularBtn.setText("PC와 연결하기");
+                        }
+                        break;
                     }
-                    break;
-                }
-                case BUTTON_STATE_ERROR:{
-                    if(circularBtn.equals(connectToGearBtn)){
-                        circularBtn.setText("연결실패");
-                    }else if(circularBtn.equals(connectToPcBtn)){
-                        circularBtn.setText("연결실패");
+                    case BUTTON_STATE_ERROR: {
+                        if (circularBtn.equals(connectToGearBtn)) {
+                            circularBtn.setText("연결실패");
+                        } else if (circularBtn.equals(connectToPcBtn)) {
+                            circularBtn.setText("연결실패");
+                        }
+                        break;
                     }
-                    break;
-                }
-                case BUTTON_STATE_PROGRESS :{
-                    circularBtn.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
-                    break;
-                }
-                case BUTTON_STATE_COMPLETE :{
-                    if(circularBtn.equals(connectToGearBtn)){
-                        circularBtn.setText("연결완료");
-                    }else if(circularBtn.equals(connectToPcBtn)){
-                        circularBtn.setText("연결완료");
+                    case BUTTON_STATE_PROGRESS: {
+                        circularBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        break;
                     }
-                    break;
+                    case BUTTON_STATE_COMPLETE: {
+                        if (circularBtn.equals(connectToGearBtn)) {
+                            circularBtn.setText("연결완료");
+                        } else if (circularBtn.equals(connectToPcBtn)) {
+                            circularBtn.setText("연결완료");
+                        }
+                        break;
+                    }
+
                 }
 
             }
-
-        }
-    }, 600);
+        }, 700);
 }
 
     private Drawable getImageResource(CircularProgressButton c) {

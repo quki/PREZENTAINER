@@ -7,5 +7,5 @@
 	<item android:state_enabled="false"
 		android:color="@color/cpb_grey"/>
 	<item android:state_enabled="true"
-		android:color="#43A047"/>
+		android:color="@color/complete"/>
 </selector>
