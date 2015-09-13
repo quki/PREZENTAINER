@@ -1,159 +1,138 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settingActivityView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    tools:context="com.puregodic.android.prezentainer.SettingFragment">
-
-    <EditText
-        android:id="@+id/ptTitleEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="프레젠테이션 제목을 기입하세요"
-        android:nextFocusDown="@+id/rootView" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/timerCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="타이머설정" />
-
-        <RadioGroup
-            android:id="@+id/timerRadioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
-
-            <RadioButton
-                android:id="@+id/timerRadio5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5분마다" />
-
-            <RadioButton
-                android:id="@+id/timerRadio10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10분마다" />
-
-            <RadioButton
-                android:id="@+id/timerRadio15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15분마다" />
-
-            <RadioButton
-                android:id="@+id/timerRadioDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="세부설정" />
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutAnimation="@anim/anim_layout_controller"
-        android:orientation="vertical">
-
-        <com.dd.CircularProgressButton
-            android:id="@+id/connectToGearBtn"
-            android:layout_width="320dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:cpb_cornerRadius="48dp"
-            app:cpb_paddingProgress="10dp"
-            app:cpb_selectorComplete="@drawable/button_circular_complete"
-            app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle" />
-
-        <com.dd.CircularProgressButton
-            android:id="@+id/connectToPcBtn"
-            android:layout_width="320dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:cpb_cornerRadius="48dp"
-            app:cpb_paddingProgress="10dp"
-            app:cpb_selectorComplete="@drawable/button_circular_complete"
-            app:cpb_selectorError="@drawable/button_circular_error"
-            app:cpb_selectorIdle="@drawable/button_circular_idle" />
-
-        <Button
-            android:id="@+id/startBtn"
-            android:layout_width="320dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/button_start"
-            android:text="시작하기"
-            android:textColor="@drawable/button_text"
-            android:textSize="18sp" />
-    </LinearLayout>
+    android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/errorMessageGear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/ic_watch_error"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:textColor="#f50057"
-            android:textSize="15sp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/errorMessagePc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:drawableLeft="@drawable/ic_laptop_error"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:textColor="#f50057"
-            android:textSize="15sp"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/settingActivityView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom|end"
-        android:orientation="vertical">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:context="com.puregodic.android.prezentainer.SettingFragment">
 
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_bluetooth"
-            fab:fab_colorNormal="#FF4081"
-            fab:fab_colorPressed="#C2185B"
-            fab:fab_colorRipple="#F06292"
+            android:padding="20dp">
 
-            />
+            <EditText
+                android:id="@+id/ptTitleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:hint="프레젠테이션 제목"
+                android:nextFocusDown="@+id/rootView" />
+        </android.support.design.widget.TextInputLayout>
+
+
+            <CheckBox
+                android:id="@+id/timerCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_gravity="end"
+                android:text="알람설정" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/anim_layout_controller"
+            android:orientation="vertical">
+
+            <com.dd.CircularProgressButton
+                android:id="@+id/connectToGearBtn"
+                android:layout_width="320dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:cpb_cornerRadius="48dp"
+                app:cpb_paddingProgress="10dp"
+                app:cpb_selectorComplete="@drawable/button_circular_complete"
+                app:cpb_selectorError="@drawable/button_circular_error"
+                app:cpb_selectorIdle="@drawable/button_circular_idle" />
+
+            <com.dd.CircularProgressButton
+                android:id="@+id/connectToPcBtn"
+                android:layout_width="320dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:cpb_cornerRadius="48dp"
+                app:cpb_paddingProgress="10dp"
+                app:cpb_selectorComplete="@drawable/button_circular_complete"
+                app:cpb_selectorError="@drawable/button_circular_error"
+                app:cpb_selectorIdle="@drawable/button_circular_idle" />
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="320dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_start"
+                android:text="시작하기"
+                android:textColor="@drawable/button_text"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/errorMessageGear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableLeft="@drawable/ic_watch_error"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="기어측 어플을 실행해주세요"
+                android:textColor="#f50057"
+                android:textSize="15sp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/errorMessagePc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/ic_laptop_error"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:text="PC측 프로그램을 실행해주세요"
+                android:textColor="#f50057"
+                android:textSize="15sp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
-</LinearLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_bluetooth"
+        fab:fab_colorNormal="#FF4081"
+        fab:fab_colorPressed="#C2185B"
+        fab:fab_colorRipple="#F06292" />
+</FrameLayout>

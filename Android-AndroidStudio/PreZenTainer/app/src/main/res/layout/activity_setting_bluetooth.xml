@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.puregodic.android.prezentainer.SettingBluetoothActivity">
-
+    <include
+        android:id="@+id/toolbarsettingBtActivity"
+        layout="@layout/toolbar" />
     <ListView
         android:id="@+id/listViewPaired"
         android:layout_width="match_parent"

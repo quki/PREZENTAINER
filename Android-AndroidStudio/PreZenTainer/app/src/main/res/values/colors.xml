@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <!-- toolbar -->
-    <color name="toolbar">#30415C</color>
-    <color name="toolbar_nav">#2C3A4A</color>
+
 
     <!--main-->
     <color name="mainblue">#2196F3</color>
@@ -12,11 +9,16 @@
     <color name="lightgrey">#E0E0E0</color>
     <color name="bluegrey">#CFD8DC</color>
     <color name="black">#222222</color>
+    <color name="black_transparent">#dc000000</color>
     <color name="shadow">#32000000</color>
+    <color name="text_light">#9E9E9E</color>
+    <color name="text_middle">#616161</color>
+    <color name="text_deep">#424242</color>
 
 
     <!-- button -->
     <color name="idle">#4FC3F7</color>
+    <color name="button_disabled">#e1ebec</color>
     <color name="error">#F44336</color>
     <color name="error_dark">#ffcd0a51</color>
     <color name="complete">#64DD17</color>
@@ -29,7 +31,7 @@
     <color name="color2">#ffffbc00</color>
     <color name="color3">#ff12ffa0</color>
     <color name="color4">#ffff6724</color>
-    
+
 
     <!--login-->
     <color name="bg_login">#2196F3</color>
@@ -53,11 +55,12 @@
     <color name="dark_black">#000000</color>
 
         <string-array name="score_bg">
-            <item>#304FFE</item>
-            <item>#009688</item>
-            <item>#4CAF50</item>
-            <item>#CDDC39</item>
-            <item>#FF9800</item>
-            <item>#FF5722</item>
+            <item>#6778a2</item>   <!--100-95-->
+            <item>#89BABE</item>   <!--94-90-->
+            <item>#c1d29f</item>    <!--89-85-->
+            <item>#debc3b</item>    <!--84-80-->
+            <item>#ffb47b</item>    <!--79-75-->
+            <item>#d08477</item>    <!--74-70-->
+            <item>#e2664c</item>    <!--69미만-->
         </string-array>
 </resources>

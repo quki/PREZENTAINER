@@ -1,11 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainblue"
     android:orientation="vertical"
-    android:gravity="center_vertical|center_horizontal"
     tools:context="com.puregodic.android.prezentainer.FileTransferRequestedActivity">
+
+
+    <include
+        android:id="@+id/toolbar_transparent"
+        layout="@layout/toolbar_transparent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/ptTitle"
@@ -22,14 +32,15 @@
             android:id="@+id/alarmInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/ic_alarm"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:textSize="15sp" />
+
         <Button
             android:id="@+id/showBtn"
             android:layout_width="match_parent"
@@ -37,18 +48,19 @@
             android:layout_margin="10dp"
             android:background="@drawable/button_start"
             android:text="결과보기"
-            android:textSize="15sp"
-            android:textColor="@drawable/button_text" />
+            android:textColor="@drawable/button_text"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/fileTransferStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/fileTransferStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

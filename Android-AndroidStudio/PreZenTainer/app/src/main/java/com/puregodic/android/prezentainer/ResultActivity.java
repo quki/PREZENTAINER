@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,8 +31,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.calculator.HeartRateCalculator;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,12 +70,21 @@ public class ResultActivity extends AppCompatActivity {
     private String mFilePath;
     private static final int SEND_THREAD_INFOMATION = 1;
     private TextView pptTitle;
-    
+    private TextView pptDate;
+    private Toolbar mToolbar;
+
     @Override
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
         pptTitle = (TextView)findViewById(R.id.pptTitle);
+        pptDate = (TextView)findViewById(R.id.pptDate);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_transparent);
+        setSupportActionBar(mToolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle(null);
+
         mDialogHelper = new DialogHelper(this);
         
         title = getIntent().getStringExtra("title");
@@ -82,8 +93,10 @@ public class ResultActivity extends AppCompatActivity {
         // 녹음 파일 경로
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
+
         pptTitle.setText(title);
-        
+        pptDate.setText(date);
+
         fetchDataByVolley();
 
         
@@ -111,7 +124,7 @@ public class ResultActivity extends AppCompatActivity {
         TextView highHeartrate;
         TextView lowHeartrate;
         TextView averageHeartrate;
-        TextView runningTime;
+        TextView runningTime,wholeTime;
         TextView score;
 
         int audioSize;
@@ -150,6 +163,7 @@ public class ResultActivity extends AppCompatActivity {
             lowHeartrate = (TextView) findViewById(R.id.lowHeartrate);
             averageHeartrate = (TextView) findViewById(R.id.averageHeartrate);
             runningTime = (TextView) findViewById(R.id.runningTime);
+            wholeTime = (TextView) findViewById(R.id.wholeTime);
             score = (TextView) findViewById(R.id.score);
 
             buttonPlay = (Button) findViewById(R.id.buttonPlay);
@@ -159,12 +173,7 @@ public class ResultActivity extends AppCompatActivity {
             maxViewport = new Viewport(chart.getMaximumViewport());
             currentViewport = new Viewport(chart.getCurrentViewport());
 
-            //heartRate정보 출력
-            heartCalcultor = new HeartRateCalculator(heartRateList);
-            averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// 평균 심박수
-            highHeartrate.setText(heartCalcultor.HighHeartRateValue());   // 최고 심박수
-            lowHeartrate.setText(heartCalcultor.LowHeartRateValue());     // 최저 심박수
-            score.setText(heartCalcultor.standardDeviation());            // 점수
+
 
 
             //아래부터 Audio 및 SeekBar작업
@@ -218,20 +227,19 @@ public class ResultActivity extends AppCompatActivity {
                     *
                     * */
 
-                        int currentSecond = ((progress/1000)-1);
+                        int currentSecond = ((progress / 1000) - 1);
                         int xValue = 0;
-                        if( currentSecond % 5 == 0 ){
+                        if (currentSecond % 5 == 0) {
                             xValue = currentSecond;
-                        }
-                        else{
-                            xValue = currentSecond-(currentSecond % 5);
+                        } else {
+                            xValue = currentSecond - (currentSecond % 5);
                         }
 
-                        int lastXvalue = (data.getLines().get(0).getValues().size()-1)*5;
+                        int lastXvalue = (data.getLines().get(0).getValues().size() - 1) * 5;
 
-                        Log.d("mIndex!!", "currentsecond : "+currentSecond);
-                        Log.d("rIndex!!", "xValue : "+xValue);
-                        Log.d("LastIndex!!","LastIndex : "+lastXvalue);
+                        Log.d("mIndex!!", "currentsecond : " + currentSecond);
+                        Log.d("rIndex!!", "xValue : " + xValue);
+                        Log.d("LastIndex!!", "LastIndex : " + lastXvalue);
                         float line0ValueY = 0;
 
                    /*
@@ -239,12 +247,12 @@ public class ResultActivity extends AppCompatActivity {
                     * IndexOutOfBoudsException 방지를 위해
                     *
                     * */
-                        if(xValue <= lastXvalue){
-                            line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY(); // 심박수 Value
+                        if (xValue <= lastXvalue) {
+                            line0ValueY = data.getLines().get(0).getValues().get((xValue / 5)).getY(); // 심박수 Value
                             data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
-                        }else{
+                        } else {
                             xValue = 0;
-                            line0ValueY = data.getLines().get(0).getValues().get((xValue/5)).getY();
+                            line0ValueY = data.getLines().get(0).getValues().get((xValue / 5)).getY();
                             data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
                         }
                         chart.setLineChartData(data);
@@ -271,7 +279,13 @@ public class ResultActivity extends AppCompatActivity {
                     }
                 });
 
-
+                //heartRate정보 출력
+                heartCalcultor = new HeartRateCalculator(heartRateList);
+                averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// 평균 심박수
+                highHeartrate.setText(heartCalcultor.HighHeartRateValue());        // 최고 심박수
+                lowHeartrate.setText(heartCalcultor.LowHeartRateValue());          // 최저 심박수
+                score.setText(heartCalcultor.standardDeviation());                 // 점수
+                wholeTime.setText(" / "+changeTimeForHuman(audio.getDuration()));    // 오디오 총 길이
             }else{
                 // 사용자가 녹음파일을 폰에서 삭제한 경우 강제 종료
                 Toast.makeText(ResultActivity.this, "녹음파일이 없네요", Toast.LENGTH_SHORT).show();
@@ -318,6 +332,7 @@ public class ResultActivity extends AppCompatActivity {
             audio.seekTo(0);
             seekbar.setProgress(0);
             buttonPlay.setText("play");
+            runningTime.setText("00:00");
          }
          
          // audio의 시간을 측정하는 별도의 Thread
@@ -373,10 +388,9 @@ public class ResultActivity extends AppCompatActivity {
                   case SEND_THREAD_INFOMATION:
                       stringTime = changeTimeForHuman(msg.arg1);
                       stringHR = heartCalcultor.currentHeartRateValue(msg.arg1);
-                      stringWholeTime = changeTimeForHuman(audio.getDuration());
 
                       activity.heartRate.setText(stringHR);                                // 현재 심박수
-                      activity.runningTime.setText(stringTime + " / " + stringWholeTime);  // 현재시간 / 총 오디오 길이
+                      activity.runningTime.setText(stringTime);  // 현재시간 / 총 오디오 길이
 
                       break;
                   default:
@@ -387,40 +401,22 @@ public class ResultActivity extends AppCompatActivity {
               
           }
 
-
-          
           // milliseconds를 사람이 볼 수 있는 시간으로 변환 ex) 02:37
           public String changeTimeForHuman (int time) {
-              int secondTime = 0;
-              int minuteTime = 0;
-              int hourTime = 0;
-                      
-              String stringTime = null;
-              String secondTimeToString = null;
-              String minuteTimeToString = null;
-              String hourTimeToString = null;
-                      
+
+              SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+              SimpleDateFormat sdfH = new SimpleDateFormat("hh:mm:ss");
+
+              String stringTime;
+
+              // 3600초 이상일때, 즉, 1시간이 넘어갈 때
               if (time / (1000 * 60 * 60) > 0) {
-                  time = time / 1000;
-                  secondTime = time % 60;
-                  minuteTime = time / 60;
-                  hourTime = minuteTime / 60;
-                  
-                  secondTimeToString = Integer.toString(secondTime);
-                  minuteTimeToString = Integer.toString(minuteTime);
-                  hourTimeToString = Integer.toString(hourTime);
-                  
-                  stringTime = hourTimeToString + ":" + minuteTimeToString + ":" + secondTimeToString;
+
+                  stringTime = sdfH.format(time);
               }
+              // 3600초 이하일때, 즉, 1시간이 안될 때
               else {
-                  time = time / 1000;
-                  secondTime = time % 60;
-                  minuteTime = time / 60;
-                  
-                  secondTimeToString = Integer.toString(secondTime);
-                  minuteTimeToString = Integer.toString(minuteTime);
-                  
-                  stringTime = minuteTimeToString + ":" + secondTimeToString;
+                  stringTime = sdf.format(time);
                   }
               
               return stringTime;
@@ -431,62 +427,56 @@ public class ResultActivity extends AppCompatActivity {
               List<Line> lines = new ArrayList<Line>();
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
               List<String> slideNum = new ArrayList<String>();
-              
 
-              for(int i=0 ; i<leftEventTimeList.size(); i++)
-              {
-            	  for(int j=0 ; j<rightEventTimeList.size(); j++)
-            	  {
-            		  if(leftEventTimeList.get(i) < rightEventTimeList.get(j))
-            		  {
-            			  rightEventTimeList.remove(j-1);
-            			  leftEventTimeList.set(i, Float.valueOf(-1));
-            			  break;
-            		  }
-            	  }
+
+              for (int i = 0; i < leftEventTimeList.size(); i++) {
+                  for (int j = 0; j < rightEventTimeList.size(); j++) {
+                      if (leftEventTimeList.get(i) < rightEventTimeList.get(j)) {
+                          rightEventTimeList.remove(j - 1);
+                          leftEventTimeList.set(i, Float.valueOf(-1));
+                          break;
+                      }
+                  }
               }
 
-              for(int i=0 ; i<leftEventTimeList.size(); i++)
-              {
-            	  if(leftEventTimeList.get(i).compareTo(Float.valueOf(-1))!=0 && !rightEventTimeList.isEmpty())
-            	  {
-            		  rightEventTimeList.remove(rightEventTimeList.size()-1);
-            	  }
+              for (int i = 0; i < leftEventTimeList.size(); i++) {
+                  if (leftEventTimeList.get(i).compareTo(Float.valueOf(-1)) != 0 && !rightEventTimeList.isEmpty()) {
+                      rightEventTimeList.remove(rightEventTimeList.size() - 1);
+                  }
               }
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < rightEventTimeList.size(); ++j) {
-                  slideNum.add(j+1+"번");
-                  axisXvalue.add(new AxisValue(rightEventTimeList.get(j)/1000).setLabel(slideNum.get(j)));
+                  slideNum.add(j + 1 + "번");
+                  axisXvalue.add(new AxisValue(rightEventTimeList.get(j) / 1000).setLabel(slideNum.get(j)));
               }
-              for(int i=0; i<axisXvalue.size(); i++){
-                  Log.d("axisXvalue", ""+axisXvalue.get(i));
+              for (int i = 0; i < axisXvalue.size(); i++) {
+                  Log.d("axisXvalue", "" + axisXvalue.get(i));
               }
-              
+
               for (int i = 0; i < numberOfLines; ++i) {
 
                   List<PointValue> values = new ArrayList<PointValue>();
 
                   for (int j = 0; j < heartRateList.size(); ++j) {
 
-                      if(i == 1 && j == 0) {
+                      if (i == 1 && j == 0) {
                           values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
                           break;
                       } else {
-                          values.add(new PointValue(j*5, heartRateList.get(j))); //adding point to the first line
+                          values.add(new PointValue(j * 5, heartRateList.get(j))); //adding point to the first line
                       }
                   }
 
                   Line line = new Line(values);
                   line.setColor(ChartUtils.COLORS[i]);
-                  
+
                   // progress에 따라 움직이는 Point
-                  if(i==1){
+                  if (i == 1) {
                       line.setHasLabels(true);
                   }
                   // 최초에 뿌려지는 chart의 line
-                  else
-                  {
+                  else {
                       line.setShape(shape); // point -> circle
                       line.setCubic(true); // line -> curve
                       line.setFilled(true); // area 채우기
@@ -495,58 +485,56 @@ public class ResultActivity extends AppCompatActivity {
                       line.setHasLabelsOnlyForSelected(false); //눌렀을 때, 라벨 표시
                   }
                   lines.add(line);
-                  if(i==0){       
-                    //미리보기 데이터에는 심장박동수 라인만 넣기!
+                  if (i == 0) {
+                      //미리보기 데이터에는 심장박동수 라인만 넣기!
                       linesForPreData.add(line);
                   }
               }
 
               data = new LineChartData(lines); // 최초에 뿌려진 data chart
               preData = new LineChartData(linesForPreData); // 미리보기 chart
-              
+
               // X축은 무조건 설정
               Axis axisX = new Axis()
-              .setHasLines(true)
-              .setLineColor(ChartUtils.COLOR_RED).setTextColor(getResources().getColor(R.color.dark_black))
-              .setValues(axisXvalue); 
+                      .setHasLines(true)
+                      .setLineColor(ChartUtils.COLOR_RED).setTextColor(getResources().getColor(R.color.dark_black))
+                      .setValues(axisXvalue);
               data.setAxisXBottom(axisX);
               // Y 축을 갖고 싶을 때
               if (hasYaxis) {
-                  
+
                   Axis axisY = new Axis()
-                  .setHasLines(true)
-                  .setHasTiltedLabels(true)  // 글자 기울임
-                  .setName("심박수");
+                          .setHasLines(true)
+                          .setHasTiltedLabels(true)  // 글자 기울임
+                          .setName("심박수");
                   data.setAxisYLeft(axisY);
-                  
-               // Y 축이 필요 없을 때
+
+                  // Y 축이 필요 없을 때
               } else {
                   data.setAxisYLeft(null);
               }
+                  data.setBaseValue(Float.NEGATIVE_INFINITY);
 
-              data.setBaseValue(Float.NEGATIVE_INFINITY);
-              
-              chart.setLineChartData(data);
-              chart.setZoomEnabled(false);
-              chart.setScrollEnabled(false);
-              
-              // 미리 보기 설정
-              previewData = new LineChartData(preData);
-              previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
-              previewChart.setLineChartData(previewData);
-              previewChart.setViewportChangeListener(new ViewportListener());
-              previewChart.setZoomType(ZoomType.HORIZONTAL); // X축 방향으로만 움직임
-              
-              maxViewport();
-              currentViewport();
+                  chart.setLineChartData(data);
+                  chart.setZoomEnabled(false);
+                  chart.setScrollEnabled(false);
+
+                  // 미리 보기 설정
+                  previewData = new LineChartData(preData);
+                  previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+                  previewChart.setLineChartData(previewData);
+                  previewChart.setViewportChangeListener(new ViewportListener());
+                  previewChart.setZoomType(ZoomType.HORIZONTAL); // X축 방향으로만 움직임
+
+                  maxViewport();
+                  currentViewport();
+
           }
-          
-          
           // 최대 Viewport 값 지정
           private void maxViewport(){
               
-              maxViewport.top = 150;
-              maxViewport.bottom = 50;
+              maxViewport.top = 120;
+              maxViewport.bottom = 45;
               maxViewport.left=0;
               maxViewport.right = audioSize/1000;
               chart.setMaximumViewport(maxViewport);
@@ -557,8 +545,8 @@ public class ResultActivity extends AppCompatActivity {
           private void currentViewport(){
 
               currentViewport.left=0;
-              currentViewport.bottom=50;
-              currentViewport.top=150;
+              currentViewport.bottom=45;
+              currentViewport.top=120;
               currentViewport.right = maxViewport.width() / 3;
               previewChart.setCurrentViewportWithAnimation(currentViewport);
               chart.setCurrentViewportWithAnimation(currentViewport);
@@ -602,6 +590,7 @@ public class ResultActivity extends AppCompatActivity {
           @Override
           public boolean onOptionsItemSelected(MenuItem item) {
               int id = item.getItemId();
+
               if (id == R.id.action_reset) {
                   generateData();
                   return true;
@@ -706,6 +695,8 @@ public class ResultActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Error: " + error.getMessage());
                         mDialogHelper.hidePdialog();
+                        finish();
+                        Toast.makeText(ResultActivity.this,"네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show();
                     }
                 }) {
 

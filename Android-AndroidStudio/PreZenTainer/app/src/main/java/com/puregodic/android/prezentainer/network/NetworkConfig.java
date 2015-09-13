@@ -15,7 +15,7 @@ public class NetworkConfig {
     
     public static String URL_FETCH_GRAPH = "http://54.64.87.31/tizen/second_select.php";
 
-    public static String URL_DELETE = "http://54.64.87.31/tizen/second_select.php";
+    public static String URL_DELETE = "http://54.64.87.31/tizen/delete.php";
 
     
 }

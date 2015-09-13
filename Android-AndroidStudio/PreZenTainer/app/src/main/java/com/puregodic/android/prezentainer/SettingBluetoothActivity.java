@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +41,8 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     private String mDeviceName;
 
     Intent returnDeviceNameIntent;
-    
+
+    private Toolbar mToolbar;
 
 
     @Override
@@ -47,15 +50,27 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_bluetooth);
 
+        // Toolbar 설정
+        mToolbar = (Toolbar)findViewById(R.id.toolbarsettingBtActivity);
+        setSupportActionBar(mToolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_arrow_left));
+        getSupportActionBar().setTitle("연결된PC");
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         isEnabledAdapter();
 
         returnDeviceNameIntent = new Intent();
         returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
         setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
 
-
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
-
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
     }

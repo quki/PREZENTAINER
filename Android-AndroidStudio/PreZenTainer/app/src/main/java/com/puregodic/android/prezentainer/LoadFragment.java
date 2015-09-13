@@ -3,9 +3,11 @@ package com.puregodic.android.prezentainer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -89,14 +91,35 @@ public class LoadFragment extends Fragment {
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         setDataByVolley();
 
+
+        // Long Click시 data 삭제
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new ClickListener() {
 
             @Override
             public void onLongClick(View view, int position) {
-                String title = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
-                String date = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
-                Toast.makeText(getActivity(),title+"\n"+date, Toast.LENGTH_SHORT).show();
-                //deleteDataByVolley(title,date);
+
+               final String title = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
+               final String date = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
+
+                AlertDialog.Builder aBuilder =  new AlertDialog.Builder(getActivity());
+                aBuilder.setTitle(title)
+                        .setMessage("\n"+date+"에 저장한 "+title+" 발표를\n\n"+"정말로 삭제하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteDataByVolley(title, date);
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = aBuilder.create();
+                dialog.show();
+
             }
 
             @Override
@@ -111,8 +134,6 @@ public class LoadFragment extends Fragment {
                         .putExtra("date", currDate));
             }
         }));
-
-
 
         return rootView;
     }
@@ -189,7 +210,7 @@ public class LoadFragment extends Fragment {
 
     // DB로 부터 response받고,JSON파싱 이후 adapter에 저장 (데이터 변화 감지)
     private void setDataByVolley(){
-        
+        mDataList.clear();
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
         StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_FETCH,
@@ -253,7 +274,16 @@ public class LoadFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Error: " + error.getMessage());
+
                         mDialogHelper.hidePdialog();
+
+                        getFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.container_body, new SettingFragment())
+                                .commit();
+                        getActivity().setTitle("시작하기");
+                        Toast.makeText(getActivity(), "네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show();
+
                     }
                 }) {
 
@@ -294,8 +324,8 @@ public class LoadFragment extends Fragment {
                     public void onResponse(String response) {
 
                         mDialogHelper.hidePdialog();
-                        Toast.makeText(getActivity(),title + "\n삭제 완료", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getActivity(),"삭제 완료", Toast.LENGTH_SHORT).show();
+                        setDataByVolley();
                     }
                 }, new Response.ErrorListener() {
 

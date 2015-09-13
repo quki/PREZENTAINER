@@ -30,7 +30,6 @@ public class CardViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card_view);
         
         mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(mToolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);

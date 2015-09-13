@@ -9,14 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <include
+            android:id="@+id/toolbarPairingActivity"
+            layout="@layout/toolbar" />
         <CheckedTextView
             android:id="@+id/checkedTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="right"
+            android:gravity="center_vertical|right"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_search"
             android:checked="false"
-            android:text="검색을 허용합니다" />
+            android:text="내 기기의 검색을 허용합니다" />
     </LinearLayout>
 
     <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
