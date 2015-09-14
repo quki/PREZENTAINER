@@ -9,5 +9,6 @@ public class BluetoothConfig {
     public static final int PHONE = 512;
     public static final int WATCH = 1792;
     public static final int HEADPHONE = 1024;
+    public static final int UNKNOWN = 7936;
 
 }

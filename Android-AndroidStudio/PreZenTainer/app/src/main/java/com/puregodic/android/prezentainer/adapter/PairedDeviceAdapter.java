@@ -57,7 +57,7 @@ public class PairedDeviceAdapter extends BaseAdapter{
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
  
         textViewPairedName.setText(pairedDevicesList.get(position).name);
-        textViewPairedAdress.setText(String.valueOf(pairedDevicesList.get(position).type));
+        textViewPairedAdress.setText(String.valueOf(pairedDevicesList.get(position).adress));
         
         switch (pairedDevicesList.get(position).type) {
             case BluetoothConfig.NOTEBOOK:
@@ -70,6 +70,9 @@ public class PairedDeviceAdapter extends BaseAdapter{
                 image.setImageResource(R.drawable.ic_phone);
                 break;
             case BluetoothConfig.HEADPHONE:
+                image.setImageResource(R.drawable.ic_launcher);
+                break;
+            case BluetoothConfig.UNKNOWN:
                 image.setImageResource(R.drawable.ic_launcher);
                 break;
         }

@@ -1,44 +1,70 @@
 var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
 
+//페이지 전환 변수
+var MainPage = $('#main');
+var StatPage = $('#start');
+var motionSettingPage = $('#motionSetting');
+var enrollMotionPage = $('#enroll_motion');
+
+//모션세팅에서 메인으로 페이지 전환
+enrollMotionPage.on("swipedown", function() {
+	is_motion(); //모션이 setting되어있는지 확인
+	tau.changePage(MainPage);
+	});
+
+//스타트페이지에서 메인으로 페이지 전환
+StatPage.on("swipedown", function() {
+	main_to_back(); 
+	tau.changePage(MainPage);
+	});
+
+motionSettingPage.on("swipedown", function() {
+	tau.changePage(StatPage);
+	});
 
 // 화면구성변화
 function updateConnection() {
-  if(isConnect){
-    $('.ui-listview').empty();
-    $('.ui-listview').append('<li>연결됨</li>');
-  }else{
-    $('.ui-listview').empty();
-    $('.ui-listview').append('<li>연결하세요</li>');
-    updateAfterStop();
+  if(!isConnect){
+	    $('#startbtn').attr('disabled', 'disabled');
+	    changeButtonStart();
   }
+  updateAfterStop();
 }
 // start button 활성화
 function updateAfterOnReceivce(){
   if(isConnect){
     $('#startbtn').removeAttr('disabled');
+    changeButtonStart();
   }
 }
 // start button 클릭 이후
 function updateAfterStart(){
   if(isConnect){
-    $('#startbtn').attr('disabled','disabled');
+	$('#startbtn').attr('disabled','disabled');
+	$('#startbtn').attr('type','hidden');
     $('#pceventbtn').removeAttr('disabled');
     $('#stopbtn').removeAttr('disabled');
+    $('#stopbtn').attr('type','button');
     $('#motionbtn').removeAttr('disabled');
+    
   }else{
     toastAlert('연결을 확인하세요.');
   }
+  changeButtonStart();
+  changeButtonMotionSetting();
 }
 
 function updateAfterStop(){
   if(!isConnect){
     $('#pceventbtn').attr('disabled','disabled');
     $('#stopbtn').attr('disabled','disabled');
+    $('#stopbtn').attr('type','hidden');
+    
+    
     check = 0;
 	document.getElementById("enable_motion").innerHTML="Off";
     $('#motionbtn').attr('disabled','disabled');
-    
     $('#right_motion_btn').attr('disabled','disabled');
 	$('#left_motion_btn').attr('disabled','disabled');
 	
@@ -47,8 +73,10 @@ function updateAfterStop(){
 	
 	document.getElementById("left_motion").innerHTML="Off";
 	left_motion_enable=0;
-    
   }
+  
+  changeButtonMotionSetting();
+  changeButtonStart();
 }
 
 //Popup toast of TAU

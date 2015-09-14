@@ -2,6 +2,355 @@
 * {
     font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
 }
+#EnrollHead {
+	padding-top:none;
+	padding-bottom:none;
+	margin-top:0;
+	margin-bottom:0;
+}
+
+h4 {
+	width:device-width;
+	text-align:center;
+	background-color:#00D8FF;
+	padding-top:10px;
+	padding-bottom:10px;
+	line-height:50px;
+}
+
+.resettingButton {
+	font-size:25px;
+	
+	padding:9px;
+	padding-top:6px;
+	padding-bottom:6px;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	background-image: url(../img/button/Red.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	
+	border: none;
+}
+.confirmButton {
+	font-size:30px;
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	padding:14px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+	border:none;
+}
+.testButton {
+	background-image: url(../img/button/Brown.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	padding:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+	border:none;
+}
+.enrollButton {
+	font-size:27px;
+	
+	padding:9px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+	background-image: url(../img/button/Green.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	
+	border: none;
+}
+.motionButton{
+	font-size:25px;
+	
+	padding:8.5px;
+	padding-top:8.5px;
+	padding-bottom:10px;
+	
+	background-image: url(../img/button/Gray.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	
+	border: none;
+}
+.rightButton {
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	padding:8px;
+	padding-top:5px;
+	padding-bottom:5px;
+	
+	font-size:30px;
+	
+	border:none;
+}
+.leftButton {
+	padding:15px;
+	padding-top:1px;
+	padding-bottom:2px;
+	
+	border:none;
+	background-image: url(../img/button/Gray.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	border: none;
+}
+
+.main_buttonSet2 a{
+	font-size:21px;
+	
+	padding:30px;
+	padding-top:50px;
+	padding-bottom:50px;
+	
+	background-image: url(../img/button/Blue.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	
+	border: none;
+}
+
+.settingButton {
+	font-size:21px;
+	
+	padding:33px;
+	padding-top:33px;
+	padding-bottom:33px;
+	
+	background-image: url(../img/button/Blue.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	
+	border: none;
+}
+.backButton {	
+	font-size:30px;
+	padding:8.5px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+	border:none;
+	background-image: url(../img/button/Blue.png);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	
+	border: none;
+}
+
+.startButtonMain a{
+	background-image: url(../img/button/Green.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	
+	padding:30px;
+	padding-top:45px;
+	padding-bottom:45px;
+	
+	font-size:30px;
+}
+.startButton input {
+	font-size:70px;
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	
+	padding-left:70px;
+	padding-right:70px;
+	padding-top:3px;
+	padding-bottom:3px;
+	
+	
+	border:none;
+}
+.stopButton input {
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	
+	padding-left:110px;
+	padding-right:110px;
+	padding-top:3px;
+	padding-bottom:3px;
+	
+	
+	border:none;
+}
+.prevButton input{
+	font-size:90px;
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	padding:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+	border:none;
+}
+.nextButton input{
+	font-size:90px;
+	background-image: url(../img/button/Gray.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-Color:rgba(255,255,255,0);
+	color:white;
+	padding:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+	border:none;
+	
+}
+
+
+.main_buttonSet1 {
+	position:absolute;
+	left:22px;
+	top:196px
+}
+.main_buttonSet2 {
+	position:absolute;
+	right:22px;
+	top:193px;
+}
+
+.enroll_buttonSet1 {
+	position:absolute;
+	left:22px;
+	top:194px
+}
+.enroll_buttonSet2 {
+	position:absolute;
+	right:22px;
+	top:197px;
+}
+
+.start_buttonSet1_1 {
+	position:absolute;
+	left:5%;
+	margin-top:10px;
+}
+.start_buttonSet1_2 {
+	position:absolute;
+	left:5%;
+	margin-top:10px;
+}
+.start_buttonSet2_1 {
+	position:absolute;
+	top:200px;
+	left:22px;
+	margin-top:10px;
+}
+.start_buttonSet2_2 {
+	position:absolute;
+	right:22px;
+	top:200px;
+	margin-top:10px;
+}
+.start_buttonSet2_3 { 
+	font-size:33px;
+	position:absolute;
+	left:29%;
+	margin-top:12px;
+	top:200px;
+}
+.start_buttonSet3_2 { 
+	position:absolute;
+	right:22px;
+	margin-top:12px;
+	top:230px;
+}
+
+.motionSetting_buttonSet p{
+	margin-top:0px;
+	margin-left:22px;
+}
+.motionSetting_buttonSet span{
+	position:absolute;
+	right:62px;
+}
+
+.enrollMotion_buttonSet1 span {
+	margin-top:0px;
+	margin-bottom:15px;
+	position:absolute;
+	right:22px;
+}
+.enrollMotion_buttonSet1_1 input{
+	margin-top:5px;
+	margin-left:0px;
+}
+.enrollMotion_buttonSet1_2 input{
+	margin-top:0px;
+	margin-left:13px;
+}
+.enrollMotion_buttonSet2 p{
+	margin-top:15px;
+	margin-bottom:20px;
+	position:relative;
+	left:35px;
+}
+.enrollMotion_buttonSet2 span{
+	margin-top:0px;
+	margin-bottom:15px;
+	position:absolute;
+	right:48px;
+}
+
+.ui-content {
+	padding-top:none;
+	padding-bottom:none;
+	margin-top:15px;
+}
+
+
+#stopwatch-content-timer {
+	padding-top:none;
+	padding-bottom:none;
+	margin-top:15px;
+}
+
+.ui-listview {
+	height: 25px;
+	padding-top:0;
+	padding-bottom:0;
+	margin-top:0;
+	margin-bottom:0;
+	font-size:20px;
+	border-bottom:none;
+	text-align:center;
+}
+.ui-listview li{
+	height: 25px;
+	padding-top:0;
+	padding-bottom:0;
+	margin-top:0;
+	margin-bottom:0;
+	font-size:20px;
+	border-bottom:none;
+}
 
 body {
     margin: 0px auto;
@@ -217,9 +566,12 @@ body {
 }
 
 .ui-content {
-	
 	margin: 0px auto;
 	
+}
+
+.ui-content div{
+	margin: 0px auto;
 }
 
 #stopwatch-content-timer {

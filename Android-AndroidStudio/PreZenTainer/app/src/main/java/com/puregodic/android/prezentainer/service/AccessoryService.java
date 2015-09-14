@@ -2,6 +2,7 @@ package com.puregodic.android.prezentainer.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class AccessoryService extends SAAgent {
 	public static final int CHANNEL_ID_EVENT = 104;
 	public static final int CHANNEL_ID_HR = 110;
 	public static final int CHANNEL_ID_EVENTTIME = 114;
-	public String mDeviceName,mPtTitle,yourId;
+	public String mDeviceName,mPtTitle,yourId,alarmTimeForHuman;
 	private String jsonHR,jsonET;
 	private StringBuffer date ;
 	private Boolean isGearConnected =false;
@@ -79,8 +80,13 @@ public class AccessoryService extends SAAgent {
 						Toast.LENGTH_SHORT).show();
 			} else if (e.getType() == SsdkUnsupportedException.LIBRARY_NOT_INSTALLED) {
 				Toast.makeText(getBaseContext(),
-						"유심 등록이 안되어있거나 Framework를 지원하지 않습니다",
+						"삼성기어 펌웨어 설치 및 업데이트를 반드시 해주세요",
 						Toast.LENGTH_SHORT).show();
+				Intent forUpdate = new Intent(
+						Intent.ACTION_VIEW,
+						Uri.parse("http://www.samsungapps.com/appquery/appDetail.as?appId=com.samsung.android.app.watchmanager&cntyTxt=450&equipID=SM-G928K"));
+				startActivity(forUpdate);
+
 			} else {
 				Toast.makeText(getBaseContext(), "SAP통신에 오류가 있습니다",
 						Toast.LENGTH_SHORT).show();
@@ -130,7 +136,8 @@ public class AccessoryService extends SAAgent {
 							.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 							.setAction("incomingFT")
 							.putExtra("title", mPtTitle)
-							.putExtra("yourId", yourId));    
+							.putExtra("yourId", yourId)
+							.putExtra("alarmTime",alarmTimeForHuman));
 					
 					// 5초 이내에 응답을 해야한다
 					int counter = 0;

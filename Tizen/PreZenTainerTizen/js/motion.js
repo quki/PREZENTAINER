@@ -33,6 +33,9 @@ var accelXArr = new Array(userInputIndex);
 var accelYArr = new Array(userInputIndex);
 var accelZArr = new Array(userInputIndex);
 
+function buttonSetting() {
+	window.addEventListener("devicemotion", onDeviceMotion, true);
+}
 
 function showResult() {
 	$("#count").html(arrayIndex+"/5");
@@ -50,6 +53,7 @@ function onDeviceMotion(e) {
     if(Math.abs(Number(accelX))+Math.abs(Number(accelY))+Math.abs(Number(accelZ))>15 && arrayIndex!=userInputIndex)
     {
     	$('#ok_button').removeAttr('disabled');
+    	document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Red.png)";
     }
 
     showResult();
@@ -78,6 +82,7 @@ function buttonPush() {
 		accelY = 0;
 		accelZ = 0;
 		$('#ok_button').attr('disabled','disabled');
+		document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Gray.png)";
 		if (arrayIndex == userInputIndex) {
 			var sumX=0; 
 			var sumY =0;
@@ -124,6 +129,7 @@ function buttonPush() {
 			}
 		}   
 	}
+	changeButtonEnrollMotion();
 	console.log("average_right : " + averageX_right + " ," + averageY_right + " ," + averageZ_right);
 	console.log("average_left : " + averageX_left + " ," + averageY_left + " ," + averageZ_left);
 }
@@ -172,6 +178,92 @@ function test_motionSensor() {
 	accelZ = 0;
 }
 
+/* changeButton함수 추가 */
+
+function changeButtonStart() {
+	if(document.getElementById('startbtn').disabled == true) {
+		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/Green.png)"
+	}
+	
+	if(document.getElementById('stopbtn').disabled == true) {
+		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/Green.png)"
+	}
+	
+	if(document.getElementById('pceventbtn').disabled == true) {
+		document.getElementById('pceventbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('pceventbtn').style.backgroundImage= "url(./img/button/Red.png)"
+	}
+	
+	if(document.getElementById('pceventbtn2').disabled == true) {
+		document.getElementById('pceventbtn2').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('pceventbtn2').style.backgroundImage= "url(./img/button/Red.png)"
+	}
+	
+}
+
+function changeButtonMotionSetting() {
+	if(document.getElementById('motionbtn').disabled == true) {
+		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Brown.png)"
+	}
+	
+	if(document.getElementById('right_motion_btn').disabled == true) {
+		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+	}
+	
+	if(document.getElementById('left_motion_btn').disabled == true) {
+		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+	}
+	
+}
+
+function changeButtonEnrollMotion() {
+	if(document.getElementById('motion_test_button').disabled == true) {
+		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/Brown.png)"
+	}
+	
+	if(document.getElementById('test_right_motion_btn').disabled == true) {
+		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+	}
+	
+	if(document.getElementById('test_left_motion_btn').disabled == true) {
+		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+	}
+	
+	if(document.getElementById('reset_button').disabled == true) {
+		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/Gray.png)"
+	}
+	else {
+		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/Red.png)"
+	}
+}
 
 function ready_motionSetting() {
 	if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0 &&
@@ -190,8 +282,10 @@ function ready_motionSetting() {
 		accelX = 0;
 	    accelY = 0;
 	    accelZ = 0;
+	    document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Gray.png)"
 	}
 	save_setLocalStorage();
+	changeButtonEnrollMotion();
 }
 function retry_motionSetting() {
 	if(control_right_left==0)
@@ -230,6 +324,9 @@ function modify_motionSetting() {
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').attr('disabled','disabled');
 	$('#motion_test_button').attr('disabled','disabled');
+	/* test_right_motion_btn, test_left_motion_btn에 disabled 속성 추가 */
+	$('#test_right_motion_btn').attr('disabled','disabled');
+	$('#test_left_motion_btn').attr('disabled','disabled');
 	check = 0;
 	document.getElementById("enable_motion").innerHTML="Off";
 	motion_test=0;
@@ -247,14 +344,15 @@ function modify_motionSetting() {
 	averageY_left=0;
 	averageZ_left=0;
 	save_setLocalStorage();
+	changeButtonEnrollMotion();
 }
 function is_motion() {   //back버튼 눌렀을 때  
 	if(averageX_right != 0 && averageY_right != 0 && averageZ_right != 0) {
-		document.getElementById("motion_state").innerHTML="Modify Motion";
+		document.getElementById("motion_state").innerHTML="Modify";
     }
 	else
 	{
-		document.getElementById("motion_state").innerHTML="Enroll Motion";
+		document.getElementById("motion_state").innerHTML="Enroll";
 		arrayIndex=0;
 		accelX = 0;
 	    accelY = 0;
@@ -292,6 +390,10 @@ function main_to_back(){
 	document.getElementById("left_motion").innerHTML="Off";
 	document.getElementById("test_left_motion").innerHTML="Off";
 	left_motion_enable=0;
+	
+	changeButtonStart();
+	changeButtonMotionSetting();
+	changeButtonEnrollMotion();
 }
 
 
@@ -302,6 +404,7 @@ function enable_motion(){
 		{
 			document.getElementById("enable_motion").innerHTML="On";
 			check=1;
+			$('#motionbtn').removeAttr('disabled');
 			$('#right_motion_btn').removeAttr('disabled');
 			$('#left_motion_btn').removeAttr('disabled');
 		}
@@ -321,8 +424,11 @@ function enable_motion(){
 		
 	}
 	else{
+		$('#motionbtn').attr('disabled','disabled');
 		alert('Motion 등록을 먼저해주세요!');
 	}
+	
+	changeButtonMotionSetting();
 }
 function load_setLocalStorage(){
 	if(window.localStorage['averageX_right'] == null && 
@@ -356,7 +462,6 @@ function load_setLocalStorage(){
 		averageY_left=Number(window.localStorage['averageY_left']);
 		averageZ_left=Number(window.localStorage['averageZ_left']);
 		arrayIndex=Number(window.localStorage['arrayIndex']);
-		document.getElementById("motion_state").innerHTML="Modify Motion";
 		
 		console.log(averageX_right);
 		console.log(averageY_right);
@@ -399,7 +504,7 @@ function test_motion_on_off(){
 		
 		$('#test_right_motion_btn').attr('disabled','disabled');
 		$('#test_left_motion_btn').attr('disabled','disabled');
-		
+			
 		document.getElementById("test_right_motion").innerHTML="Off";
 		right_motion_enable=0;
 		
@@ -407,6 +512,7 @@ function test_motion_on_off(){
 		left_motion_enable=0;
 		
 	}	
+	changeButtonEnrollMotion();
 }
 
 function right_enable_motion(){
@@ -419,10 +525,12 @@ function right_enable_motion(){
 	else
 	{
 		document.getElementById("test_right_motion").innerHTML="Off";
+		
 		document.getElementById("right_motion").innerHTML="Off";
 		right_motion_enable=0;
 	}	
-	
+	changeButtonEnrollMotion();
+	changeButtonMotionSetting();
 }
 
 function left_enable_motion(){
@@ -438,29 +546,17 @@ function left_enable_motion(){
 		document.getElementById("left_motion").innerHTML="Off";
 		left_motion_enable=0;
 	}	
-	
+	changeButtonEnrollMotion();
+	changeButtonMotionSetting();
 }
 
-//window.addEventListener("devicemotion", onDeviceMotion, true);
 
 //Initialize function
 window.onload = function () {
-	
+    // TODO:: Do your initialization job
+	window.addEventListener("devicemotion", onDeviceMotion, true);
 	load_setLocalStorage();
     console.log("init() called");
-    // add eventListener for tizenhwkey
-    document.addEventListener('tizenhwkey', function(e) {
-        if(e.keyName == "back")
-        	{
-        		if(confirm("어플을 종료하시겠습니까?")==true){
-        			tizen.application.getCurrentApplication().exit();
-        		}
-        		
-            ///////////어떤 화면에서든 back버튼 눌렀을 때 모든 설정 초기화
-        		main_to_back();
-        		is_motion();
- 	
-        	}
-            
-    });
+
+
 };

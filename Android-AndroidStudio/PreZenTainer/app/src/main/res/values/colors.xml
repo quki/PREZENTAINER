@@ -5,6 +5,7 @@
     <!--main-->
     <color name="mainblue">#2196F3</color>
     <color name="mainblue_dark">#1976D2</color>
+    <color name="mainblue_light">#BBDEFB</color>
     <color name="white">#FFFFFF</color>
     <color name="lightgrey">#E0E0E0</color>
     <color name="bluegrey">#CFD8DC</color>
@@ -26,12 +27,6 @@
     <!-- clickstate -->
     <color name="clickstate">#C5CAE9</color>
     
-    <!-- swipe -->
-    <color name="color1">#ff92ff2f</color>
-    <color name="color2">#ffffbc00</color>
-    <color name="color3">#ff12ffa0</color>
-    <color name="color4">#ffff6724</color>
-
 
     <!--login-->
     <color name="bg_login">#2196F3</color>

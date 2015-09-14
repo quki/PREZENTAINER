@@ -41,10 +41,11 @@
         <TextView
             android:id="@+id/settingAlarm"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:gravity="center"
             android:clickable="true"
             android:textColor="@color/white"
+            android:background="@drawable/textview_alarm"
             android:text=" 알려주세요" />
     </LinearLayout>
 </RelativeLayout>

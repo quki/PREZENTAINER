@@ -10,10 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.reflect.Field;
-import java.text.DecimalFormat;
 
 public class AlarmActivity extends AppCompatActivity {
 
@@ -27,11 +25,12 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
-
         // Time Picker
         minutePicker = (NumberPicker) findViewById(R.id.minutePicker);
         secondPicker = (NumberPicker) findViewById(R.id.secondPicker);
         settingAlarm = (TextView) findViewById(R.id.settingAlarm);
+
+        // Picker 설정 부분 (Max,Min설정,글자색 white설정)
         minutePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         secondPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         minutePicker.setMaxValue(60);
@@ -46,12 +45,12 @@ public class AlarmActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                // SettingFragment로 알람의 분,초 값 전달
+                // SettingFragment로 알람의 분,초 값 각각 전달
                 int min = minutePicker.getValue();
                 int sec = secondPicker.getValue();
 
                 returnAlarmTimeIntent = new Intent();
-                returnAlarmTimeIntent.putExtra("min", min).putExtra("sec",sec);
+                returnAlarmTimeIntent.putExtra("min", min).putExtra("sec", sec);
                 setResult(REQUEST_ALARM, returnAlarmTimeIntent);
                 finish();
             }
@@ -60,6 +59,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     }
 
+    // Picker의 글자색 설정 함수
     public static boolean setNumberPickerTextColor(NumberPicker numberPicker, int color) {
         final int count = numberPicker.getChildCount();
         for (int i = 0; i < count; i++) {
@@ -88,8 +88,10 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        Toast.makeText(AlarmActivity.this, "뒤로가기 버튼을 허용하지 않습니다", Toast.LENGTH_SHORT).show();
-
+        returnAlarmTimeIntent = new Intent();
+        returnAlarmTimeIntent.putExtra("min", 0).putExtra("sec", 0);
+        setResult(REQUEST_ALARM, returnAlarmTimeIntent);
+        finish();
     }
 
 }

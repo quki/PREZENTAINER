@@ -147,9 +147,10 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                                     if(mDeviceName != null && mAccessoryService != null){
 
 
-                                        // Service에 device name, ppt tittle, 계정정보 넘기기
+                                        // Service에 device name, ppt tittle, alarm시간, 계정정보 넘기기
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
+                                        mAccessoryService.alarmTimeForHuman = alarmTimeForHuman;
                                         mAccessoryService.yourId = yourId;
 
                                         if (timeInterval != null) {
@@ -271,6 +272,8 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        // 블루투스 승인 dialog 요청
         if (requestCode == REQUEST_ENABLE_BT) {
 
             // 블루투스 연결 허락을 사용자에게 물어본 이후 동작
@@ -279,16 +282,29 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
             } else {
                 Toast.makeText(getActivity(), "블루투스를 꼭 켜주세요", Toast.LENGTH_SHORT).show();
             }
+
+        // SettingBluetoothActivity에 디바이스 이름 요청
         } else if (requestCode == REQUEST_DEVICENAME) {
             mDeviceName = intent.getStringExtra("deviceName");
+            if(mDeviceName != null){
+                new Thread(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        // 해당 Device(PC) 이름으로 연결
+                        ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
+                        mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
+                        mConnecToPcHelper.connectWithPc(mDeviceName);
+                    }
+                }).start();
+            }
+
+        // AlarmActivity에 alarm시간 요청
         } else if (requestCode == REQUEST_ALARM) {
 
             // AlarmActivity로 부터 알람시간의 분과 초를 가져온다
             int min = intent.getIntExtra("min",1);
             int sec = intent.getIntExtra("sec", 1);
-
-            alarmTimeForHuman = min+"분 "+sec+"초";
 
             // Alarm시간을 소수점으로 만들어준다 ex) 5분30초 -> 5.5
             // 그리고 0분0초 인 경우 0을 return
@@ -299,26 +315,26 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
             // 0분0초가 아닐 때
             if(!alarmTimeForGear.equals("0")){
 
+                // 사람이 보기 좋은 형태로 변환
+                if(min==0){
+                    alarmTimeForHuman =sec+"초";
+                }else if(sec == 0 ){
+                    alarmTimeForHuman =min+"분";
+                }else{
+                    alarmTimeForHuman = min+"분 "+sec+"초";
+                }
+
                 timeInterval = new ArrayList<>();
                 timeInterval.add(alarmTimeForGear);
                 Toast.makeText(getActivity(),alarmTimeForHuman, Toast.LENGTH_SHORT).show();
+
             }else{
                 timerCheckBox.setChecked(false);
+                Toast.makeText(getActivity(),"알람을 설정하지 않습니다", Toast.LENGTH_SHORT).show();
             }
         }
 
-        if(mDeviceName != null){
-            new Thread(new Runnable() {
 
-                @Override
-                public void run() {
-                    // 해당 Device(PC) 이름으로 연결
-                    ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
-                    mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
-                    mConnecToPcHelper.connectWithPc(mDeviceName);
-                }
-            }).start();
-        }
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
@@ -506,6 +522,10 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     private void setCircularProgressBtn(final CircularProgressButton circularBtn, final int id) {
 
 
+        // Progress 상태로 누르는 경우 모든 drawable을 버튼에서 사라지게 한다
+        if(id== BUTTON_STATE_PROGRESS)
+            circularBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
         Handler mHandler = new Handler();
         circularBtn.setProgress(id);
 
@@ -541,10 +561,6 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                         } else if (circularBtn.equals(connectToPcBtn)) {
                             circularBtn.setText("연결실패");
                         }
-                        break;
-                    }
-                    case BUTTON_STATE_PROGRESS: {
-                        circularBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                         break;
                     }
                     case BUTTON_STATE_COMPLETE: {

@@ -13,7 +13,5 @@
     <tizen:privilege name="http://developer.samsung.com/privilege/healthinfo"/>
     <tizen:privilege name="http://developer.samsung.com/privilege/medicalinfo"/>
     <tizen:privilege name="http://tizen.org/privilege/camera"/>
-    <tizen:privilege name="http://tizen.org/privilege/audiorecorder"/>
-    <tizen:privilege name="http://tizen.org/privilege/content.write"/>
     <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
 </widget>
