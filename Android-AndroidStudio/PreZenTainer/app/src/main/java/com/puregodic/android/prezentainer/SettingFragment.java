@@ -575,7 +575,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                 }
 
             }
-        }, 700);
+        }, 800);
 }
 
     private Drawable getImageResource(CircularProgressButton c) {
