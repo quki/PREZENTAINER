@@ -1,3 +1,4 @@
+
 package com.puregodic.android.prezentainer;
 
 import android.media.MediaPlayer;
@@ -89,7 +90,7 @@ public class ResultActivity extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         yourId = getIntent().getStringExtra("yourId");
         date = getIntent().getStringExtra("date");
-        // �끃�쓬 �뙆�씪 寃쎈줈
+        // 녹음 파일 경로
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
 
@@ -97,10 +98,12 @@ public class ResultActivity extends AppCompatActivity {
         pptDate.setText(date);
 
         fetchDataByVolley();
-     }
+
+        
+    }
     
     /* Fragment
-     * Chart, SeekBar 紐⑤몢 PlaceholderFragment�뿉�꽌 �옉�뾽*/
+     * Chart, SeekBar 모두 PlaceholderFragment에서 작업*/
     public class PlaceHolderFragment extends Fragment{
         
         private ArrayList<Float> heartRateList;
@@ -130,7 +133,7 @@ public class ResultActivity extends AppCompatActivity {
         private boolean hasYaxis = true;
         private ValueShape shape = ValueShape.CIRCLE;
         
-        // Viewport�뒗 �돺寃� 留먰빐 �솕硫� (View)�씪怨� �깮媛곹븯硫� �맂�떎. 二쇰줈 蹂댁뿬吏��뒗 踰붿쐞瑜� 吏��젙�븷 �븣 二쇰줈 �궗�슜�맂�떎.
+        // Viewport는 쉽게 말해 화면 (View)라고 생각하면 된다. 주로 보여지는 범위를 지정할 때 주로 사용된다.
         private Viewport maxViewport,currentViewport;
         
         public final Handler timeHandler = new TimeHandler(this);
@@ -138,7 +141,7 @@ public class ResultActivity extends AppCompatActivity {
         public PlaceHolderFragment() {
         }
         
-        // Volley濡� 遺��꽣 諛쏆븘�삩 ArrayList 珥덇린�솕 �옉�뾽
+        // Volley로 부터 받아온 ArrayList 초기화 작업
         public PlaceHolderFragment(ArrayList<Float> heartRateList ,ArrayList<Float> rightEventTimeList, ArrayList<Float> leftEventTimeList) {
             this.heartRateList = heartRateList;
             this.rightEventTimeList = rightEventTimeList;
@@ -172,7 +175,8 @@ public class ResultActivity extends AppCompatActivity {
 
 
 
-            //�븘�옒遺��꽣 Audio 諛� SeekBar�옉�뾽
+
+            //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
             audio = MediaPlayer.create(getApplicationContext(), audioPath);
 
@@ -180,20 +184,20 @@ public class ResultActivity extends AppCompatActivity {
 
                 audio.setLooping(true);
                 /**
-                 * seekbar�쓽 理쒕뙎媛믪쓣 �쓬�븙�쓽 理쒕�湲몄씠, 利� music.getDuration()�쓽 媛믪쓣 �뼸�뼱�� 吏��젙
+                 * seekbar의 최댓값을 음악의 최대길이, 즉 music.getDuration()의 값을 얻어와 지정
                  */
                 audioSize = audio.getDuration();
                 seekbar.incrementProgressBy(1);
                 seekbar.setMax(audioSize);
-                // 理쒖큹�뿉�뿉 chart�뿉 肉뚮젮 以� data �깮�꽦
+                // 최초에에 chart에 뿌려 줄 data 생성
                 generateData();
 
-                // �옄�룞�쑝濡� chart媛� 怨꾩궛 �릺�뒗 寃� 諛⑹�
+                // 자동으로 chart가 계산 되는 것 방지
                 chart.setViewportCalculationEnabled(false);
 
 
                 /**
-                 * �떆�겕諛붾�� ��吏곸��쓣�뻹 �쓬�븙 �옱�깮 �쐞移섎룄 蹂��븷�닔 �엳�룄濡� 吏��젙
+                 * 시크바를 움직였을떄 음악 재생 위치도 변할수 있도록 지정
                  */
                 seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
                     @Override
@@ -212,13 +216,13 @@ public class ResultActivity extends AppCompatActivity {
 
                    /*
                     *          < currentSecond >
-                    * 1. millisecond -> index 蹂��솚
-                    * 2. progress/1000 (珥�)
-                    * 3. (progress/1000)-1 (�씤�뜳�뒪)
+                    * 1. millisecond -> index 변환
+                    * 2. progress/1000 (초)
+                    * 3. (progress/1000)-1 (인덱스)
                     *
                     *           < realIndex >
-                    * 1. mIndex以� 5�쓽 諛곗닔瑜� 李얠븘�꽌 realIndex�뿉 ���엯
-                    * 2. �떒, �씪�쓽 �옄由�(5�떒�쐞)�뿉�꽌 �궡由�
+                    * 1. mIndex중 5의 배수를 찾아서 realIndex에 대입
+                    * 2. 단, 일의 자리(5단위)에서 내림
                     * ex)  43 -> 40, 47 -> 45
                     *
                     * */
@@ -239,12 +243,12 @@ public class ResultActivity extends AppCompatActivity {
                         float line0ValueY = 0;
 
                    /*
-                    * progress濡� ArrayList�쓽 index瑜� 李몄“�븷 �븣,
-                    * IndexOutOfBoudsException 諛⑹�瑜� �쐞�빐
+                    * progress로 ArrayList의 index를 참조할 때,
+                    * IndexOutOfBoudsException 방지를 위해
                     *
                     * */
                         if (xValue <= lastXvalue) {
-                            line0ValueY = data.getLines().get(0).getValues().get((xValue / 5)).getY(); // �떖諛뺤닔 Value
+                            line0ValueY = data.getLines().get(0).getValues().get((xValue / 5)).getY(); // 심박수 Value
                             data.getLines().get(1).getValues().get(0).set(xValue, line0ValueY);
                         } else {
                             xValue = 0;
@@ -253,7 +257,7 @@ public class ResultActivity extends AppCompatActivity {
                         }
                         chart.setLineChartData(data);
 
-                        // user媛� �겢由��븷 寃쎌슦 �빐�떦 position�쑝濡� progressbar�씠�룞
+                        // user가 클릭할 경우 해당 position으로 progressbar이동
                         if (fromUser)
                             audio.seekTo(progress);
                     }
@@ -275,16 +279,16 @@ public class ResultActivity extends AppCompatActivity {
                     }
                 });
 
-                //heartRate�젙蹂� 異쒕젰
+                //heartRate정보 출력
                 heartCalcultor = new HeartRateCalculator(heartRateList);
-                averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// �룊洹� �떖諛뺤닔
-                highHeartrate.setText(heartCalcultor.HighHeartRateValue());        // 理쒓퀬 �떖諛뺤닔
-                lowHeartrate.setText(heartCalcultor.LowHeartRateValue());          // 理쒖� �떖諛뺤닔
-                score.setText(heartCalcultor.standardDeviation());                 // �젏�닔
-                wholeTime.setText(" / "+changeTimeForHuman(audio.getDuration()));    // �삤�뵒�삤 珥� 湲몄씠
+                averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// 평균 심박수
+                highHeartrate.setText(heartCalcultor.HighHeartRateValue());        // 최고 심박수
+                lowHeartrate.setText(heartCalcultor.LowHeartRateValue());          // 최저 심박수
+                score.setText(heartCalcultor.standardDeviation());                 // 점수
+                wholeTime.setText(" / "+changeTimeForHuman(audio.getDuration()));    // 오디오 총 길이
             }else{
-                // �궗�슜�옄媛� �끃�쓬�뙆�씪�쓣 �룿�뿉�꽌 �궘�젣�븳 寃쎌슦 媛뺤젣 醫낅즺
-                Toast.makeText(ResultActivity.this, "�끃�쓬�뙆�씪�씠 �뾾�꽕�슂", Toast.LENGTH_SHORT).show();
+                // 사용자가 녹음파일을 폰에서 삭제한 경우 강제 종료
+                Toast.makeText(ResultActivity.this, "녹음파일이 없네요", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -318,7 +322,7 @@ public class ResultActivity extends AppCompatActivity {
          public void buttonStop(){
             audio.stop();
             try {
-                // stream�쓣 以�鍮�
+                // stream을 준비
                audio.prepare();
             } catch (IllegalStateException e) {
                e.printStackTrace();
@@ -331,19 +335,19 @@ public class ResultActivity extends AppCompatActivity {
             runningTime.setText("00:00");
          }
          
-         // audio�쓽 �떆媛꾩쓣 痢≪젙�븯�뒗 蹂꾨룄�쓽 Thread
+         // audio의 시간을 측정하는 별도의 Thread
          public void Thread(){Runnable task = new Runnable() {
              public void run() {
                  
-                 // SeekBar 媛깆떊�쓣 �쐞�븳 Code瑜� �꽔�뼱以�
+                 // SeekBar 갱신을 위한 Code를 넣어줌
                  while (audio.isPlaying()) {
                      try {
-                         // 1珥� 留덈떎
+                         // 1초 마다
                          Thread.sleep(1000);
                      } catch (InterruptedException e) {
                          e.printStackTrace();
                      }
-                     // UI 媛깆떊
+                     // UI 갱신
                      seekbar.setProgress(audio.getCurrentPosition());
                      
                      Log.d("audio.getCurrentPosition()",
@@ -351,8 +355,8 @@ public class ResultActivity extends AppCompatActivity {
 
                      Message msg = timeHandler.obtainMessage();
                      
-                     msg.what = SEND_THREAD_INFOMATION; // �빖�뱾�윭�뿉 蹂대궡湲� �쐞�븳 �떇蹂� Id
-                     msg.arg1 = Integer.valueOf(audio.getCurrentPosition()); // �빖�뱾�윭�뿉 蹂대궡�뒗 �씤�옄 媛� Integer
+                     msg.what = SEND_THREAD_INFOMATION; // 핸들러에 보내기 위한 식별 Id
+                     msg.arg1 = Integer.valueOf(audio.getCurrentPosition()); // 핸들러에 보내는 인자 값 Integer
                      timeHandler.sendMessage(msg);
 
                  }
@@ -362,7 +366,7 @@ public class ResultActivity extends AppCompatActivity {
          thread.start();
          }
          
-         // MainThread�뿉 �젒洹쇳븯湲� �쐞�븳 Handler
+         // MainThread에 접근하기 위한 Handler
          public class TimeHandler extends Handler {
               private final WeakReference<PlaceHolderFragment> mActivity;
              
@@ -373,7 +377,7 @@ public class ResultActivity extends AppCompatActivity {
               @Override
               public void handleMessage(Message msg) {
                   
-                  // msg = �쁽�옱 �삤�뵒�삤 �쐞移�(Integer)
+                  // msg = 현재 오디오 위치(Integer)
                   String stringTime = null;
                   String stringHR = null;
                   String stringWholeTime = null;
@@ -385,8 +389,8 @@ public class ResultActivity extends AppCompatActivity {
                       stringTime = changeTimeForHuman(msg.arg1);
                       stringHR = heartCalcultor.currentHeartRateValue(msg.arg1);
 
-                      activity.heartRate.setText(stringHR);                                // �쁽�옱 �떖諛뺤닔
-                      activity.runningTime.setText(stringTime);  // �쁽�옱�떆媛� / 珥� �삤�뵒�삤 湲몄씠
+                      activity.heartRate.setText(stringHR);                                // 현재 심박수
+                      activity.runningTime.setText(stringTime);  // 현재시간 / 총 오디오 길이
 
                       break;
                   default:
@@ -397,7 +401,7 @@ public class ResultActivity extends AppCompatActivity {
               
           }
 
-          // milliseconds瑜� �궗�엺�씠 蹂� �닔 �엳�뒗 �떆媛꾩쑝濡� 蹂��솚 ex) 02:37
+          // milliseconds를 사람이 볼 수 있는 시간으로 변환 ex) 02:37
           public String changeTimeForHuman (int time) {
 
               SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
@@ -405,23 +409,23 @@ public class ResultActivity extends AppCompatActivity {
 
               String stringTime;
 
-              // 3600珥� �씠�긽�씪�븣, 利�, 1�떆媛꾩씠 �꽆�뼱媛� �븣
+              // 3600초 이상일때, 즉, 1시간이 넘어갈 때
               if (time / (1000 * 60 * 60) > 0) {
 
                   stringTime = sdfH.format(time);
               }
-              // 3600珥� �씠�븯�씪�븣, 利�, 1�떆媛꾩씠 �븞�맆 �븣
+              // 3600초 이하일때, 즉, 1시간이 안될 때
               else {
                   stringTime = sdf.format(time);
                   }
               
               return stringTime;
           }
-          // 理쒖큹�뿉�뿉 chart�뿉 肉뚮젮 以� data �깮�꽦 
+          // 최초에에 chart에 뿌려 줄 data 생성 
           private void generateData() {
 
               List<Line> lines = new ArrayList<Line>();
-              List<Line> linesForPreData = new ArrayList<Line>();  //誘몃━蹂닿린 �뜲�씠�꽣瑜� �쐞�븳 List
+              List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
               List<String> slideNum = new ArrayList<String>();
 
 
@@ -440,10 +444,10 @@ public class ResultActivity extends AppCompatActivity {
                       rightEventTimeList.remove(rightEventTimeList.size() - 1);
                   }
               }
-              // 異� 媛� �꽕�젙 (�뒳�씪�씠�뱶 踰덊샇)
+              // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < rightEventTimeList.size(); ++j) {
-                  slideNum.add(j + 1 + "踰�");
+                  slideNum.add(j + 1 + "번");
                   axisXvalue.add(new AxisValue(rightEventTimeList.get(j) / 1000).setLabel(slideNum.get(j)));
               }
               for (int i = 0; i < axisXvalue.size(); i++) {
@@ -467,45 +471,45 @@ public class ResultActivity extends AppCompatActivity {
                   Line line = new Line(values);
                   line.setColor(ChartUtils.COLORS[i]);
 
-                  // progress�뿉 �뵲�씪 ��吏곸씠�뒗 Point
+                  // progress에 따라 움직이는 Point
                   if (i == 1) {
                       line.setHasLabels(true);
                   }
-                  // 理쒖큹�뿉 肉뚮젮吏��뒗 chart�쓽 line
+                  // 최초에 뿌려지는 chart의 line
                   else {
                       line.setShape(shape); // point -> circle
                       line.setCubic(true); // line -> curve
-                      line.setFilled(true); // area 梨꾩슦湲�
+                      line.setFilled(true); // area 채우기
                       line.setHasLabels(false);
                       line.setPointRadius(1);
-                      line.setHasLabelsOnlyForSelected(false); //�닃���쓣 �븣, �씪踰� �몴�떆
+                      line.setHasLabelsOnlyForSelected(false); //눌렀을 때, 라벨 표시
                   }
                   lines.add(line);
                   if (i == 0) {
-                      //誘몃━蹂닿린 �뜲�씠�꽣�뿉�뒗 �떖�옣諛뺣룞�닔 �씪�씤留� �꽔湲�!
+                      //미리보기 데이터에는 심장박동수 라인만 넣기!
                       linesForPreData.add(line);
                   }
               }
 
-              data = new LineChartData(lines); // 理쒖큹�뿉 肉뚮젮吏� data chart
-              preData = new LineChartData(linesForPreData); // 誘몃━蹂닿린 chart
+              data = new LineChartData(lines); // 최초에 뿌려진 data chart
+              preData = new LineChartData(linesForPreData); // 미리보기 chart
 
-              // X異뺤� 臾댁“嫄� �꽕�젙
+              // X축은 무조건 설정
               Axis axisX = new Axis()
                       .setHasLines(true)
                       .setLineColor(ChartUtils.COLOR_RED).setTextColor(getResources().getColor(R.color.dark_black))
                       .setValues(axisXvalue);
               data.setAxisXBottom(axisX);
-              // Y 異뺤쓣 媛뽮퀬 �떢�쓣 �븣
+              // Y 축을 갖고 싶을 때
               if (hasYaxis) {
 
                   Axis axisY = new Axis()
                           .setHasLines(true)
-                          .setHasTiltedLabels(true)  // 湲��옄 湲곗슱�엫
-                          .setName("�떖諛뺤닔");
+                          .setHasTiltedLabels(true)  // 글자 기울임
+                          .setName("심박수");
                   data.setAxisYLeft(axisY);
 
-                  // Y 異뺤씠 �븘�슂 �뾾�쓣 �븣
+                  // Y 축이 필요 없을 때
               } else {
                   data.setAxisYLeft(null);
               }
@@ -515,18 +519,18 @@ public class ResultActivity extends AppCompatActivity {
                   chart.setZoomEnabled(false);
                   chart.setScrollEnabled(false);
 
-                  // 誘몃━ 蹂닿린 �꽕�젙
+                  // 미리 보기 설정
                   previewData = new LineChartData(preData);
                   previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
                   previewChart.setLineChartData(previewData);
                   previewChart.setViewportChangeListener(new ViewportListener());
-                  previewChart.setZoomType(ZoomType.HORIZONTAL); // X異� 諛⑺뼢�쑝濡쒕쭔 ��吏곸엫
+                  previewChart.setZoomType(ZoomType.HORIZONTAL); // X축 방향으로만 움직임
 
                   maxViewport();
                   currentViewport();
 
           }
-          // 理쒕� Viewport 媛� 吏��젙
+          // 최대 Viewport 값 지정
           private void maxViewport(){
               
               maxViewport.top = 120;
@@ -537,7 +541,7 @@ public class ResultActivity extends AppCompatActivity {
               previewChart.setMaximumViewport(maxViewport);
               
           }
-          // �쁽�옱 蹂댁뿬吏� Viewport 媛� 吏��젙
+          // 현재 보여질 Viewport 값 지정
           private void currentViewport(){
 
               currentViewport.left=0;
@@ -549,7 +553,7 @@ public class ResultActivity extends AppCompatActivity {
           }
           
           
-          // Y異� �뾾�븷�뒗 option
+          // Y축 없애는 option
           private void toggleYaxis() {
               hasYaxis = !hasYaxis;
               generateData();
@@ -602,7 +606,7 @@ public class ResultActivity extends AppCompatActivity {
     
     private void fetchDataByVolley(){
 
-        mDialogHelper.showPdialog("�옞�떆留� 湲곕떎�젮二쇱꽭�슂...", true);
+        mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
         StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_FETCH_GRAPH,
                 new Response.Listener<String>() {
@@ -612,7 +616,7 @@ public class ResultActivity extends AppCompatActivity {
                         
                         mDialogHelper.hidePdialog();
                         
-                        // String response -> JSON Object -> JSON Array 異붿텧 -> 媛쒕퀎 �빆紐� parsing
+                        // String response -> JSON Object -> JSON Array 추출 -> 개별 항목 parsing
                         try {
 
                             
@@ -638,7 +642,7 @@ public class ResultActivity extends AppCompatActivity {
                                 JSONArray timeRight = (JSONArray)time.get("right");
                                 JSONArray timeLeft = (JSONArray)time.get("left");
 
-                            // HeartRate媛� �븘�삁 痢≪젙�씠 �븞�맂 寃쎌슦, undefined �삁�쇅 泥섎━
+                            // HeartRate가 아예 측정이 안된 경우, undefined 예외 처리
                             JSONArray hbr ;
                             if(jObj.getString("hbr").equals("undefined")){
                                 hbr = new JSONArray("[60]");
@@ -649,7 +653,7 @@ public class ResultActivity extends AppCompatActivity {
                                 ArrayList<Float> rightEventTimeList= new ArrayList<>();
                                 ArrayList<Float> leftEventTimeList= new ArrayList<>();
 
-                            // Heart Rate媛� �꽆�뼱�삤吏� �븡�뒗 寃쎌슦 諛⑹�
+                            // Heart Rate가 넘어오지 않는 경우 방지
                             if(hbr.length() != 0){
                                 for(int i = 0; i<hbr.length(); i++){
                                     float heartRateValue = Float.parseFloat(hbr.get(i).toString());
@@ -692,13 +696,13 @@ public class ResultActivity extends AppCompatActivity {
                         Log.e(TAG, "Error: " + error.getMessage());
                         mDialogHelper.hidePdialog();
                         finish();
-                        Toast.makeText(ResultActivity.this,"�꽕�듃�썙�겕 �뿰寃곗쓣 �솗�씤�븯�꽭�슂", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ResultActivity.this,"네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show();
                     }
                 }) {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url ( �빐�떦 id && �빐�떦 title�씤 row )
+                // Posting params to register url ( 해당 id && 해당 title인 row )
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 params.put("title", title);
