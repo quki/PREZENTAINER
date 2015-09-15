@@ -3,7 +3,7 @@ package com.puregodic.android.prezentainer.calculator;
 import java.util.ArrayList;
 
 /**
- * Created by SAMSUNG on 2015-09-09.
+ * Created by darkstars77 on 2015-09-09.
  */
 public class HeartRateCalculator {
 
@@ -58,6 +58,7 @@ public class HeartRateCalculator {
 
     //표준편차를 이용한 ppt점수
     public String standardDeviation() {
+        int offset = 3;
         float sum=0;
         double standardDeviationValue=0;
         String result=null;
@@ -70,28 +71,8 @@ public class HeartRateCalculator {
 
 
         standardDeviationValue = Math.sqrt((double)sum/heartRateList.size());
-        int score;
 
-        if(standardDeviationValue <= 5){
-            score=100;
-        }
-        else if(5 < standardDeviationValue && standardDeviationValue <= 10){
-            score=90;
-        }
-        else if(10 < standardDeviationValue && standardDeviationValue <= 20){
-            score=80;
-        }
-        else if(20 < standardDeviationValue && standardDeviationValue <= 30){
-            score=70;
-        }
-        else if(30 < standardDeviationValue && standardDeviationValue <= 40){
-            score=60;
-        }
-        else{
-            score=50;
-        }
-
-        result = Integer.toString(score);
+        result = Integer.valueOf(100-(int)standardDeviationValue*offset).toString();
         return result;
     }
 

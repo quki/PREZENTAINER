@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +33,9 @@ public class PairingActivity extends AppCompatActivity {
     private RippleBackground rippleBackground;
     BroadcastReceiver mBroadcastReceiver;
 
-    CheckedTextView checkedTextView;
+    private CheckedTextView checkedTextView;
 
+    private Toolbar mToolbar;
     private PairingFragment fragment = null;
 
     @Override
@@ -40,10 +43,21 @@ public class PairingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pairing);
 
+        // Toolbar 설정
+        mToolbar = (Toolbar)findViewById(R.id.toolbarPairingActivity);
+        setSupportActionBar(mToolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_arrow_left));
+        getSupportActionBar().setTitle("주변 기기검색");
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         rippleBackground = (RippleBackground) findViewById(R.id.content);
-
         checkedTextView = (CheckedTextView) findViewById(R.id.checkedTextView);
-
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         // 만일 하드웨어에 블루투스가 없다면 null을 return 한다.
         if (mBluetoothAdapter == null) {
@@ -89,7 +103,7 @@ public class PairingActivity extends AppCompatActivity {
                     checkedTextView.setChecked(false);
                     if (mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
 
-                        Toast.makeText(PairingActivity.this, "/'예\' 버튼을 누르면 내 기기 검색 허용을 차단합니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PairingActivity.this, "'예' 버튼을 누르면 내 기기 검색 허용을 차단합니다", Toast.LENGTH_SHORT).show();
                         Intent cancelDiscoverableIntent = new
                                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                         cancelDiscoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1);
@@ -111,7 +125,6 @@ public class PairingActivity extends AppCompatActivity {
 
                     } else if (mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
 
-                        Toast.makeText(PairingActivity.this, "내 디바이스를 페어링 된적이 있는 장치들은 검색이 가능하지만 새로운 장치들은 검색할수 없는 상태", Toast.LENGTH_SHORT).show();
 
                         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                         //discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);   --> 초단위 300초 : 5분

@@ -7,20 +7,23 @@ import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.puregodic.android.prezentainer.adapter.PairedDeviceAdapter;
 import com.puregodic.android.prezentainer.adapter.PairedDeviceData;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
 import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
 
 import java.util.ArrayList;
@@ -34,18 +37,32 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     private ListView listViewPaired;
     
-    private Button btnSearch;
 
     private String mDeviceName;
 
     Intent returnDeviceNameIntent;
-    
 
+    private Toolbar mToolbar;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_bluetooth);
+
+        // Toolbar 설정
+        mToolbar = (Toolbar)findViewById(R.id.toolbarsettingBtActivity);
+        setSupportActionBar(mToolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_arrow_left));
+        getSupportActionBar().setTitle("연결된 PC");
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         isEnabledAdapter();
 
@@ -53,10 +70,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
         setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
 
-
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
-
-        btnSearch = (Button)findViewById(R.id.btnSearch);
 
     }
 
@@ -64,20 +78,23 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     protected void onPostCreate(Bundle savedInstanceState) {
 
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        super.onPostCreate(savedInstanceState);
+    }
 
-            @Override
-            public void onClick(View v) {
-
-
-                Intent i = new Intent(SettingBluetoothActivity.this, CardViewActivity.class);
-                startActivity(i);
-            }
-        });
+    @Override
+    protected void onResume() {
 
         listPairedDevices();
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_list);
+         fab.attachToListView(listViewPaired);
 
-        super.onPostCreate(savedInstanceState);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingBluetoothActivity.this, PairingActivity.class));
+            }
+        });
+        super.onResume();
     }
 
     @Override
@@ -111,16 +128,21 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
     // List Devices paired
     private void listPairedDevices() {
         
-        // pair된 기기들을 Set화 시킴
+        // 패어링된 기기들을 Set화 시킴
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         ArrayList<PairedDeviceData> pairedDeviceArrayList = new ArrayList<PairedDeviceData>();
 
-        // pair된 device를 list
+        // 패어링된 device를 list
         for (BluetoothDevice pairedDevice : pairedDevices) {
-            
+
+            // 패어링된 기기의 type, name, adress를 data객체에 초기화
             int type = pairedDevice.getBluetoothClass().getMajorDeviceClass();
-            PairedDeviceData data = new PairedDeviceData(type, pairedDevice.getName());
-            pairedDeviceArrayList.add(data);
+            if(type == BluetoothConfig.NOTEBOOK){
+                PairedDeviceData data = new PairedDeviceData(type, pairedDevice.getName(),pairedDevice.getAddress());
+                pairedDeviceArrayList.add(data);
+            }
+
+
         }
         
         PairedDeviceAdapter adapter = new PairedDeviceAdapter(this,pairedDeviceArrayList);

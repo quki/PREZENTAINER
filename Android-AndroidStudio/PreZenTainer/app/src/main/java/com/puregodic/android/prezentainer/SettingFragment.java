@@ -28,7 +28,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +40,7 @@ import com.puregodic.android.prezentainer.bluetooth.ConnectionActionPc;
 import com.puregodic.android.prezentainer.service.AccessoryService;
 import com.puregodic.android.prezentainer.service.ConnectionActionGear;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements BluetoothHelper{
@@ -55,12 +55,11 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     private Boolean isGearConnected = false;
     private Boolean isPcConnected = false;
     private BluetoothAdapter mBluetoothAdapter;
-    public static final int REQUEST_DETAIL = 3;
+    public static final int REQUEST_ALARM = 4;
     private static final String TAG = "==SETTING ACTIVITY==";
 
     private Button startBtn;
     private CheckBox timerCheckBox;
-    private RadioGroup timerRadioGroup;
     private EditText ptTitleEditText;
 
     //private static final  int PDIALOG_TIMEOUT_ID = 444;
@@ -75,9 +74,8 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     private ArrayList<String> timeInterval;
     // ArrayList To JSON
     private Gson gson = new Gson();
-    String gsonString;
     private String alarmTime;
-
+    private String alarmTimeForHuman;
     private String yourId;
 
     public SettingFragment() {
@@ -103,7 +101,6 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
         startBtn = (Button)rootView.findViewById(R.id.startBtn);
         timerCheckBox = (CheckBox)rootView.findViewById(R.id.timerCheckBox);
-        timerRadioGroup = (RadioGroup)rootView.findViewById(R.id.timerRadioGroup);
         ptTitleEditText = (EditText)rootView.findViewById(R.id.ptTitleEditText);
         connectToGearBtn = (CircularProgressButton)rootView.findViewById(R.id.connectToGearBtn);
         connectToPcBtn = (CircularProgressButton)rootView.findViewById(R.id.connectToPcBtn);
@@ -150,16 +147,17 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                                     if(mDeviceName != null && mAccessoryService != null){
 
 
-                                        // Service에 device name, ppt tittle, 계정정보 넘기기
+                                        // Service에 device name, ppt tittle, alarm시간, 계정정보 넘기기
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
+                                        mAccessoryService.alarmTimeForHuman = alarmTimeForHuman;
                                         mAccessoryService.yourId = yourId;
 
                                         if (timeInterval != null) {
                                             // timeInterval(ArrayList) -> JSONArray -> String ex) "["2","3","5"]"
                                             String timeJson = gson.toJson(timeInterval);
                                             sendDataToService(timeJson);
-                                            alarmTime = timeInterval.get(0)+"분";
+                                            alarmTime = alarmTimeForHuman;
 
                                         }else{
                                             // 체크박스를 단 한번도 누르지 않은 경우, 눌렀다가 해제한 경우 "[]"을 전달
@@ -220,7 +218,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
         });
 
-        connectToPcBtn.setOnClickListener(new View.OnClickListener(){
+        connectToPcBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (connectToPcBtn.getProgress() == BUTTON_STATE_IDLE) {
 
@@ -229,9 +227,9 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                     startActivityForResult(requestDeviceNameIntent, REQUEST_DEVICENAME);
 
                 } else if (connectToPcBtn.getProgress() == BUTTON_STATE_COMPLETE) {
-                    setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
-                }else if(connectToPcBtn.getProgress() == BUTTON_STATE_ERROR){
-                    setCircularProgressBtn(connectToPcBtn,BUTTON_STATE_IDLE);
+                    setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_IDLE);
+                } else if (connectToPcBtn.getProgress() == BUTTON_STATE_ERROR) {
+                    setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_IDLE);
                 } else {
                     setCircularProgressBtn(connectToPcBtn, BUTTON_STATE_IDLE);
                 }
@@ -245,56 +243,15 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    timerRadioGroup.setVisibility(timerRadioGroup.VISIBLE);
+                    startActivityForResult(new Intent(getActivity(),AlarmActivity.class), REQUEST_ALARM);
                 } else {
                     // 체크박스를 해제한 경우 timeInterval을 null로
-                    timerRadioGroup.setVisibility(timerRadioGroup.INVISIBLE);
-                    timerRadioGroup.clearCheck();
                     if (timeInterval != null)
                         timeInterval = null;
-                    Toast.makeText(getActivity().getApplicationContext(), "" + timeInterval, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        // 수정 - 라디오그룹에서 선택된 값 ArrayList(timeInterval)에 넣기
-        timerRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                // 5분마다
-                if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio5) {
-                    timeInterval = new ArrayList<String>();
-                    timeInterval.add("5");
-                    Toast.makeText(getActivity(),
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
-                            .show();
-                }
-                // 10분마다
-                if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio10) {
-                    timeInterval = new ArrayList<String>();
-                    timeInterval.add("10");
-                    Toast.makeText(getActivity(),
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
-                            .show();
-                }
-                // 15분마다
-                if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadio15) {
-                    timeInterval = new ArrayList<String>();
-                    timeInterval.add("15");
-                    Toast.makeText(getActivity(),
-                            String.valueOf("시간간격 : " + timeInterval.get(0)), Toast.LENGTH_SHORT)
-                            .show();
-                }
-                // 개인 설정
-                if (timerRadioGroup.getCheckedRadioButtonId() == R.id.timerRadioDetail) {
-                    //DetailSettingActivity( Sub Activity )로 부터 ArrayList( timeInterval ) 요청
-                    Intent intent = new Intent(getActivity(), DetailSettingActivity.class);
-                    startActivityForResult(intent, REQUEST_DETAIL);
-                }
-
-            }
-        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,6 +272,8 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        // 블루투스 승인 dialog 요청
         if (requestCode == REQUEST_ENABLE_BT) {
 
             // 블루투스 연결 허락을 사용자에게 물어본 이후 동작
@@ -323,32 +282,59 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
             } else {
                 Toast.makeText(getActivity(), "블루투스를 꼭 켜주세요", Toast.LENGTH_SHORT).show();
             }
+
+        // SettingBluetoothActivity에 디바이스 이름 요청
         } else if (requestCode == REQUEST_DEVICENAME) {
             mDeviceName = intent.getStringExtra("deviceName");
+            if(mDeviceName != null){
+                new Thread(new Runnable() {
 
-        } else if (requestCode == REQUEST_DETAIL) {
+                    @Override
+                    public void run() {
+                        // 해당 Device(PC) 이름으로 연결
+                        ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
+                        mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
+                        mConnecToPcHelper.connectWithPc(mDeviceName);
+                    }
+                }).start();
+            }
 
-            // DetailSettingActivity로 부터 가져온 ArrayList를 timeInterval에 저장
-            timeInterval = intent.getStringArrayListExtra("timeInterval");
+        // AlarmActivity에 alarm시간 요청
+        } else if (requestCode == REQUEST_ALARM) {
 
-            // 삭제 요망
-            gsonString = gson.toJson(timeInterval);
-            Toast.makeText(getActivity(), gsonString , Toast.LENGTH_SHORT).show();
+            // AlarmActivity로 부터 알람시간의 분과 초를 가져온다
+            int min = intent.getIntExtra("min",1);
+            int sec = intent.getIntExtra("sec", 1);
 
-        }
+            // Alarm시간을 소수점으로 만들어준다 ex) 5분30초 -> 5.5
+            // 그리고 0분0초 인 경우 0을 return
+            DecimalFormat format = new DecimalFormat("0.##");
+            float time = min + ((float)sec) / 60;
+            String alarmTimeForGear = format.format(time);
 
-        if(mDeviceName != null){
-            new Thread(new Runnable() {
+            // 0분0초가 아닐 때
+            if(!alarmTimeForGear.equals("0")){
 
-                @Override
-                public void run() {
-                    // 해당 Device(PC) 이름으로 연결
-                    ConnecToPcHelper mConnecToPcHelper = new ConnecToPcHelper();
-                    mConnecToPcHelper.registerConnectionAction(getConnectionActionPc());
-                    mConnecToPcHelper.connectWithPc(mDeviceName);
+                // 사람이 보기 좋은 형태로 변환
+                if(min==0){
+                    alarmTimeForHuman =sec+"초";
+                }else if(sec == 0 ){
+                    alarmTimeForHuman =min+"분";
+                }else{
+                    alarmTimeForHuman = min+"분 "+sec+"초";
                 }
-            }).start();
+
+                timeInterval = new ArrayList<>();
+                timeInterval.add(alarmTimeForGear);
+                Toast.makeText(getActivity(),alarmTimeForHuman, Toast.LENGTH_SHORT).show();
+
+            }else{
+                timerCheckBox.setChecked(false);
+                Toast.makeText(getActivity(),"알람을 설정하지 않습니다", Toast.LENGTH_SHORT).show();
+            }
         }
+
+
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
@@ -536,6 +522,10 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     private void setCircularProgressBtn(final CircularProgressButton circularBtn, final int id) {
 
 
+        // Progress 상태로 누르는 경우 모든 drawable을 버튼에서 사라지게 한다
+        if(id== BUTTON_STATE_PROGRESS)
+            circularBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
         Handler mHandler = new Handler();
         circularBtn.setProgress(id);
 
@@ -573,10 +563,6 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                         }
                         break;
                     }
-                    case BUTTON_STATE_PROGRESS: {
-                        circularBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                        break;
-                    }
                     case BUTTON_STATE_COMPLETE: {
                         if (circularBtn.equals(connectToGearBtn)) {
                             circularBtn.setText("연결완료");
@@ -589,7 +575,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                 }
 
             }
-        }, 700);
+        }, 800);
 }
 
     private Drawable getImageResource(CircularProgressButton c) {

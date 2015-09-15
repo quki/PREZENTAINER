@@ -15,7 +15,7 @@
 			<corners
 				android:radius="48dp" />
 			<solid
-				android:color="#E1F5FE" />
+				android:color="@color/button_disabled" />
 		</shape>
 	</item>
 	<item>

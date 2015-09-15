@@ -3,9 +3,11 @@ package com.puregodic.android.prezentainer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,8 +33,8 @@ import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,11 +91,35 @@ public class LoadFragment extends Fragment {
         mRecyclerView.setItemAnimator(new CustomItemAnimator());
         setDataByVolley();
 
+
+        // Long Click시 data 삭제
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new ClickListener() {
 
             @Override
             public void onLongClick(View view, int position) {
-                // TODO Auto-generated method stub
+
+               final String title = ((TextView)view.findViewById(R.id.loadPtTitle)).getText().toString();
+               final String date = ((TextView)view.findViewById(R.id.loadCurrDate)).getText().toString();
+
+                AlertDialog.Builder aBuilder =  new AlertDialog.Builder(getActivity());
+                aBuilder.setTitle(title)
+                        .setMessage("\n"+date+"에 저장한 "+title+" 발표를\n\n"+"정말로 삭제하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteDataByVolley(title, date);
+                            }
+                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = aBuilder.create();
+                dialog.show();
+
             }
 
             @Override
@@ -108,8 +134,6 @@ public class LoadFragment extends Fragment {
                         .putExtra("date", currDate));
             }
         }));
-
-
 
         return rootView;
     }
@@ -186,7 +210,7 @@ public class LoadFragment extends Fragment {
 
     // DB로 부터 response받고,JSON파싱 이후 adapter에 저장 (데이터 변화 감지)
     private void setDataByVolley(){
-        
+        mDataList.clear();
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
         StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_FETCH,
@@ -208,14 +232,33 @@ public class LoadFragment extends Fragment {
                                 getActivity().setTitle("시작하기");
                                 Toast.makeText(getActivity(), "발표를 먼저 시작하세요", Toast.LENGTH_SHORT).show();
                             }else{
+
+                                // 파싱 : PT제목, PT저장 시간, 심박수 JSONArray
                                 Log.e("PARSING", jArray.toString());
                                 for(int i = 0; i<jArray.length(); i++){
                                     JSONObject jObj = (JSONObject)jArray.get(i);
                                     String title = jObj.getString("title");
                                     String date = jObj.getString("date");
+                                    JSONArray jArrayHbr;
+                                    // HeartRate가 아예 측정이 안된 경우, undefined 예외 처리
+                                    if(jObj.getString("hbr").equals("undefined")){
+                                        jArrayHbr = new JSONArray("[60]");
+                                    }else{
+                                        jArrayHbr = new JSONArray(jObj.getString("hbr"));
+                                    }
+                                    // 받은 심박수 배열을 ArrayList로 변경, 이후 setData
+                                    ArrayList<Float> heartRateList = new ArrayList<>();
+
+                                        for(int j = 0; j<jArrayHbr.length(); j++){
+                                            float heartRateValue = Float.parseFloat(jArrayHbr.get(j).toString());
+                                            heartRateList.add(heartRateValue);
+                                        }
+
+                                    // 파싱한 데이터들을 클래스(LoadPtTitleData) 내부 field로 관리
                                     LoadPtTitleData mData =  new LoadPtTitleData();
                                     mData.setTitle(title);
                                     mData.setDate(date);
+                                    mData.setHbr(heartRateList);
                                     mDataList.add(mData);
                                     mAdapter.notifyDataSetChanged();
                                 }
@@ -229,7 +272,16 @@ public class LoadFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Error: " + error.getMessage());
+
                         mDialogHelper.hidePdialog();
+
+                        getFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.container_body, new SettingFragment())
+                                .commit();
+                        getActivity().setTitle("시작하기");
+                        Toast.makeText(getActivity(), "네트워크 연결을 확인하세요", Toast.LENGTH_SHORT).show();
+
                     }
                 }) {
             @Override
@@ -253,7 +305,59 @@ public class LoadFragment extends Fragment {
         
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq);
-        
+
+    }
+    // 해당 계정 & PT 제목 & PT 저장 날짜 일치하는 data 삭제
+    private void deleteDataByVolley(final String title, final String date){
+
+        mDialogHelper.showPdialog("데이터를 삭제 중 입니다...", true);
+
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_DELETE,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        mDialogHelper.hidePdialog();
+                        Toast.makeText(getActivity(),"삭제 완료", Toast.LENGTH_SHORT).show();
+                        setDataByVolley();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                mDialogHelper.hidePdialog();
+                Toast.makeText(getActivity(),title + "\n삭제 실패", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("yourId", yourId);
+                params.put("title", title);
+                params.put("date", date);
+                return params;
+            }
+
+            // Setting Encoding at Volley
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String utf8String = new String(response.data, "UTF-8");
+                    return Response.success(new String(utf8String), HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                }
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq);
+
     }
     @Override
     public void onAttach (Activity activity){

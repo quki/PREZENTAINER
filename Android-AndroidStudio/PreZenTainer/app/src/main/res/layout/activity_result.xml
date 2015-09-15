@@ -1,174 +1,272 @@
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="80"
-        android:weightSum="100">
-    <TextView
-        android:id="@+id/pptTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="title"
-        android:layout_weight="5"/>
+
     <FrameLayout
-        android:id="@+id/chartContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="95" />
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="94">
+
+        <LinearLayout
+            android:id="@+id/chartContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <include
+                android:id="@+id/toolbar_transparent"
+                layout="@layout/toolbar_transparent" />
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/pptDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+
+                android:gravity="center_horizontal"
+                android:text="2015년 2월 25일 16시 57분"
+                android:textColor="@color/text_light"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/pptTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pptDate"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:text="공개SW개발자대회"
+                android:textColor="@color/text_middle"
+                android:textSize="17sp" />
+
+
+        </RelativeLayout>
+    </FrameLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="20"
-        android:orientation="vertical"
-        android:weightSum="100">
+        android:layout_weight="5"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="15"
-        android:weightSum="40">
-        <TextView
-            android:text="현재심박수"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:autoText="false"
-            android:gravity="center" />
-        <TextView
-            android:text="최고심박수"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-        <TextView
-            android:text="최저심박수"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-        <TextView
-            android:text="평균심박수"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="15"
-        android:weightSum="40">
-        <TextView
-            android:id="@+id/heartRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-        <TextView
-            android:id="@+id/highHeartrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-        <TextView
-            android:id="@+id/lowHeartrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-        <TextView
-            android:id="@+id/averageHeartrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="15"
-        android:weightSum="10">
-        <TextView
-            android:text="현재시간/총재생시간"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3.15"
-            android:gravity="center" />
-        <TextView
-            android:text="Score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="15"
-        android:weightSum="10"
-       >
-        <TextView
-            android:id="@+id/runningTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center" />
         <TextView
             android:id="@+id/score"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="70"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center" />
+            android:layout_gravity="center_horizontal"
+            android:autoText="false"
+            android:textColor="@color/text_light"
+            android:gravity="center"
+            android:text="score"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="40">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/graph_data_layout"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/heartRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/text_deep" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:autoText="false"
+                    android:gravity="center"
+                    android:text="현재심박수"
+                    android:textColor="@color/text_light"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/graph_data_layout"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/highHeartrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@color/text_deep" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="최고심박수"
+                    android:textColor="@color/text_light"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/graph_data_layout"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lowHeartrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@color/text_deep" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="최저심박수"
+                    android:textColor="@color/text_light"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@drawable/graph_data_layout"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/averageHeartrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@color/text_deep" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="평균심박수"
+                    android:textColor="@color/text_light"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="30">
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/buttonPlay"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.48"
-            android:text="play" />
+            android:layout_marginTop="7dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/buttonStop"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/runningTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@color/text_light"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/wholeTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / 00:00"
+                android:textColor="@color/text_light"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.48"
-            android:text="stop" />
-    </LinearLayout>
-    </LinearLayout>
+            android:layout_marginBottom="1dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
+            <Button
+                android:id="@+id/buttonPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/button_start"
+                android:text="play"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/buttonStop"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_weight="50"
+                android:background="@drawable/button_start"
+                android:text="stop"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
