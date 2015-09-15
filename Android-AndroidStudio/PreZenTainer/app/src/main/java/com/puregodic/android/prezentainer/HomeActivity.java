@@ -149,7 +149,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 2:
                 fragment = new WebFragment();
-                title = "개발자페이지";
+                title = "홈페이지";
                 break;
             default:
                 break;

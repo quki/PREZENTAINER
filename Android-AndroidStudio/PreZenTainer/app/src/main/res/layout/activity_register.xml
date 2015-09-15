@@ -15,7 +15,12 @@
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp" >
- 
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/f_prezentainer" />
         <EditText
             android:id="@+id/email"
             android:layout_width="fill_parent"
@@ -67,10 +72,11 @@
  
         <!-- Link to Login Screen -->
  
-        <Button
+        <TextView
             android:id="@+id/btnLinkToLoginScreen"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
             android:layout_marginTop="40dip"
             android:background="@drawable/button_link_to_login"
             android:text="@string/btn_link_to_login"

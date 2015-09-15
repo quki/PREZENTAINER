@@ -1,12 +1,6 @@
 
 package com.puregodic.android.prezentainer.login;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -27,14 +22,21 @@ import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.HomeActivity;
 import com.puregodic.android.prezentainer.R;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
-import com.puregodic.android.prezentainer.network.NetworkConfig;
 import com.puregodic.android.prezentainer.network.AppController;
+import com.puregodic.android.prezentainer.network.NetworkConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    private Button btnRegister,btnLinkToLogin;
+    private Button btnRegister;
+    private TextView btnLinkToLogin;
 
     private EditText inputEmail,inputPassword,inputPasswordCheck;
     private LinearLayout rootView;
@@ -51,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputPassword = (EditText)findViewById(R.id.password);
         inputPasswordCheck = (EditText)findViewById(R.id.password_check);
         btnRegister = (Button)findViewById(R.id.btnRegister);
-        btnLinkToLogin = (Button)findViewById(R.id.btnLinkToLoginScreen);
+        btnLinkToLogin = (TextView)findViewById(R.id.btnLinkToLoginScreen);
         rootView = (LinearLayout)findViewById(R.id.registerActivityView);
         
         // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기

@@ -34,7 +34,7 @@
     <string name="drawer_close">Close</string>
     <string name="nav_item_setting">시작하기</string>
     <string name="nav_item_load">불러오기</string>
-    <string name="nav_item_homePage">개발자페이지</string>
+    <string name="nav_item_homePage">홈페이지</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">

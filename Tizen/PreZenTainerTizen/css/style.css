@@ -215,12 +215,13 @@ h4 {
 	
 }
 
-
+/* 시작(메인)페이지에 start버튼 */
 .main_buttonSet1 {
 	position:absolute;
 	left:22px;
 	top:196px
 }
+/* 시작(메인)페이지에 setting버튼 */
 .main_buttonSet2 {
 	position:absolute;
 	right:22px;
@@ -310,11 +311,7 @@ h4 {
 	right:48px;
 }
 
-.ui-content {
-	padding-top:none;
-	padding-bottom:none;
-	margin-top:15px;
-}
+
 
 
 
@@ -517,23 +514,12 @@ body {
 	padding-bottom: 15px;
 }
 
-#stopwatch-navbar-running {
-	display: none;
-}
-
-#stopwatch-navbar-paused {
-	display: none;
-}
-
-.hidden {
-	display: none;
-}
-
 .ui-content {
+	padding-top:none;
+	padding-bottom:none;
+	margin-top:15px;
 	margin: 0px auto;
-	
 }
-
 .ui-content div{
 	margin: 0px auto;
 }
@@ -546,8 +532,4 @@ body {
 	margin-top:15px;
 	margin: auto;
     width: 100%;
-}
-
-#stopwatch-page {
-	min-height: 228px !important;
 }
