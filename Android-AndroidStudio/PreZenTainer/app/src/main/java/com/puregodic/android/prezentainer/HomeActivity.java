@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.puregodic.android.prezentainer.navigationadapter.FragmentDrawer;
 import com.puregodic.android.prezentainer.login.LoginActivity;
 import com.puregodic.android.prezentainer.login.SessionManager;
@@ -120,12 +119,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
             });
 
             AlertDialog dialog = mAlertBuilder.create();
-
             dialog.show();
-
-
-
-        }
+      }
         return super.onOptionsItemSelected(item);
     }
 
@@ -197,6 +192,5 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         public void onTick(long millisUntilFinished) {
             Log.i("Test", "isTwo" + isTwo);
         }
-
     }
 }

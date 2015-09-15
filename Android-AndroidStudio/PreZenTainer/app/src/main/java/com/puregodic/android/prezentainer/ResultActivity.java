@@ -1,4 +1,3 @@
-
 package com.puregodic.android.prezentainer;
 
 import android.media.MediaPlayer;
@@ -83,11 +82,8 @@ public class ResultActivity extends AppCompatActivity {
         String fileExtension = ".amr";
         mFilePath= FileTransferRequestedActivity.DIR_PATH + title + date+ fileExtension;
         pptTitle.setText(title);
-        
         fetchDataByVolley();
-
-        
-    }
+     }
     
     /* Fragment
      * Chart, SeekBar 모두 PlaceholderFragment에서 작업*/
@@ -166,7 +162,6 @@ public class ResultActivity extends AppCompatActivity {
             lowHeartrate.setText(heartCalcultor.LowHeartRateValue());     // 최저 심박수
             score.setText(heartCalcultor.standardDeviation());            // 점수
 
-            
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
             audio = MediaPlayer.create(getApplicationContext(), audioPath);

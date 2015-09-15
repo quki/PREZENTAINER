@@ -224,17 +224,14 @@ public class LoadFragment extends Fragment {
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException : " + e.getMessage());
                         }
-                        
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "Error: " + error.getMessage());
                         mDialogHelper.hidePdialog();
                     }
                 }) {
-
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
@@ -242,7 +239,6 @@ public class LoadFragment extends Fragment {
                 params.put("yourId", yourId);
                 return params;
             }
-
             // Setting Encoding at Volley
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
@@ -253,7 +249,6 @@ public class LoadFragment extends Fragment {
                     return Response.error(new ParseError(e));
                 }
             }
-
         };
         
         // Adding request to request queue

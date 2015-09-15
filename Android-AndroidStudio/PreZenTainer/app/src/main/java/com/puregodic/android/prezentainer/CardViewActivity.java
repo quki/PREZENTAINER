@@ -20,15 +20,12 @@ public class CardViewActivity extends AppCompatActivity {
     ActionBarDrawerToggle mToggle;
     DrawerLayout mDrawer;
     Toolbar mToolbar;
-
     LinearLayout container;
     Calendar mCalendar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_view);
-        
         mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mToolbar.setBackgroundColor(getResources().getColor(R.color.toolbar));
         setSupportActionBar(mToolbar);
@@ -37,8 +34,6 @@ public class CardViewActivity extends AppCompatActivity {
         mToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.app_name, R.string.app_name);
         mDrawer.setDrawerListener(mToggle);
         setTitle("Android Support");
-        
-       
     }
     
     public void google(View v) {
