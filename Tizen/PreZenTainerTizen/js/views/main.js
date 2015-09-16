@@ -34,12 +34,13 @@ define({
 
     
     stream = null,
+    //RECORDING_INTERVAL_STEP = 100,
+    //recordingInterval = null, recordingTime = 0,
+    
     isRecording = false,  exitInProgress = false;
 
     var rightEventTimeArray = new Array(),
         leftEventTimeArray =  new Array();
-    
-    
     //////////////////////////////////////////////////RECORDING////////////////////////////////////////////////////////////////////////
     
     // 처음시작할때 recording 상태로 만들어준다. ----> toggleRecording();
@@ -51,15 +52,52 @@ define({
       }
     }
 
+    /*// Recording ProgressBar 렌더링 값 설정
+    function renderRecordingProgressBarValue(value) {
+      recordProgressVal.style.width = value + 'px';
+    }
+
+    // Recording ProgressBar 렌더링 작업
+    function renderRecordingProgressBar() {
+      var parentWidth = recordProgress.clientWidth, width = recordingTime
+              / a.MAX_RECORDING_TIME * parentWidth;
+      renderRecordingProgressBarValue(width);
+    }
+
+    // Reset Recording ProgressBar 
+    function resetRecordingProgress() {
+      recordingTime = 0;
+      //renderRecordingProgressBar();
+    }
+
+    // Remove Recording ProgressBar Interval 
+    function removeRecordingInterval() {
+      clearInterval(recordingInterval);
+    }
+
+    // Update Recording ProgressBar
+    function updateRecordingProgress() {
+      recordingTime = a.getRecordingTime();
+
+      //renderRecordingProgressBar();
+    }
+
+    // Sets recording interval
+    function setRecordingInterval() {
+      recordingInterval = setInterval(updateRecordingProgress,
+              RECORDING_INTERVAL_STEP);
+    }*/
 
     // Starts audio recording
     function startRecording() {
       a.startRecording();
+      //resetRecordingProgress();
     }
 
     // Stops audio recording
     function stopRecording() {
       a.stopRecording();
+      //resetRecordingProgress();
       isRecording = false;
     }
 
@@ -93,6 +131,7 @@ define({
 
     // Handles audio.recording.start event
     function onRecordingStart() {
+      //setRecordingInterval();
       toggleRecording(true);
     }
 
@@ -100,7 +139,9 @@ define({
     function onRecordingDone(ev) {
       var path = ev.detail.path;
 
+      //removeRecordingInterval();
       toggleRecording(false);
+      //updateRecordingProgress();
       if (!exitInProgress) {
         e.fire('show.preview', {
           audio: path
@@ -123,6 +164,7 @@ define({
         console.error('Error: ' + error);
       }
 
+      //removeRecordingInterval();
       toggleRecording(false);
     }
 
