@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,7 +30,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleAdapter;
 import com.puregodic.android.prezentainer.adapter.LoadPtTitleData;
-import com.puregodic.android.prezentainer.decoration.CustomItemAnimator;
 import com.puregodic.android.prezentainer.decoration.DividerItemDecoration;
 import com.puregodic.android.prezentainer.dialog.DialogHelper;
 import com.puregodic.android.prezentainer.login.RegisterActivity;
@@ -87,8 +87,7 @@ public class LoadFragment extends Fragment {
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
-        // this is the default; this call is actually only necessary with custom ItemAnimators
-        mRecyclerView.setItemAnimator(new CustomItemAnimator());
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         setDataByVolley();
 
 
@@ -166,10 +165,21 @@ public class LoadFragment extends Fragment {
         
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
+
+
+            // GestureDectector : 제스처 커스터마이징, 짧게 눌렀을때, 오래 눌렀을 때
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return super.onDown(e);
+                }
+
+                //누른 이후
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
+
+
+
                     return true;
                 }
  
@@ -201,8 +211,8 @@ public class LoadFragment extends Fragment {
 
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-            // TODO Auto-generated method stub
-            
+
+
         }
     }
 

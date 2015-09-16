@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--pre Lollipop unable to ripple-->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/clickstate" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+</selector>
