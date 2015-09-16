@@ -137,7 +137,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
             // 패어링된 기기의 type, name, adress를 data객체에 초기화
             int type = pairedDevice.getBluetoothClass().getMajorDeviceClass();
-            if(type == BluetoothConfig.NOTEBOOK){
+            if(type == BluetoothConfig.COMPUTER){
                 PairedDeviceData data = new PairedDeviceData(type, pairedDevice.getName(),pairedDevice.getAddress());
                 pairedDeviceArrayList.add(data);
             }

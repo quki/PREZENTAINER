@@ -176,20 +176,28 @@ public class PairingFragment extends Fragment {
     private void setIconImage(ImageView i , int type){
 
         switch(type){
-            case BluetoothConfig.NOTEBOOK : {
-                i.setImageResource(R.drawable.ic_notebook);
+            case BluetoothConfig.COMPUTER : {
+                i.setImageResource(R.drawable.ic_pc);
                 break;
             }
             case BluetoothConfig.PHONE:  {
-                i.setImageResource(R.drawable.ic_paired_default_phone);
+                i.setImageResource(R.drawable.ic_phone);
                 break;
             }
-            case BluetoothConfig.WATCH : {
+            case BluetoothConfig.WEARABLE : {
                 i.setImageResource(R.drawable.ic_watch);
                 break;
             }
-            case BluetoothConfig.HEADPHONE : {
-                i.setImageResource(R.drawable.ic_launcher);
+            case BluetoothConfig.AUDIO_VIDEO : {
+                i.setImageResource(R.drawable.ic_headphone);
+                break;
+            }
+            case BluetoothConfig.UNCATEGORIZED : {
+                i.setImageResource(R.drawable.ic_phone);
+                break;
+            }
+            default:{
+                i.setImageResource(R.drawable.ic_phone);
                 break;
             }
 

@@ -73,7 +73,7 @@
 
                 <ImageView
 
-                    android:src="@drawable/ic_notebook"
+                    android:src="@drawable/ic_pc"
                     android:layout_gravity="center"
                     android:id="@+id/imageView"
                     android:layout_width="42dp"

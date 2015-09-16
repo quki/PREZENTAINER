@@ -60,20 +60,23 @@ public class PairedDeviceAdapter extends BaseAdapter{
         textViewPairedAdress.setText(String.valueOf(pairedDevicesList.get(position).adress));
         
         switch (pairedDevicesList.get(position).type) {
-            case BluetoothConfig.NOTEBOOK:
-                image.setImageResource(R.drawable.ic_notebook);
+            case BluetoothConfig.COMPUTER:
+                image.setImageResource(R.drawable.ic_pc);
                 break;
-            case BluetoothConfig.WATCH:
+            case BluetoothConfig.WEARABLE:
                 image.setImageResource(R.drawable.ic_watch);
                 break;
             case BluetoothConfig.PHONE:
                 image.setImageResource(R.drawable.ic_phone);
                 break;
-            case BluetoothConfig.HEADPHONE:
-                image.setImageResource(R.drawable.ic_launcher);
+            case BluetoothConfig.AUDIO_VIDEO:
+                image.setImageResource(R.drawable.ic_headphone);
                 break;
-            case BluetoothConfig.UNKNOWN:
-                image.setImageResource(R.drawable.ic_launcher);
+            case BluetoothConfig.UNCATEGORIZED:
+                image.setImageResource(R.drawable.ic_phone);
+                break;
+            default:
+                image.setImageResource(R.drawable.ic_phone);
                 break;
         }
         
