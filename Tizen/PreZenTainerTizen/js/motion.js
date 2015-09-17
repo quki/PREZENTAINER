@@ -178,21 +178,30 @@ function test_motionSensor() {
 	accelZ = 0;
 }
 
-/* changeButton함수 추가 */
+/* 
+ * changeButton
+ * 버튼의 활성화, 비활성화 효과 관리
+ *  
+ *  */
 
 function changeButtonStart() {
+  
+  // disable 상태
 	if(document.getElementById('startbtn').disabled == true) {
-		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
 	}
+	//able 상태
 	else {
-		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/Green.png)"
+		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
 	}
 	
+	//disable 상태
 	if(document.getElementById('stopbtn').disabled == true) {
-		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
 	}
+	//able 상태
 	else {
-		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/Green.png)"
+		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
 	}
 	
 	if(document.getElementById('pceventbtn').disabled == true) {

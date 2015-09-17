@@ -90,8 +90,6 @@ public class LoadPtTitleAdapter extends RecyclerView.Adapter<LoadPtTitleAdapter.
             bgShape.setColor(Color.parseColor(color));
         }
 
-
-
     }
 
     // ArrayList<LoadPtTitleData> 의 전체 길이 return

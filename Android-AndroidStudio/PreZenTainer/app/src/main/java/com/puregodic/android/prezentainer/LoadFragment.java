@@ -149,12 +149,12 @@ public class LoadFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    /* 
+
+    /*
      * Click, Touch Event Listener 커스터마이징
      * */
     public static interface ClickListener {
-        
+
         public void onClick(View view, int position);
         public void onLongClick(View view, int position);
     }
@@ -163,23 +163,17 @@ public class LoadFragment extends Fragment {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
         
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
+        public RecyclerTouchListener(final Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
 
 
             // GestureDectector : 제스처 커스터마이징, 짧게 눌렀을때, 오래 눌렀을 때
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDown(MotionEvent e) {
-                    return super.onDown(e);
-                }
 
-                //누른 이후
+
+                //손가락을 땟을 때
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
-
-
-
                     return true;
                 }
  
@@ -195,11 +189,11 @@ public class LoadFragment extends Fragment {
         
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
                 clickListener.onClick(child, rv.getChildPosition(child));
             }
+
             return false;
         }
 
@@ -211,7 +205,6 @@ public class LoadFragment extends Fragment {
 
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
 
         }
     }
