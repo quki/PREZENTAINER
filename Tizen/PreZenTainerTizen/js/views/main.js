@@ -26,7 +26,7 @@ define({
         initialised = false,
         startbtn = null,
         stopbtn = null,
-        pceventbtn = null,
+        pceventbtn_right = null,pceventbtn_left=null,
 
     ERROR_FILE_WRITE = 'FILE_WRITE_ERR',
     NO_FREE_SPACE_MSG = 'No free space.',
@@ -52,52 +52,15 @@ define({
       }
     }
 
-    /*// Recording ProgressBar 렌더링 값 설정
-    function renderRecordingProgressBarValue(value) {
-      recordProgressVal.style.width = value + 'px';
-    }
-
-    // Recording ProgressBar 렌더링 작업
-    function renderRecordingProgressBar() {
-      var parentWidth = recordProgress.clientWidth, width = recordingTime
-              / a.MAX_RECORDING_TIME * parentWidth;
-      renderRecordingProgressBarValue(width);
-    }
-
-    // Reset Recording ProgressBar 
-    function resetRecordingProgress() {
-      recordingTime = 0;
-      //renderRecordingProgressBar();
-    }
-
-    // Remove Recording ProgressBar Interval 
-    function removeRecordingInterval() {
-      clearInterval(recordingInterval);
-    }
-
-    // Update Recording ProgressBar
-    function updateRecordingProgress() {
-      recordingTime = a.getRecordingTime();
-
-      //renderRecordingProgressBar();
-    }
-
-    // Sets recording interval
-    function setRecordingInterval() {
-      recordingInterval = setInterval(updateRecordingProgress,
-              RECORDING_INTERVAL_STEP);
-    }*/
 
     // Starts audio recording
     function startRecording() {
       a.startRecording();
-      //resetRecordingProgress();
     }
 
     // Stops audio recording
     function stopRecording() {
       a.stopRecording();
-      //resetRecordingProgress();
       isRecording = false;
     }
 
@@ -131,7 +94,6 @@ define({
 
     // Handles audio.recording.start event
     function onRecordingStart() {
-      //setRecordingInterval();
       toggleRecording(true);
     }
 
@@ -139,9 +101,7 @@ define({
     function onRecordingDone(ev) {
       var path = ev.detail.path;
 
-      //removeRecordingInterval();
       toggleRecording(false);
-      //updateRecordingProgress();
       if (!exitInProgress) {
         e.fire('show.preview', {
           audio: path
@@ -164,7 +124,6 @@ define({
         console.error('Error: ' + error);
       }
 
-      //removeRecordingInterval();
       toggleRecording(false);
     }
 
@@ -332,8 +291,6 @@ define({
         stopTimer();
         disconnectSAP();
         //코드수정
-        currentSlide = 0; //현재슬라이드 0으로 초기화
-        //
       }
     }
 
@@ -353,22 +310,27 @@ define({
       $('#startbtn').attr('type','button');
     }
     
-    function onPcEventBtnClick(){
+    function onPcEventBtnClickRight(){
       eventtopc("right");
+    }
+    function onPcEventBtnClickLeft(){
+      eventtopc("leftt");
     }
 
     // Registers event listeners
     function bindEvents() {
       startbtn.addEventListener('click', onStartBtnClick);
       stopbtn.addEventListener('click', onStopBtnClick);
-      pceventbtn.addEventListener('click', onPcEventBtnClick);
+      pceventbtn_right.addEventListener('click', onPcEventBtnClickRight);
+      pceventbtn_left.addEventListener('click', onPcEventBtnClickLeft);
     }
     
     // Initialize modules
     function init() {
       startbtn = document.getElementById('startbtn');
       stopbtn = document.getElementById('stopbtn');
-      pceventbtn = document.getElementById('pceventbtn');
+      pceventbtn_right = document.getElementById('pceventbtn_right');
+      pceventbtn_left = document.getElementById('pceventbtn_left');
       bindEvents();
       initStream();
       initStopWatch();

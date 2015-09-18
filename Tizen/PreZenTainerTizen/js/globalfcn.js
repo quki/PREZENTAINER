@@ -7,26 +7,12 @@ var CHANNELID_SETTING = 100,
 var isConnect = false;
 var heartRateArray ;
 
-//전역변수 추가
-var totalTime = 0; //슬라이드 개별설정 처리해주기 위한 전역변수
-var currentSlide = 0 ; //현재 슬라이드 위치
-var vibratingIntervalArr = []; //슬라이드 개별설정 저장하는 배열
-
 //makeJsonEventTime 함수참조 포인터 만들기
 var p_pushEventTimeToArray;
 
 // Event btn clicked
 function eventtopc(direction) {       
   try {
-	//코드수정
-	//슬라이드 개별설정 처리해주는 부분(2번째 슬라이드부터)
-	if (mTimeInterval.length !== 0 && mTimeInterval.length > 1 && currentSlide < mTimeInterval.length) {
-		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000));
-		//이전 슬라이드 타이머설정 제거
-		clearTimeout(vibratingIntervalArr[currentSlide-1]);
-	}
-	++currentSlide; //슬라이드 +1
-	//
 	if(direction === "right") //오른쪽 이벤트 발생시!
 	{
 	  p_pushEventTimeToArray(direction); // event time을 "Right" Array에 Push
@@ -40,8 +26,6 @@ function eventtopc(direction) {
 		console.log("sendData(LEFT)");
 	}
 
-    console.log('Event to PC !' + currentSlide + direction);
-    
   } catch (err) {
     console.log("exception [" + err.name + "] msg[" + err.message + "]");
   }
@@ -109,11 +93,6 @@ function startTimer(){
     	}
     	console.log('Timer Start ! Time Interval : '+ mTimeInterval[0] );
     	
-    	//개별설정 일 때 첫번째 페이지 처리
-    	if (mTimeInterval.length > 1) {
-    		vibratingIntervalArr.push(setTimeout(vibrator, mTimeInterval[currentSlide]*1000*60));
-    		++currentSlide;
-    	}
     //
     }else{
       console.log('Timer Off !');
@@ -128,12 +107,6 @@ function stopTimer(){
 	//일정간격 초기화
     clearInterval(vibratingInterval);
     //코드수정
-    //슬라이드 개별설정 초기화
-    for (var i = 0; i < vibratingIntervalArr.length; i++) {
-        clearTimeout(vibratingIntervalArr[i]);
-    }
-    vibratingIntervalArr = [];
-    //
     console.log('Timer Stop !');
   }else{
     console.log('Timer Already Off !');

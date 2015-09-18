@@ -2,25 +2,25 @@ var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
 
 //페이지 전환 변수
-var MainPage = $('#main');
-var StatPage = $('#start');
+var mainPage = $('#main');
+var startPage = $('#start');
 var motionSettingPage = $('#motionSetting');
 var enrollMotionPage = $('#enroll_motion');
 
 //모션세팅에서 메인으로 페이지 전환
 enrollMotionPage.on("swipedown", function() {
 	is_motion(); //모션이 setting되어있는지 확인
-	tau.changePage(MainPage);
+	tau.changePage(mainPage);
 	});
 
 //스타트페이지에서 메인으로 페이지 전환
-StatPage.on("swipedown", function() {
+startPage.on("swipedown", function() {
 	main_to_back(); 
-	tau.changePage(MainPage);
+	tau.changePage(mainPage);
 	});
 
 motionSettingPage.on("swipedown", function() {
-	tau.changePage(StatPage);
+	tau.changePage(startPage);
 	});
 
 // 화면구성변화
@@ -43,7 +43,8 @@ function updateAfterStart(){
   if(isConnect){
 	$('#startbtn').attr('disabled','disabled');
 	$('#startbtn').attr('type','hidden');
-    $('#pceventbtn').removeAttr('disabled');
+    $('#pceventbtn_right').removeAttr('disabled');
+    $('#pceventbtn_left').removeAttr('disabled');
     $('#stopbtn').removeAttr('disabled');
     $('#stopbtn').attr('type','button');
     $('#motionbtn').removeAttr('disabled');
@@ -54,10 +55,11 @@ function updateAfterStart(){
   changeButtonStart();
   changeButtonMotionSetting();
 }
-
+//stop button 클릭 이후
 function updateAfterStop(){
   if(!isConnect){
-    $('#pceventbtn').attr('disabled','disabled');
+    $('#pceventbtn_right').attr('disabled','disabled');
+    $('#pceventbtn_left').attr('disabled','disabled');
     $('#stopbtn').attr('disabled','disabled');
     $('#stopbtn').attr('type','hidden');
     

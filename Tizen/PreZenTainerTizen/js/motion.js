@@ -186,7 +186,10 @@ function test_motionSensor() {
 
 function changeButtonStart() {
   
-  // disable 상태
+   /*
+    * start button
+    * */
+  //disable 상태
 	if(document.getElementById('startbtn').disabled == true) {
 		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
 	}
@@ -195,6 +198,10 @@ function changeButtonStart() {
 		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
 	}
 	
+	
+	 /*
+   * stop button
+   * */
 	//disable 상태
 	if(document.getElementById('stopbtn').disabled == true) {
 		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
@@ -204,18 +211,27 @@ function changeButtonStart() {
 		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
 	}
 	
-	if(document.getElementById('pceventbtn').disabled == true) {
-		document.getElementById('pceventbtn').style.backgroundImage= "url(./img/button/Gray.png)"
+	/*
+   * right button
+   * */
+	//disable 상태
+	if(document.getElementById('pceventbtn_right').disabled == true) {
+		document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
 	}
+	//able 상태
 	else {
-		document.getElementById('pceventbtn').style.backgroundImage= "url(./img/button/Red.png)"
+		document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right.png)"
 	}
-	
-	if(document.getElementById('pceventbtn2').disabled == true) {
-		document.getElementById('pceventbtn2').style.backgroundImage= "url(./img/button/Gray.png)"
+	/*
+   * left button
+   * */
+	//disable 상태
+	if(document.getElementById('pceventbtn_left').disabled == true) {
+		document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
 	}
+	//able 상태
 	else {
-		document.getElementById('pceventbtn2').style.backgroundImage= "url(./img/button/Red.png)"
+		document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
 	}
 	
 }
