@@ -95,10 +95,10 @@ h5 input{
 	background-size: 100% 100%;
 	border: none;
 }
-
+/* Enoroll motion 페이지 */
 .confirmButton {
 	font-size: 30px;
-	background-image: url(../img/button/Gray.png);
+	background-image: url(../img/button/ic_check_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
