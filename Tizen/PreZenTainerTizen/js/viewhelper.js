@@ -96,3 +96,91 @@ function showMain(message) {
   }
   transferId = 0;
 }
+
+
+
+/*
+ * 버튼의 클릭효과
+ * */
+
+// main page에 start버튼
+function mainStartButtonClickEffect() {
+   $('#mainStartButton').ready(function() {
+         $('.startButtonMain').on('touchstart', function(event){
+            $(this).addClass('active');
+          });
+         $('.startButtonMain').on('touchend', function(event){
+            $(this).removeClass('active');
+          });
+      });
+}
+
+
+//main page에 setting버튼
+function mainSettingButtonClickEffect() {
+   $('#mainSettingButton').ready(function() {
+         $('.settingButtonMain').on('touchstart', function(event){
+            $(this).addClass('active');
+          });
+         $('.settingButtonMain').on('touchend', function(event){
+            $(this).removeClass('active');
+          });
+      });
+}
+
+//start page에 setting버튼
+function startSettingButtonClickEffect() {
+   $('#startSettingButton').ready(function() {
+         $('.settingButtonStart').on('touchstart', function(event){
+            $(this).addClass('active');
+          });
+         $('.settingButtonStart').on('touchend', function(event){
+            $(this).removeClass('active');
+          });
+      });
+}
+//start page에 start버튼
+function startStartButtonClickEffect() {
+   $('#startbtn').ready(function() {
+         $('.startButton').on('touchstart', function(event){
+            document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
+          });
+         $('.startButton').on('touchend', function(event){
+            document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
+          });
+      });
+}
+//start page에 stopt버튼
+function startStopButtonClickEffect(){
+   $('#stopbtn').ready(function() {
+         $('.stopButton').on('touchstart', function(event){
+            document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
+          });
+         $('.stopButton').on('touchend', function(event){
+            document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
+          });
+      });
+}
+//start page에 prevt버튼
+function startLeftButtonClickEffect() {
+   $('#pceventbtn_left').ready(function() {
+         $('.prevButton').on('touchstart', function(event){
+            document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
+          });
+         $('.prevButton').on('touchend', function(event){
+            document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
+          });
+      });
+}
+//start page에 next버튼
+function startRightButtonClickEffect() {
+   $('#pceventbtn_right').ready(function() {
+         $('.nextButton').on('touchstart', function(event){
+            document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
+          });
+         $('.nextButton').on('touchend', function(event){
+            document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right.png)"
+          });
+      });
+}
+

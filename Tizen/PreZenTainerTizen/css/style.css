@@ -3,22 +3,24 @@
 }
 
 /* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
-h5 input{
-	width: 100%; 
+h5 input {
+	width: 100%;
 	height: 100%;
-	background-color:rgba(34, 86, 134, 0.5);
+	background-color: rgba(34, 86, 134, 0.5);
 }
 
 body {
 	margin: 0px auto;
 	background-color: #222;
 }
+
 .ui-content {
 	margin: 0px auto;
 	padding-top: none;
 	padding-bottom: none;
 	margin-top: 0px;
 }
+
 .ui-content div {
 	margin: 0px auto;
 }
@@ -44,86 +46,59 @@ body {
     Main page
 -----------------------------*/
 
-/* main화면 setting 버튼 이미지 */
-.main_buttonSet2 a {
+/* setting 버튼 이미지*/
+.settingButtonMain a {
+	display: block;
+	width: 128px;
+	height: 128px;
 	background-image: url(../img/button/ic_settings.png);
-	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	padding-left: 30px;
-	border: none;
+	background-repeat: no-repeat;
 }
 
 /* main화면에 start button 이미지 */
 .startButtonMain a {
+	display: block;
+	width: 128px;
+	height: 128px;
 	background-image: url(../img/button/ic_presentation_play.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	padding-left: 30px;
 }
 
 /* main화면에 setting 버튼에 대한 위치 */
 .main_buttonSet2 {
 	position: absolute;
-	left: calc(30% -   30px); 
-	top: calc(70% -   30px);
+	left: 5%;
+	bottom: 5%;
 }
 
 /* main화면에 start 버튼에 대한 위치 */
 .main_buttonSet1 {
 	position: absolute;
-	right: calc(30% -   30px);
-	top: calc(70% -   30px);
+	right: 5%;
+	bottom: 5%;
 }
-
-
 
 /* ----------------------------
     EnrollMotion page
 -----------------------------*/
 
-
-/* Enoroll motion 페이지에 check(확인)버튼 이미지*/
+/*  check(확인)버튼 이미지*/
 .confirmButton {
 	font-size: 30px;
+	padding-left: 16px;
 	background-image: url(../img/button/ic_check_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	width:50px;
-	height:50px;
+	width: 50px;
+	height: 50px;
 	border: none;
 }
 
-/* enroll motion페이지에 check버튼 위치 */
-.enrollMotion_buttonSet1_1 input {
-	position: absolute;
-	top: 5px;
-	left: 0px;
-}
-
-/* Enoroll motion 페이지에 resetting(재설정)버튼 이미지*/
-.resettingButton {
-	font-size: 30px;
-	background-Color: rgba(255, 255, 255, 0);
-	color: white;
-	background-image: url(../img/button/ic_resetting.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	width:50px;
-	height:50px;
-	border: none;
-}
-
-/* enroll motion페이지에 resetting버튼 위치 */
-.enrollMotion_buttonSet1_2 input {
-	position: absolute;
-	top: calc(50% -   50px);
-	left: 5px;
-	
-}
-
-/* enroll motion페이지에 test버튼 이미지 */
+/* test버튼 이미지 */
 .testButton {
 	font-size: 30px;
 	background-image: url(../img/button/ic_test.png);
@@ -131,39 +106,12 @@ body {
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	width:50px;
-	height:50px;
-	border: none;
-}
-/* enroll motion페이지에 test버튼과  옆에 On/Off 글자 위치 */
-.enrollMotion_buttonSet2 p {
-	margin-top: 15px;
-	margin-bottom: 20px;
-	position: relative;
-	left: 35px;
-}
-/* enroll motion페이지에 test버튼 옆에 On/Off 글자 */
-.enrollMotion_buttonSet2 span {
-	margin-top: 0px;
-	margin-bottom: 15px;
-	position: relative;
-	right: 48px;
-}
-
-.motionButton {
-	font-size: 25px;
-	padding: 8.5px;
-	padding-top: 8.5px;
-	padding-bottom: 10px;
-	background-image: url(../img/button/Gray.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	background-Color: rgba(255, 255, 255, 0);
-	color: white;
+	width: 50px;
+	height: 50px;
 	border: none;
 }
 
-/* enroll motion페이지에 test_right버튼 이미지 */
+/* test_right버튼 이미지 */
 .rightButton {
 	background-image: url(../img/button/ic_test_right_disable.png);
 	background-size: 100% 100%;
@@ -171,11 +119,11 @@ body {
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
 	font-size: 30px;
-	width:50px;
-	height:50px;
+	width: 50px;
+	height: 50px;
 	border: none;
 }
-/* enroll motion페이지에 test_left버튼 이미지 */
+/*  test_left버튼 이미지 */
 .leftButton {
 	border: none;
 	background-image: url(../img/button/ic_test_left_disable.png);
@@ -183,10 +131,50 @@ body {
 	background-size: 100% 100%;
 	background-Color: rgba(255, 255, 255, 0);
 	font-size: 30px;
-	width:50px;
-	height:50px;
+	width: 50px;
+	height: 50px;
 	color: white;
 	border: none;
+}
+
+/* resetting(재설정)버튼 이미지*/
+.resettingButton {
+	font-size: 30px;
+	background-Color: rgba(255, 255, 255, 0);
+	color: white;
+	background-image: url(../img/button/ic_resetting.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 50px;
+	height: 50px;
+	border: none;
+}
+
+.enrollMotion_buttonSet2 .confirm {
+	position: absolute;
+	top: 5px;
+	/* left: calc(50% -   50px);
+	right: calc(50% -   75px); */
+}
+
+.enrollMotion_buttonSet2 .test {
+	position: absolute;
+	top: calc(25% -     25px);
+}
+
+.enrollMotion_buttonSet2 .left {
+	position: absolute;
+	top: calc(50% -     50px);
+}
+
+.enrollMotion_buttonSet2 .right {
+	position: absolute;
+	top: calc(75% -     50px);
+}
+
+.enrollMotion_buttonSet2 .resetting {
+	position: absolute;
+	bottom: 5px;
 }
 
 /* ----------------------------
@@ -202,29 +190,31 @@ body {
 	background-image: url(../img/button/ic_start_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	background-Color:rgba(255,255,255,0);
-	width:150px;
-	height:150px;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 150px;
+	height: 150px;
 	border: none;
 }
-/* start페이지에 start button 이미지 */
+
+/* start페이지 stop button 이미지 */
 .stopButton input {
 	background-image: url(../img/button/ic_stop_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	width:150px;
-	height:150px;
+	width: 150px;
+	height: 150px;
 	border: none;
 }
+
 /* start페이지에 left button 이미지 */
 .prevButton input {
 	background-image: url(../img/button/ic_left_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	width:100px;
-	height:100px;
+	width: 100px;
+	height: 100px;
 	border: none;
 }
 /* start페이지에 right button 이미지 */
@@ -233,15 +223,17 @@ body {
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	width:100px;
-	height:100px;
+	width: 100px;
+	height: 100px;
 	border: none;
 }
 
 /* start화면 setting 버튼 이미지 */
-.settingButton a{
-	padding-right:30px;
-	background-image: url(../img/button/ic_settings_dark.png);
+.settingButtonStart a {
+	display:block;
+	width:50px;
+	height:50px;
+	background-image: url(../img/button/ic_settings_white.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 }
@@ -253,47 +245,64 @@ body {
 /* start 페이지에서 start button 위치*/
 .start_buttonSet1_1 {
 	position: absolute;
-	left: calc(50% -   75px);
-	right: calc(50% -   75px);
-	top: calc(50% -   75px);
+	left: calc(50% -     75px);
+	right: calc(50% -     75px);
+	top: calc(50% -     75px);
 }
 /* start 페이지에서 stop button 위치*/
 .start_buttonSet1_2 {
 	position: absolute;
-	left: calc(50% -   75px);
-	right: calc(50% -   75px);
-	top: calc(50% -   75px);
+	left: calc(50% -     75px);
+	right: calc(50% -     75px);
+	top: calc(50% -     75px);
 }
 /* start 페이지에 left 버튼 위치 */
 .start_buttonSet2_1 {
 	position: absolute;
 	left: 1%;
-	top: calc(50% -   50px);
+	top: calc(50% -     50px);
 	margin-top: 10px;
 }
 /* start 페이지에 right 버튼 위치 */
 .start_buttonSet2_2 {
 	position: absolute;
 	right: 1%;
-	top: calc(50% -   50px);
+	top: calc(50% -     50px);
 	margin-top: 10px;
 }
 /* start 페이지에 setting 버튼 위치 */
 .start_buttonSet2_3 {
-	
 	position: absolute;
-	left: calc(50% -   15px);
-	right: calc(50% -   15px);
+	left: calc(50% -     15px);
+	right: calc(50% -     15px);
 	bottom: 5%;
 }
-.start_bottom_section{
+
+.start_bottom_section {
 	width: device-width;
-	height:30%;
+	height: 30%;
 	text-align: center;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	background-color:rgba(34, 86, 134, 0.5);
+	background-color: rgba(34, 86, 134, 0.5);
 }
+
+/* ----------------------------
+    MotionSetting page
+-----------------------------*/
+.motionButton {
+	font-size: 25px;
+	padding: 8.5px;
+	padding-top: 8.5px;
+	padding-bottom: 10px;
+	background-image: url(../img/button/Gray.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-Color: rgba(255, 255, 255, 0);
+	color: white;
+	border: none;
+}
+
 .motionSetting_buttonSet p {
 	margin-top: 0px;
 	margin-left: 22px;
@@ -303,15 +312,6 @@ body {
 	position: absolute;
 	right: 62px;
 }
-
-.enrollMotion_buttonSet1 span {
-	margin-top: 0px;
-	margin-bottom: 15px;
-	position: absolute;
-	right: 22px;
-}
-
-
 
 /* ----------------------------
     StopWatch part
@@ -329,7 +329,7 @@ body {
 	padding-bottom: none;
 	margin: 0px auto;
 	margin-top: 0px;
-	margin-left: calc(50% -   75px);
+	margin-left: calc(50% -     75px);
 }
 
 .hidden {
@@ -437,4 +437,28 @@ body {
 	background-image: url(../img/stopwatch/new/34x51/9.png);
 }
 
+/* ----------------------------
+     버튼 click 효과 이미지 - (a tag)
+-----------------------------*/
 
+/* main화면에 start button 눌렀을 때 이미지 */
+.startButtonMain a:active {
+	background-image: url(../img/button/ic_presentation_play_disable.png);
+}
+/* main화면 setting 버튼 클릭 이미지*/
+.settingButtonMain a:active {
+	background-image: url(../img/button/ic_settings_disable.png);
+}
+/* start페이지에 start button 클릭 이미지 */
+.startButton input:active {
+	background-image: url(../img/button/ic_start_disable.png);
+}
+
+/* start페이지에 stop button click 이미지 */
+.stopButton input:active {
+	background-image: url(../img/button/ic_stop_disable.png);
+}
+/* start화면 setting 버튼 클릭 이미지 */
+.settingButtonStart a:active {
+	background-image: url(../img/button/ic_settings_dark.png);
+}

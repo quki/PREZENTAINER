@@ -23,10 +23,10 @@
     </div>
     <div data-role="content" class="main_buttonSet">
       <div class="main_buttonSet1 startButtonMain">
-        <a href="#start" data-role="button" data-theme="c"></a>
+        <a href="#start" id="mainStartButton" onclick="mainStartButtonClickEffect();" data-role="button" data-theme="c"></a>
       </div>
-      <div class="main_buttonSet2">
-        <a class="settingButton" href="#enroll_motion" onClick="ready_motionSetting();" data-role="button" data-theme="a"></a>
+      <div class="main_buttonSet2 settingButtonMain">
+        <a id="mainSettingButton" href="#enroll_motion" onClick="ready_motionSetting();mainSettingButtonClickEffect();" data-role="button" data-theme="a"></a>
       </div>
     </div>
   </div>
@@ -53,23 +53,23 @@
 
     <div class="start_buttonSet1">
       <div class="start_buttonSet1_1 startButton">
-        <input type="button" id="startbtn" disabled="disabled">
+        <input type="button" id="startbtn" onclick="startStartButtonClickEffect();" disabled="disabled">
       </div>
       <div class="start_buttonSet1_2 stopButton">
-        <input type="hidden" src="./img/button/ic_stop.png" id="stopbtn" disabled="disabled">
+        <input type="hidden" src="./img/button/ic_stop.png" id="stopbtn" onclick="startStopButtonClickEffect();" disabled="disabled">
       </div>
     </div>
 
     <div class="start_buttonSet2">
       <div class="start_buttonSet2_1 prevButton">
-        <input type="button" id="pceventbtn_left" disabled="disabled" style="float: left">
+        <input type="button" id="pceventbtn_left" onclick="startLeftButtonClickEffect();" disabled="disabled" style="float: left">
       </div>
       <div class="start_buttonSet2_2 nextButton">
-        <input type="button" id="pceventbtn_right" disabled="disabled" style="float: left">
+        <input type="button" id="pceventbtn_right" onclick="startRightButtonClickEffect();" disabled="disabled" style="float: left">
       </div>
       
-      <div class="start_buttonSet2_3 settingButton">
-        <a href="#motionSetting" data-role="button" data-theme="c"></a>
+      <div class="start_buttonSet2_3 settingButtonStart">
+        <a href="#motionSetting" id="startSettingButton" onclick="startSettingButtonClickEffect();" data-role="button" data-theme="c"></a>
       </div>  
     </div>
   </div>
@@ -93,30 +93,26 @@
   <div data-role="page" id="enroll_motion">
     <div data-role="content">
 
-      <div class="enrollMotion_buttonSet1">
-        <span id="count" style="color: white;" style="float:left">0/5</span>
-        <div class="enrollMotion_buttonSet1_1">
-          <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()" style="float: left">
-        </div>
-        <div class="enrollMotion_buttonSet1_2">
-          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()">
-        </div>
-      </div>
-
       <div class="enrollMotion_buttonSet2">
-        <p>
-          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()" > 
-          <span id="test_motion" style="float:left">Off</span>
-        </p>
-        <p>
-          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()" > 
+      <div class ="confirm">
+          <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()" > 
+          <span id="count">0/5</span>
+          </div>
+          <div class ="test">
+          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> 
+          <span id="test_motion">Off</span>
+          </div>
+          <div class ="right">
+          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> 
           <span id="test_right_motion">Off</span>
-        </p>
-        <p>
-          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()" > 
+          </div>
+          <div class ="left">
+          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> 
           <span id="test_left_motion">Off</span>
-        </p>
-
+          </div>
+           <div class ="resetting">
+          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()">
+          </div>
       </div>
     </div>
   </div>
