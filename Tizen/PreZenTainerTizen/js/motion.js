@@ -53,7 +53,7 @@ function onDeviceMotion(e) {
     if(Math.abs(Number(accelX))+Math.abs(Number(accelY))+Math.abs(Number(accelZ))>15 && arrayIndex!=userInputIndex)
     {
     	$('#ok_button').removeAttr('disabled');
-    	document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Red.png)";
+    	document.getElementById('ok_button').style.backgroundImage= "url(./img/button/ic_check.png)";
     }
 
     showResult();
@@ -82,7 +82,7 @@ function buttonPush() {
 		accelY = 0;
 		accelZ = 0;
 		$('#ok_button').attr('disabled','disabled');
-		document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Gray.png)";
+		document.getElementById('ok_button').style.backgroundImage= "url(./img/button/ic_check_disable.png)";
 		if (arrayIndex == userInputIndex) {
 			var sumX=0; 
 			var sumY =0;
@@ -184,16 +184,16 @@ function test_motionSensor() {
  *  
  *  */
 
+
+// start page
 function changeButtonStart() {
   
    /*
     * start button
     * */
-  //disable 상태
 	if(document.getElementById('startbtn').disabled == true) {
 		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
 	}
-	//able 상태
 	else {
 		document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
 	}
@@ -202,11 +202,9 @@ function changeButtonStart() {
 	 /*
    * stop button
    * */
-	//disable 상태
 	if(document.getElementById('stopbtn').disabled == true) {
 		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
 	}
-	//able 상태
 	else {
 		document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
 	}
@@ -214,22 +212,18 @@ function changeButtonStart() {
 	/*
    * right button
    * */
-	//disable 상태
 	if(document.getElementById('pceventbtn_right').disabled == true) {
 		document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
 	}
-	//able 상태
 	else {
 		document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right.png)"
 	}
 	/*
    * left button
    * */
-	//disable 상태
 	if(document.getElementById('pceventbtn_left').disabled == true) {
 		document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
 	}
-	//able 상태
 	else {
 		document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
 	}
@@ -259,34 +253,45 @@ function changeButtonMotionSetting() {
 	}
 	
 }
-
+// enrollmotion page
 function changeButtonEnrollMotion() {
+  
+  /*
+   * test button
+   * */
 	if(document.getElementById('motion_test_button').disabled == true) {
-		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test_disable.png)"
 	}
 	else {
-		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/Brown.png)"
+		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test.png)"
 	}
-	
+	/*
+   * test button right
+   * */
 	if(document.getElementById('test_right_motion_btn').disabled == true) {
-		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/ic_test_right_disable.png)"
 	}
 	else {
-		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/ic_test_right.png)"
 	}
-	
+	/*
+   * test button left
+   * */
 	if(document.getElementById('test_left_motion_btn').disabled == true) {
-		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/ic_test_left_disable.png)"
 	}
 	else {
-		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/ic_test_left.png)"
 	}
 	
+	/*
+   * resetting button
+   * */
 	if(document.getElementById('reset_button').disabled == true) {
-		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting_disable.png)"
 	}
 	else {
-		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/Red.png)"
+		document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting.png)"
 	}
 }
 
@@ -307,7 +312,7 @@ function ready_motionSetting() {
 		accelX = 0;
 	    accelY = 0;
 	    accelZ = 0;
-	    document.getElementById('ok_button').style.backgroundImage= "url(./img/button/Gray.png)"
+	    document.getElementById('ok_button').style.backgroundImage= "url(./img/button/ic_check_disable.png)"
 	}
 	save_setLocalStorage();
 	changeButtonEnrollMotion();

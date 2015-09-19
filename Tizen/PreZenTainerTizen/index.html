@@ -99,19 +99,22 @@
           <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()" style="float: left">
         </div>
         <div class="enrollMotion_buttonSet1_2">
-          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()" value="재설정">
+          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()">
         </div>
       </div>
 
       <div class="enrollMotion_buttonSet2">
         <p>
-          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()" value="Test"> <span id="test_motion">Off</span>
+          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()" > 
+          <span id="test_motion" style="float:left">Off</span>
         </p>
         <p>
-          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()" value="Right"> <span id="test_right_motion">Off</span>
+          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()" > 
+          <span id="test_right_motion">Off</span>
         </p>
         <p>
-          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()" value="Left"> <span id="test_left_motion">Off</span>
+          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()" > 
+          <span id="test_left_motion">Off</span>
         </p>
 
       </div>

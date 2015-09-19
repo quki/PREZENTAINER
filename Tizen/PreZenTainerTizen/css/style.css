@@ -2,6 +2,13 @@
 	font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
 }
 
+/* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
+h5 input{
+	width: 100%; 
+	height: 100%;
+	background-color:rgba(34, 86, 134, 0.5);
+}
+
 body {
 	margin: 0px auto;
 	background-color: #222;
@@ -32,7 +39,6 @@ body {
 .text-centered {
 	text-align: center;
 }
-
 
 /* ----------------------------
     Main page
@@ -70,32 +76,13 @@ body {
 }
 
 
-#EnrollHead {
-	padding-top: none;
-	padding-bottom: none;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-/* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
-h5 input{
-	width: 100%; 
-	height: 100%;
-	background-color:rgba(34, 86, 134, 0.5);
-}
 
-.resettingButton {
-	font-size: 25px;
-	padding: 9px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	background-Color: rgba(255, 255, 255, 0);
-	color: white;
-	background-image: url(../img/button/Red.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	border: none;
-}
-/* Enoroll motion 페이지 */
+/* ----------------------------
+    EnrollMotion page
+-----------------------------*/
+
+
+/* Enoroll motion 페이지에 check(확인)버튼 이미지*/
 .confirmButton {
 	font-size: 30px;
 	background-image: url(../img/button/ic_check_disable.png);
@@ -103,33 +90,64 @@ h5 input{
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	padding: 14px;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	width:50px;
+	height:50px;
 	border: none;
 }
 
+/* enroll motion페이지에 check버튼 위치 */
+.enrollMotion_buttonSet1_1 input {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+}
+
+/* Enoroll motion 페이지에 resetting(재설정)버튼 이미지*/
+.resettingButton {
+	font-size: 30px;
+	background-Color: rgba(255, 255, 255, 0);
+	color: white;
+	background-image: url(../img/button/ic_resetting.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width:50px;
+	height:50px;
+	border: none;
+}
+
+/* enroll motion페이지에 resetting버튼 위치 */
+.enrollMotion_buttonSet1_2 input {
+	position: absolute;
+	top: calc(50% -   50px);
+	left: 5px;
+	
+}
+
+/* enroll motion페이지에 test버튼 이미지 */
 .testButton {
-	background-image: url(../img/button/Brown.png);
+	font-size: 30px;
+	background-image: url(../img/button/ic_test.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	padding: 10px;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	width:50px;
+	height:50px;
 	border: none;
 }
-
-.enrollButton {
-	font-size: 27px;
-	padding: 9px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	background-image: url(../img/button/Green.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	border: none;
+/* enroll motion페이지에 test버튼과  옆에 On/Off 글자 위치 */
+.enrollMotion_buttonSet2 p {
+	margin-top: 15px;
+	margin-bottom: 20px;
+	position: relative;
+	left: 35px;
+}
+/* enroll motion페이지에 test버튼 옆에 On/Off 글자 */
+.enrollMotion_buttonSet2 span {
+	margin-top: 0px;
+	margin-bottom: 15px;
+	position: relative;
+	right: 48px;
 }
 
 .motionButton {
@@ -145,28 +163,28 @@ h5 input{
 	border: none;
 }
 
+/* enroll motion페이지에 test_right버튼 이미지 */
 .rightButton {
-	background-image: url(../img/button/Gray.png);
+	background-image: url(../img/button/ic_test_right_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	padding: 8px;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	font-size: 30px;
+	width:50px;
+	height:50px;
 	border: none;
 }
-
+/* enroll motion페이지에 test_left버튼 이미지 */
 .leftButton {
-	padding: 15px;
-	padding-top: 1px;
-	padding-bottom: 2px;
 	border: none;
-	background-image: url(../img/button/Gray.png);
+	background-image: url(../img/button/ic_test_left_disable.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	background-Color: rgba(255, 255, 255, 0);
+	font-size: 30px;
+	width:50px;
+	height:50px;
 	color: white;
 	border: none;
 }
@@ -226,19 +244,6 @@ h5 input{
 	background-image: url(../img/button/ic_settings_dark.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-}
-
-
-.enroll_buttonSet1 {
-	position: absolute;
-	left: 22px;
-	top: 194px
-}
-
-.enroll_buttonSet2 {
-	position: absolute;
-	right: 22px;
-	top: 197px;
 }
 
 /* ----------------------------
@@ -306,29 +311,7 @@ h5 input{
 	right: 22px;
 }
 
-.enrollMotion_buttonSet1_1 input {
-	margin-top: 5px;
-	margin-left: 0px;
-}
 
-.enrollMotion_buttonSet1_2 input {
-	margin-top: 0px;
-	margin-left: 13px;
-}
-
-.enrollMotion_buttonSet2 p {
-	margin-top: 15px;
-	margin-bottom: 20px;
-	position: relative;
-	left: 35px;
-}
-
-.enrollMotion_buttonSet2 span {
-	margin-top: 0px;
-	margin-bottom: 15px;
-	position: absolute;
-	right: 48px;
-}
 
 /* ----------------------------
     StopWatch part
