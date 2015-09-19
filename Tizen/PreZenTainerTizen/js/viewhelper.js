@@ -5,7 +5,7 @@ var progressBarWidget,
 var mainPage = $('#main');
 var startPage = $('#start');
 var motionSettingPage = $('#motionSetting');
-var enrollMotionPage = $('#enroll_motion');
+var enrollMotionPage = $('#enrollMotion');
 
 //모션세팅에서 메인으로 페이지 전환
 enrollMotionPage.on("swipedown", function() {

@@ -86,8 +86,6 @@ body {
 
 /*  check(확인)버튼 이미지*/
 .confirmButton {
-	font-size: 30px;
-	padding-left: 16px;
 	background-image: url(../img/button/ic_check_disable.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
@@ -100,12 +98,10 @@ body {
 
 /* test버튼 이미지 */
 .testButton {
-	font-size: 30px;
 	background-image: url(../img/button/ic_test.png);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	color: white;
 	width: 50px;
 	height: 50px;
 	border: none;
@@ -117,8 +113,6 @@ body {
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	color: white;
-	font-size: 30px;
 	width: 50px;
 	height: 50px;
 	border: none;
@@ -130,18 +124,14 @@ body {
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	background-Color: rgba(255, 255, 255, 0);
-	font-size: 30px;
 	width: 50px;
 	height: 50px;
-	color: white;
 	border: none;
 }
 
 /* resetting(재설정)버튼 이미지*/
 .resettingButton {
-	font-size: 30px;
 	background-Color: rgba(255, 255, 255, 0);
-	color: white;
 	background-image: url(../img/button/ic_resetting.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
@@ -150,32 +140,61 @@ body {
 	border: none;
 }
 
-.enrollMotion_buttonSet2 .confirm {
+	/* 
+		EnrollMotion Page에 있는
+		모든 버튼 및 value(0/5, off 등) 위치
+		차례로, cofirm-test-left-right-resetting (각각 input, span 순)
+		
+	 */
+
+.enrollMotion_buttonSet2 .confirm input{
+	position: absolute;
+	right:5px;
+	top: 5px;
+}
+.enrollMotion_buttonSet2 .confirm span{
 	position: absolute;
 	top: 5px;
-	/* left: calc(50% -   50px);
-	right: calc(50% -   75px); */
+	left: 5px;
 }
-
-.enrollMotion_buttonSet2 .test {
+.enrollMotion_buttonSet2 .test input{
 	position: absolute;
 	top: calc(25% -     25px);
 }
-
-.enrollMotion_buttonSet2 .left {
+.enrollMotion_buttonSet2 .test span{
+	position: absolute;
+	top: calc(25% -     25px);
+	right: 5px;
+}
+.enrollMotion_buttonSet2 .left input{
 	position: absolute;
 	top: calc(50% -     50px);
 }
-
-.enrollMotion_buttonSet2 .right {
+.enrollMotion_buttonSet2 .left span{
+	position: absolute;
+	top: calc(50% -     50px);
+	right: 5px;
+}
+.enrollMotion_buttonSet2 .right input{
 	position: absolute;
 	top: calc(75% -     50px);
 }
-
-.enrollMotion_buttonSet2 .resetting {
+.enrollMotion_buttonSet2 .right span{
+	position: absolute;
+	top: calc(75% -     50px);
+	right: 5px;
+}
+.enrollMotion_buttonSet2 .resetting input{
 	position: absolute;
 	bottom: 5px;
+	right: 5px;
 }
+.enrollMotion_buttonSet2 .resetting span{
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+}
+
 
 /* ----------------------------
     Start page
@@ -273,8 +292,8 @@ body {
 /* start 페이지에 setting 버튼 위치 */
 .start_buttonSet2_3 {
 	position: absolute;
-	left: calc(50% -     15px);
-	right: calc(50% -     15px);
+	left: calc(50% -     25px);
+	right: calc(50% -     25px);
 	bottom: 5%;
 }
 
@@ -302,15 +321,40 @@ body {
 	color: white;
 	border: none;
 }
-
-.motionSetting_buttonSet p {
-	margin-top: 0px;
-	margin-left: 22px;
+	/* 
+		MotionSetting Page에 있는
+		모든 버튼 및 value(off) 위치
+		차례로,toggle-right-left(각각 input, span 순)
+	 */
+.motionSetting_buttonSet .MotionSetting_toggle input{
+	position:absolute;
+	left: 10%;
+	top:10%;
 }
-
-.motionSetting_buttonSet span {
-	position: absolute;
-	right: 62px;
+.motionSetting_buttonSet .MotionSetting_toggle span{
+	position:absolute;
+	right: 10%;
+	top:10%;
+}
+.motionSetting_buttonSet .motionSetting_right input{
+	position:absolute;
+	left: 10%;
+	top:50%;
+}
+.motionSetting_buttonSet .motionSetting_right span{
+	position:absolute;
+	right: 10%;
+	top:50%;
+}
+.motionSetting_buttonSet .motionSetting_left input{
+	position:absolute;
+	left: 10%;
+	bottom:10%;
+}
+.motionSetting_buttonSet .motionSetting_left span{
+	position:absolute;
+	right: 10%;
+	bottom:10%;
 }
 
 /* ----------------------------

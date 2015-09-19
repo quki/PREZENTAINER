@@ -38,7 +38,7 @@ function buttonSetting() {
 }
 
 function showResult() {
-	$("#count").html(arrayIndex+"/5");
+	$("#count").html("모션등록 "+arrayIndex+"/5");
 }
 
 function onDeviceMotion(e) {
@@ -343,14 +343,16 @@ function finish_motionSetting() {
 	console.log(averageZ_left);
 	console.log(arrayIndex);
 	save_setLocalStorage();
-	document.getElementById("ok_button").value="완료";
+	$("#count").html("모션등록 완료");
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').removeAttr('disabled');
 	$('#motion_test_button').removeAttr('disabled');
 }
 function modify_motionSetting() {
+  arrayIndex=0;
 	alert('오른쪽 넘김을 위한 같은동작을 5번 해주세요!');
-	document.getElementById("ok_button").value="확인";
+	$("#count").html("모션등록 "+arrayIndex+"/5");
+	/*document.getElementById("ok_button").value="확인";*/
 	$('#ok_button').attr('disabled','disabled');
 	$('#reset_button').attr('disabled','disabled');
 	$('#motion_test_button').attr('disabled','disabled');
@@ -360,8 +362,8 @@ function modify_motionSetting() {
 	check = 0;
 	document.getElementById("enable_motion").innerHTML="Off";
 	motion_test=0;
-	document.getElementById("test_motion").innerHTML="Off";
-	arrayIndex=0;
+	document.getElementById("test_motion").innerHTML="테스트 Off";
+	
 	
 	control_right_left=0;
 	accelX = 0;
@@ -391,7 +393,7 @@ function is_motion() {   //back버튼 눌렀을 때
 	}
         
 	motion_test=0;  //설정화면에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
-	document.getElementById("test_motion").innerHTML="Off";
+	document.getElementById("test_motion").innerHTML="테스트 Off";
 	
 	$('#test_right_motion_btn').attr('disabled','disabled');
 	$('#test_left_motion_btn').attr('disabled','disabled');
@@ -519,7 +521,7 @@ function test_motion_on_off(){
 	
 	if(motion_test==0)
 	{
-		document.getElementById("test_motion").innerHTML="On";
+		document.getElementById("test_motion").innerHTML="테스트 On";
 		motion_test=1;
 		check = 0;
 		
@@ -529,7 +531,7 @@ function test_motion_on_off(){
 	}
 	else
 	{
-		document.getElementById("test_motion").innerHTML="Off";
+		document.getElementById("test_motion").innerHTML="테스트 Off";
 		motion_test=0;
 		
 		$('#test_right_motion_btn').attr('disabled','disabled');

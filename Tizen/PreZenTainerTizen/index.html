@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- Main view -->
+  <!-- 'Main' Page -->
   <div data-role="page" class="ui-page ui-page-active" id="main">
     <div>
       <h5>
@@ -26,12 +26,12 @@
         <a href="#start" id="mainStartButton" onclick="mainStartButtonClickEffect();" data-role="button" data-theme="c"></a>
       </div>
       <div class="main_buttonSet2 settingButtonMain">
-        <a id="mainSettingButton" href="#enroll_motion" onClick="ready_motionSetting();mainSettingButtonClickEffect();" data-role="button" data-theme="a"></a>
+        <a id="mainSettingButton" href="#enrollMotion" onClick="ready_motionSetting();mainSettingButtonClickEffect();" data-role="button" data-theme="a"></a>
       </div>
     </div>
   </div>
 
-  <!-- Start Program view -->
+  <!-- 'Start' PPT Page -->
   <div data-role="page" id="start">
     <div>
       <section id="stopwatch-content-timer">
@@ -73,45 +73,49 @@
       </div>  
     </div>
   </div>
-  <!-- 추가내용  -->
-  <!-- motion setting view -->
+  
+  <!-- MotionSetting Page-->
   <div data-role="page" id="motionSetting">
     <div class="motionSetting_buttonSet">
-      <p>
-        <input type="button" class="motionButton" id="motionbtn" value="Motion" disabled="disabled" onClick="enable_motion()"> <span id="enable_motion">Off</span>
-      </p>
-      <p>
-        <input type="button" class="rightButton" id="right_motion_btn" disabled="disabled" value="Right" onClick="right_enable_motion()"> <span id="right_motion">Off</span>
-      </p>
-      <p>
-        <input type="button" class="leftButton" id="left_motion_btn" disabled="disabled" value="Left" onClick="left_enable_motion()"> <span id="left_motion">Off</span>
-      </p>
+        <div class ="MotionSetting_toggle">
+          <input type="button" class="motionButton" id="motionbtn" value="모션" disabled="disabled" onClick="enable_motion()"> 
+          <span id="enable_motion">Off</span>
+        </div>
+        <div class ="motionSetting_right">
+          <input type="button" class="rightButton" id="right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> 
+          <span id="right_motion">Off</span>
+        </div>
+        <div class ="motionSetting_left">
+          <input type="button" class="leftButton" id="left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> 
+          <span id="left_motion">Off</span>
+        </div>
     </div>
   </div>
 
-  <!-- Enroll_motion 페이지 -->
-  <div data-role="page" id="enroll_motion">
+  <!-- EnrollMotion Page -->
+  <div data-role="page" id="enrollMotion">
     <div data-role="content">
 
       <div class="enrollMotion_buttonSet2">
-      <div class ="confirm">
-          <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()" > 
-          <span id="count">0/5</span>
+          <div class ="confirm">
+            <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()" > 
+            <span id="count">모션등록 0/5</span>
           </div>
-          <div class ="test">
-          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> 
-          <span id="test_motion">Off</span>
+           <div class ="test">
+            <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> 
+            <span id="test_motion">테스트 Off</span>
           </div>
           <div class ="right">
-          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> 
-          <span id="test_right_motion">Off</span>
+            <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> 
+            <span id="test_right_motion">Off</span>
           </div>
           <div class ="left">
-          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> 
-          <span id="test_left_motion">Off</span>
+            <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> 
+            <span id="test_left_motion">Off</span>
           </div>
            <div class ="resetting">
-          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()">
+            <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()">
+            <span id="test_left_motion">재설정</span>
           </div>
       </div>
     </div>
