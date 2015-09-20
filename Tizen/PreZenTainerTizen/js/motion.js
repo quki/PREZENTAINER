@@ -185,7 +185,7 @@ function test_motionSensor() {
  *  */
 
 
-// start page
+// Start page
 function changeButtonStart() {
   
    /*
@@ -229,27 +229,35 @@ function changeButtonStart() {
 	}
 	
 }
-
+//Motion Setting page
 function changeButtonMotionSetting() {
+  
+  /*
+   * motion toggle button
+   * */
 	if(document.getElementById('motionbtn').disabled == true) {
 		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Gray.png)"
 	}
 	else {
 		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Brown.png)"
 	}
-	
+	/*
+   * right button
+   * */
 	if(document.getElementById('right_motion_btn').disabled == true) {
-		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
 	}
 	else {
-		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/ic_right.png)"
 	}
-	
+	/*
+   * left button
+   * */
 	if(document.getElementById('left_motion_btn').disabled == true) {
-		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
+		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
 	}
 	else {
-		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
+		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/ic_left.png)"
 	}
 	
 }

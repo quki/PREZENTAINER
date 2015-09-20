@@ -136,7 +136,8 @@ function backkeyhandler(e) {
 
   window.addEventListener('tizenhwkey', backkeyhandler);
   window.addEventListener('load', function(ev) {
-    $('.ui-listview').append('<li>연결하세요</li>');
+    
+    
   });
 }());
 (function(tau) {

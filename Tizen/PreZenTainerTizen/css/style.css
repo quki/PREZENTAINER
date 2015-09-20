@@ -2,6 +2,11 @@
 	font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
 }
 
+@font-face{
+    font-family: "MyFont";
+    src: url('../res/font/NanumGothic.ttf'),
+}
+
 /* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
 h5 input {
 	width: 100%;
@@ -10,8 +15,15 @@ h5 input {
 }
 
 body {
+	font-family: MyFont !important;
 	margin: 0px auto;
 	background-color: #222;
+}
+
+.ui-listview li{
+	list-style-position: inside;
+	border-bottom:solid 1px;
+    border-bottom-color: #fff ;
 }
 
 .ui-content {
@@ -310,15 +322,17 @@ body {
     MotionSetting page
 -----------------------------*/
 .motionButton {
-	font-size: 25px;
+	
 	padding: 8.5px;
-	padding-top: 8.5px;
-	padding-bottom: 10px;
+	width:100px;
+	height:50px;
 	background-image: url(../img/button/Gray.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
+	font-size: 25px;
+	font-weight:bold;
 	border: none;
 }
 	/* 
@@ -326,36 +340,36 @@ body {
 		모든 버튼 및 value(off) 위치
 		차례로,toggle-right-left(각각 input, span 순)
 	 */
-.motionSetting_buttonSet .MotionSetting_toggle input{
+.MotionSetting_toggle input{
+	
 	position:absolute;
-	left: 10%;
-	top:10%;
+	left: 25%;
 }
-.motionSetting_buttonSet .MotionSetting_toggle span{
+.MotionSetting_toggle span{
 	position:absolute;
-	right: 10%;
-	top:10%;
+	right: 25%;
+	font-size: 25px;
 }
-.motionSetting_buttonSet .motionSetting_right input{
+
+.motionSetting_right input{
 	position:absolute;
-	left: 10%;
-	top:50%;
+	left: 25%;
 }
-.motionSetting_buttonSet .motionSetting_right span{
+.motionSetting_right span{
 	position:absolute;
-	right: 10%;
-	top:50%;
+	right: 25%;
+	font-size: 25px;
 }
-.motionSetting_buttonSet .motionSetting_left input{
+.motionSetting_left input{
 	position:absolute;
-	left: 10%;
-	bottom:10%;
+	left: 25%;
 }
-.motionSetting_buttonSet .motionSetting_left span{
+.motionSetting_left span{
 	position:absolute;
-	right: 10%;
-	bottom:10%;
+	right: 25%;
+	font-size: 25px;
 }
+
 
 /* ----------------------------
     StopWatch part
