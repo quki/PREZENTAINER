@@ -8,12 +8,12 @@
 <title>PREZENTAINER</title>
 
 <link rel="stylesheet" href="lib/tau/wearable/theme/default/tau.min.css">
+<link rel="stylesheet" href="lib/jquery/jquery.mobile-1.2.0.min.css" />
 <link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)" href="lib/tau/wearable/theme/default/tau.circle.min.css">
-
-<link rel="stylesheet" href="css/jquery.mobile-1.2.0.min.css" />
 <link rel="stylesheet" href="css/style.css" />
+
 </head>
-<body class="body">
+<body>
   <!-- 'Main' Page -->
   <div data-role="page" class="ui-page ui-page-active" id="main">
     <div>
@@ -138,10 +138,12 @@
 <!-- load javascript file -->
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
-<script type="text/javascript" src="js/circle-helper.js"></script>
-<script type="text/javascript" src="js/globalfcn.js"></script>
-<script type="text/javascript" src="js/viewhelper.js"></script>
-<script type="text/javascript" src="js/sap.js"></script>
-<script type="text/javascript" src="js/motion.js"></script>
+<script type="text/javascript" src="js/globals/viewhelper.js"></script>
+<script type="text/javascript" src="js/globals/circle-helper.js"></script>
+<script type="text/javascript" src="js/globals/eventtopc.js"></script>
+<script type="text/javascript" src="js/globals/heartrate.js"></script>
+<script type="text/javascript" src="js/globals/alarm.js"></script>
+<script type="text/javascript" src="js/globals/sap.js"></script>
+<script type="text/javascript" src="js/globals/motion.js"></script>
 <script src="./js/core/core.js" data-main="./js/app.js"></script>
 </html>

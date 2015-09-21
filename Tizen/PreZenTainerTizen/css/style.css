@@ -17,9 +17,10 @@ h5 input {
 body {
 	font-family: MyFont !important;
 	margin: 0px auto;
-	background-color: #222;
+	background-color: rgba(152,192,228,1);
 }
 
+/* li tag*/
 .ui-listview li{
 	list-style-position: inside;
 	border-bottom:solid 1px;
@@ -321,6 +322,8 @@ body {
 /* ----------------------------
     MotionSetting page
 -----------------------------*/
+
+/* 모션 toggle 버튼 이미지 */
 .motionButton {
 	
 	padding: 8.5px;

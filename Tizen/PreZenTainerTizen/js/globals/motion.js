@@ -1,3 +1,11 @@
+/*
+ * 
+ * motion관련 함수
+ * 
+ * */
+
+
+
 //실시간 가속도 값
 var accelX = 0, accelY = 0, accelZ = 0;
 

@@ -1,6 +1,15 @@
+
+/*
+ * 
+ * 화면관리 관련함수
+ * 
+ * */
+
+
+
 var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
-
+var isConnect = false;
 //페이지 전환 변수
 var mainPage = $('#main');
 var startPage = $('#start');
@@ -184,3 +193,39 @@ function startRightButtonClickEffect() {
       });
 }
 
+
+//Handler for flick down gesture
+function backkeyhandler(e) {
+if (e.keyName == "back") {
+ var page = document.getElementsByClassName('ui-page-active')[0], 
+               pageid = page? page.id : " ";
+ if (pageid === "main") {
+   tizen.application.getCurrentApplication().exit();
+ } else {
+   window.history.back();
+ }
+}
+}
+
+(function() {
+// tau progress bar implementation
+var sendPage = document.getElementById('sendPage');
+sendPage.addEventListener('pagehide', function() {
+ progressBarWidget.destroy();
+});
+
+window.addEventListener('tizenhwkey', backkeyhandler);
+window.addEventListener('load', function(ev) {
+ 
+ 
+});
+}());
+(function(tau) {
+// tau popup toast implementation
+var toastPopup = document.getElementById('popupToast');
+toastPopup.addEventListener('popupshow', function(ev) {
+ setTimeout(function() {
+   tau.closePopup();
+ }, 2000);
+}, false);
+})(window.tau);

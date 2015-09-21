@@ -1,11 +1,24 @@
+/*
+ * 
+ * SAP 관련함수
+ * 
+ * */
+
+    var CHANNELID_SETTING = 100,
+    CHANNELID_EVENT = 104, 
+    CHANNELID_HR = 110,
+    CHANNELID_EVENTTIME = 114;
+
 var mSAAgent,
     connectionListener,
     mSASocket,
     mSAFiletransfer,
     mSARemotePeerAgent,
     transferId = 0;
-
+ 
 var mTimeInterval = null;
+
+
 
 // Initialize File Transfer 
 function ftInit(successCb, errorCb) {
