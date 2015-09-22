@@ -78,17 +78,9 @@
   <div data-role="page" id="motionSetting">
     <ul class="ui-listview">
       <li class="MotionSetting_toggle">
-          <input type="button" class="motionButton" id="motionbtn" value="모션" disabled="disabled" onClick="enable_motion()"> 
+          <input type="button" class="motionButton" id="motionbtn" value="모션" disabled="disabled" onClick="enable_motion()">
           <span id="enable_motion">Off</span>
-      </li>
-      <li class="motionSetting_right">
-          <input type="button" class="rightButton" id="right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> 
-          <span id="right_motion">Off</span>
-      </li>
-      <li class="motionSetting_left">
-          <input type="button" class="leftButton" id="left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> 
-          <span id="left_motion">Off</span>
-      </li>
+
     </ul>
   </div>
 
@@ -103,14 +95,8 @@
         <div class="test">
           <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> <span id="test_motion">테스트 Off</span>
         </div>
-        <div class="right">
-          <input type="button" class="rightButton" id="test_right_motion_btn" disabled="disabled" onClick="right_enable_motion()"> <span id="test_right_motion">Off</span>
-        </div>
-        <div class="left">
-          <input type="button" class="leftButton" id="test_left_motion_btn" disabled="disabled" onClick="left_enable_motion()"> <span id="test_left_motion">Off</span>
-        </div>
         <div class="resetting">
-          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()"> <span id="test_left_motion">재설정</span>
+          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()"> <span>재설정</span>
         </div>
       </div>
     </div>
