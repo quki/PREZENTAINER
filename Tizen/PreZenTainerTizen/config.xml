@@ -5,6 +5,10 @@
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="teamlogo.png"/>
     <tizen:metadata key="AccessoryServicesLocation" value="res/xml/serviceprofile.xml"/>
+    <tizen:metadata key="master_app_name" value="PreZenTainer"/> 
+    <tizen:metadata key="master_app_packagename" value="com.puregodic.android.prezentainer"/>
+    <tizen:metadata key="master_app_playstore_deeplink" value="http://play.google.com/store/apps/details?id=com.puregodic.android.prezentainer"/>
+    <tizen:metadata key="master_app_auto_uninstallation" value="yes"/>
     <name>PreZenTainerTizen</name>
     <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
     <tizen:privilege name="http://tizen.org/privilege/content.read"/>
