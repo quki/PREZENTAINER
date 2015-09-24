@@ -54,11 +54,11 @@ public class AccessoryService extends SAAgent {
 		super("AccessoryService", AccessoryServiceConnection.class);
 	}
 	
-	// FileAction Interface Initialize
+	// FileAction Interface Initialize함
     public void registerFileAction(FileAction mFileAction) {
         this.mFileAction = mFileAction;
     }
-    // ConnectionAction (Gear) Interface Initailize
+    // ConnectionAction (Gear) Interface Initailize함
     public void registerConnectionAction(ConnectionActionGear mConnectionActionGear){
         this.mConnectionActionGear = mConnectionActionGear;
     }
@@ -69,7 +69,7 @@ public class AccessoryService extends SAAgent {
 		super.onCreate();
 		mContext = getApplicationContext();
 		
-		// Initialize SAP and catch the error
+		// Initialize Accessory and catch the error
 		SA sa = new SA();
 		try {
 			sa.initialize(this);
@@ -101,11 +101,11 @@ public class AccessoryService extends SAAgent {
 			return;
 		}
 		
-		
+		// SA File Transfer EventListener 정의
 		ftEventCallBack = new EventListener() {
 			
 			
-			//File Transfer Requested
+			//File Transfer Requested 때
 			@Override
 			public void onTransferRequested(int transId, String fileName) {
 			    
@@ -123,11 +123,14 @@ public class AccessoryService extends SAAgent {
                 date.append("시 ");
                 date.append(String.valueOf(calendar.get(Calendar.MINUTE)));
                 date.append("분");
-			    
+
+				//FileTransferRequestedActivity가 이미 떠 있을 때
 				if (FileTransferRequestedActivity.isUp) {
 					Log.d(TAG, "Activity is Already up");
+					// transId와 파일 전송시간을 FileAction Interface을 통해 FileTransferRequestedActivity로 전송
 					mFileAction.onFileActionTransferRequested(transId, date.toString()); 
-					//put data into FileAction Interface
+
+				//	FileTransferRequestedActivity로 Intent , ptTitle, 계정, 알람시간 전달
 				} else {
 					Log.d(TAG, "Activity is not up, invoke activity");
 					mContext.startActivity(new Intent()
@@ -156,62 +159,28 @@ public class AccessoryService extends SAAgent {
 				}
 				
 			}
-			
-			
-			//File Transfer Status changed
+
+			//File Transfer Status changed 때
 			@Override
 			public void onProgressChanged(int transId, int progress) {
 				if (mFileAction != null) {
+					// 파일 전송 시 ProgressBar 갱신을 위함
 					mFileAction.onFileActionProgress(progress);
 				}
 				
 			}
-			//File Transfer Completed
+			//File Transfer Complete 때
 			@Override
 			public void onTransferCompleted(int transId, String fileName, int errCode) {
-			    
-			    
-			    
+
 			    Log.e(TAG, "Transfer Completed filename :  "+fileName + "errCode : "+errCode+" \n and  PT tittle is "+mPtTitle);
 				if (errCode == SAFileTransfer.ERROR_NONE) {
 				    
-					
                     mFileAction.onFileActionTransferComplete();
-                    
-					StringRequest str = new StringRequest(Method.POST, NetworkConfig.URL_INSERT,
-                            new Response.Listener<String>() {
 
-                        @Override
-                        public void onResponse(String response) {
-                            Log.e(TAG, "Volley onResponse : " + response);
-                        }
-                    },      new Response.ErrorListener() {
+					// Server(DB)에 data insert
+					insertDataByVolley();
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            VolleyLog.d(TAG, "Error: " + error.getMessage());
-                        }
-                    }){
-
-                        @Override
-                        protected Map<String, String> getParams() {
-                            // Create Parameter to insert Table
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("email", yourId);
-                            params.put("title", mPtTitle);
-                            params.put("date", date.toString());
-                            params.put("hbr", jsonHR);
-                            params.put("time", jsonET);
-                            return params;
-                        }
-                        
-                        
-                    };
-             
-                    // Adding request to request queue
-                    AppController.getInstance().addToRequestQueue(str, TAG);
-                    
-					
 				} else {
 				    Log.e(TAG, "Transfer error, errCode : "+errCode);
 					mFileAction.onFileActionError();
@@ -219,7 +188,7 @@ public class AccessoryService extends SAAgent {
 			}
 		};
 		
-		// SAFile Transfer Instantiate
+		// SA File Transfer Instance화
 		mSAFileTransfer = new SAFileTransfer(AccessoryService.this, ftEventCallBack);
 	}
 
@@ -281,6 +250,7 @@ public class AccessoryService extends SAAgent {
         super.onError(peerAgent, str, i);
     }
 
+	// 처음 client가 bind할때 한번만 호출됨
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return mBinder;
@@ -288,9 +258,9 @@ public class AccessoryService extends SAAgent {
 
 
 
-	// Binder 상속 받은 클래스
+	// Service와 Fragment를 bind하기 위한 class
 	public class MyBinder extends Binder {
-		
+		//Service class(AccessoryService)를 return함
 		public AccessoryService getService() {
 			return AccessoryService.this;
 		}
@@ -355,10 +325,6 @@ public class AccessoryService extends SAAgent {
 
 		}
 
-		private void send(int channelIdEvent, String string) {
-            // TODO Auto-generated method stub
-            
-        }
 
         @Override
 		protected void onServiceConnectionLost(int reason) {
@@ -415,13 +381,7 @@ public class AccessoryService extends SAAgent {
             Log.e(TAG, "mConnectionHandler null");
         }
     }
-    // Cancel File Transfer
-    public void cancelFileTransfer(int transId) {
-        if (mSAFileTransfer != null) {
-            mSAFileTransfer.cancel(transId);
-        }
-    }
-    
+
 
     public boolean establishConnection(SAPeerAgent peerAgent) {
         if (peerAgent != null) {
@@ -444,7 +404,42 @@ public class AccessoryService extends SAAgent {
         }
         return true;
     }
-    
+
+	// Server(DB-Table)에 data insert
+	private void insertDataByVolley(){
+
+		StringRequest str = new StringRequest(Method.POST, NetworkConfig.URL_INSERT,
+				new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.e(TAG, "Volley onResponse : " + response);
+					}
+				},      new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				VolleyLog.d(TAG, "Error: " + error.getMessage());
+			}
+		}){
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Create Parameter to insert Table
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("email", yourId);
+				params.put("title", mPtTitle);
+				params.put("date", date.toString());
+				params.put("hbr", jsonHR);
+				params.put("time", jsonET);
+				return params;
+			}
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(str, TAG);
+
+	}
     @Override
     public void onDestroy() {
         closeConnection();

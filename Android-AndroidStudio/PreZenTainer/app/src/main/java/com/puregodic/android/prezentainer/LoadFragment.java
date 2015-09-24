@@ -88,7 +88,7 @@ public class LoadFragment extends Fragment {
                 new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        setDataByVolley();
+        fetchDataByVolley();
 
 
         // Long Click시 data 삭제
@@ -212,7 +212,7 @@ public class LoadFragment extends Fragment {
 
 
     // DB로 부터 response받고,JSON파싱 이후 adapter에 저장 (데이터 변화 감지)
-    private void setDataByVolley(){
+    private void fetchDataByVolley(){
         mDataList.clear();
         mDialogHelper.showPdialog("잠시만 기다려주세요...", true);
         
@@ -328,7 +328,7 @@ public class LoadFragment extends Fragment {
 
                         mDialogHelper.hidePdialog();
                         Toast.makeText(getActivity(),"삭제 완료", Toast.LENGTH_SHORT).show();
-                        setDataByVolley();
+                        fetchDataByVolley();
                     }
                 }, new Response.ErrorListener() {
 
