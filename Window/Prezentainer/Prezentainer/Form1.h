@@ -152,13 +152,13 @@ namespace Prezentainer {
 			// label1
 			// 
 			this->label1->AccessibleName = L"";
-			this->label1->Font = (gcnew System::Drawing::Font(L"±¼¸²", 9, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)), 
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(129)));
+			this->label1->Font = (gcnew System::Drawing::Font(L"¸¼Àº °íµñ", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(129)));
 			this->label1->Location = System::Drawing::Point(3, 15);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(109, 23);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"Port_number";
+			this->label1->Text = L"Port Number";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label1->Click += gcnew System::EventHandler(this, &Form1::label1_Click);
 			// 
@@ -207,12 +207,14 @@ namespace Prezentainer {
 			// linkLabel1
 			// 
 			this->linkLabel1->AutoSize = true;
-			this->linkLabel1->Location = System::Drawing::Point(12, 41);
+			this->linkLabel1->Font = (gcnew System::Drawing::Font(L"¸¼Àº °íµñ", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(129)));
+			this->linkLabel1->Location = System::Drawing::Point(12, 53);
 			this->linkLabel1->Name = L"linkLabel1";
-			this->linkLabel1->Size = System::Drawing::Size(41, 12);
+			this->linkLabel1->Size = System::Drawing::Size(55, 15);
 			this->linkLabel1->TabIndex = 6;
 			this->linkLabel1->TabStop = true;
-			this->linkLabel1->Text = L"µµ¿ò¸»";
+			this->linkLabel1->Text = L"»ç¿ë¹æ¹ý";
 			this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Form1::linkLabel1_LinkClicked);
 			// 
 			// Form1
