@@ -8,36 +8,33 @@
 
 
 
-CSerialPort::CSerialPort()
+CSerialPort::CSerialPort() //포트 상태를 초기화(생성자)
 {
 	_hSerial = INVALID_HANDLE_VALUE;
 }
 
-CSerialPort::~CSerialPort()
+CSerialPort::~CSerialPort() //Close호출(소멸자)
 {
 	Close ();
 }
 
-bool CSerialPort::Open (const char *portName, long baudRate, char dataBits, char parity, char stopBits)
+bool CSerialPort::Open (const char *portName, long baudRate, char dataBits, char parity, char stopBits) //포트를 OPEN하는 함수임.
 {
-	if (_hSerial != INVALID_HANDLE_VALUE) {
-		//TRACE ("ERROR: Open(): %s, %d, Port is already opened\n", portName, baudRate);
+	if (_hSerial != INVALID_HANDLE_VALUE) {  //포트가 사용중인지 확인,사용중일 경우 false리턴함.
 		return false;
 	}
 
 	_hSerial = CreateFile (portName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
-	if (_hSerial == INVALID_HANDLE_VALUE){
-		//TRACE ("ERROR: CreateFile(): %s, %d, %s", portName, baudRate, GetLastErrorString());
+
+	if (_hSerial == INVALID_HANDLE_VALUE){  //포트가 정상적으로 열였는지 확인, 정상적으로 열리지 않았으면 false 리턴함.
 		return false;
 	}
 
-	//SetupComm (_hSerial, 8192, 8192);
 	PurgeComm (_hSerial, PURGE_TXABORT|PURGE_RXABORT|PURGE_TXCLEAR|PURGE_RXCLEAR);
 
 	DCB dcbSerialParams;
 	
 	if (!GetCommState (_hSerial, &dcbSerialParams)) {
-		//TRACE ("ERROR: GetCommState (): %s", GetLastErrorString());
 		return false;
 	}
 
@@ -61,67 +58,63 @@ bool CSerialPort::Open (const char *portName, long baudRate, char dataBits, char
 	dcbSerialParams.fOutxCtsFlow = false;
 	
 	if (!SetCommState(_hSerial, &dcbSerialParams)) {
-		//TRACE ("ERROR: SetCommState(): %s", GetLastErrorString());
 		return false;
 	}
 
-	//TRACE ("SUCCESS: Open(): %s, %d, open serial port\n", portName, baudRate);
+
 	return true;
 }
 
-void CSerialPort::Close ()
+void CSerialPort::Close () //포트를 닫아주는 역할을 하는 함수임.
 {
 	if (_hSerial != INVALID_HANDLE_VALUE) {
 		CloseHandle (_hSerial);
 
 		_hSerial = INVALID_HANDLE_VALUE;
-		//TRACE ("SUCCESS: Close(): close serial port\n");
+
 	}
 }
 
-int CSerialPort::Read(char *data, int maxDataLength)
+int CSerialPort::Read(char *data, int maxDataLength) //포트에서 데이터를 읽어들이는 역할을 하는 함수임.
 {
 	DWORD readBytes = 0;
 
 	if (!ReadFile (_hSerial, data, maxDataLength, &readBytes, NULL)){
-		//TRACE ("ERROR: ReadFile(): %s", GetLastErrorString());
+
 		return -1;
 	}
 	return readBytes;
 }
 
-int CSerialPort::Write(const char *data, int dataLength)
+int CSerialPort::Write(const char *data, int dataLength) //OPEN된 포트로 데이터를 쓰는 역할을 하는 함수임. 
 {
 	DWORD writtenBytes = 0;
 
 	if (!WriteFile (_hSerial, data, dataLength, &writtenBytes, NULL)) {
-		//TRACE ("ERROR: WriteFile(): %s", GetLastErrorString());
+
 		return -1;
 	}
 	return writtenBytes;
 }
 
-void CSerialPort::Flush()
+void CSerialPort::Flush() //포트의 버퍼를 비우는 역할을 하는 함수임.
 {
 	DWORD comError = 0;
 	COMSTAT comStat;
 
 	if (!ClearCommError (_hSerial, &comError, &comStat)) {
-		//TRACE ("ERROR: ClearCommError(): %s", GetLastErrorString());
 		return;
 	}
 	if (!PurgeComm (_hSerial, PURGE_TXABORT|PURGE_RXABORT|PURGE_TXCLEAR|PURGE_RXCLEAR)) {
-		//TRACE ("ERROR: PurgeComm(): %s", GetLastErrorString());
 		return;
 	}
 }
 
-bool CSerialPort::SetTimeout(int readTimeout, int writeTimeout, int readIntervalTimeout)
+bool CSerialPort::SetTimeout(int readTimeout, int writeTimeout, int readIntervalTimeout) //통신포트에서 timeout을 설정해주는 함수임.
 {
 	COMMTIMEOUTS commTimeout;
 
 	if (!GetCommTimeouts (_hSerial, &commTimeout)) {
-		//TRACE ("ERROR: GetCommTimeouts(): %s", GetLastErrorString());
 		return false;
 	}
 
@@ -132,25 +125,23 @@ bool CSerialPort::SetTimeout(int readTimeout, int writeTimeout, int readInterval
 	commTimeout.WriteTotalTimeoutConstant = writeTimeout;
 
 	if (!SetCommTimeouts (_hSerial, &commTimeout)) {
-		//TRACE ("ERROR: SetCommTimeouts(): %s", GetLastErrorString());
 		return false;
 	}
 	return true;
 }
 
-int CSerialPort::CountReadBuff()
+int CSerialPort::CountReadBuff() //버퍼안의 갯수를 세는 함수임.
 {
 	DWORD comError = 0;
 	COMSTAT comStat;
 
 	if (!ClearCommError(_hSerial, &comError, &comStat)) {
-		//TRACE ("ERROR: ClearCommError(): %s", GetLastErrorString());
 		return -1;
 	}
 	return comStat.cbInQue;
 }
 
-const char *CSerialPort::GetLastErrorString()
+const char *CSerialPort::GetLastErrorString() //에러 string 보여주는 함수임.
 {
 	static char lastError[1024];
 	

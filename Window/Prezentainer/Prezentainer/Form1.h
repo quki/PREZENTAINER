@@ -4,76 +4,72 @@
 #include "SerialPort.h"
 #include <windows.h>
 #include <msclr\marshal_cppstd.h>
-#include <boost/thread/thread.hpp>
+#include <boost/thread/thread.hpp> //Visual Studio2010에서 쓰레드를 사용하기위해 boost라이브러리의 thread를 이용함.
 #include "shellapi.h"
 
 char name[20]="\\\\.\\COM";
 
-int isStringDouble(const char *s) { //입력받은 string이 숫자인지를 체크하는 함수
+int isStringDouble(const char *s) { //입력받은 string이 숫자인지를 체크하는 함수임.
   size_t size = strlen(s);
-  if (size == 0) return 0; // 0바이트 문자열은 숫자가 아님
+  if (size == 0) return 0; // 0바이트 문자열은 숫자가 아님.
 
   for (int i = 0; i < (int) size; i++) {
     if (s[i] == '.' || s[i] == '-' || s[i] == '+') continue;
-    if (s[i] < '0' || s[i] > '9') return 0; // 알파벳 등이 있으면 숫자 아님
+    if (s[i] < '0' || s[i] > '9') return 0; // 알파벳 등이 있으면 숫자 아님.
   }
 
-  return 1; // 그밖의 경우는 숫자임
+  return 1; // 그밖의 경우는 숫자임.
 }
 
 void PressVirtualKeyboad(BYTE vk) {
 
 	// Simulate a key press
-
 	keybd_event( vk, vk, 0, 0 );
 
-
 	// Simulate a key release
-
 	keybd_event( vk, vk, KEYEVENTF_KEYUP, 0);
 
 }
 void PressLeft() {
 
-	PressVirtualKeyboad(VK_LEFT);
+	PressVirtualKeyboad(VK_LEFT); //윈도우 api 사용 왼쪽키 이벤트 발생시킴.
 
 }
 void PressRight() {
 
-	PressVirtualKeyboad(VK_RIGHT);
+	PressVirtualKeyboad(VK_RIGHT); //윈도우 api 사용 오른쪽키 이벤트 발생시킴.
 	
 }
 
-void run_program()
+void run_program() //블루투스 통신을 위해 serialPort를 열고 들어오는 이벤트를 처리하는 부분임.
 		{
 
-			CSerialPort com1;
-			com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);  //통신포트 Open
-			com1.SetTimeout (10, 10, 1);
+			CSerialPort com1;                                      //통신포트 객체 생성함.
+			com1.Open (name, CBR_115200, 8, ONESTOPBIT, NOPARITY);  //통신포트 Open함.
+			com1.SetTimeout (10, 10, 1);//SetTimeout을 설정함.
 
-			char buff[6]="0"; //read할 버퍼를 비워둔다.
+			char buff[6]="0"; //read할 버퍼를 비워두는 역할을 함.(0값을 넣어둠.)
 
 			while (1)
 			
 			{
 				com1.Read (buff, 6);
                 
-				if(strcmp(buff,"right")==0)        //스트림으로 부터 읽어들인 값이 right일경우 ->이벤트 실행
+				if(strcmp(buff,"right")==0)        //스트림으로 부터 읽어들인 값이 right일경우 ->이벤트 실행함.
 				{
 					PressRight();
-					strcpy(buff,"0");
+					strcpy(buff,"0");  //인벤트 발생후에 다음 키이벤트를 받아들이기 위해 버퍼를 0 으로만듦.
 				}
-				else if(strcmp(buff,"leftt")==0) //스트림으로 부터 읽어들인 값이 left일경우 ->이벤트 실행
+				else if(strcmp(buff,"leftt")==0) //스트림으로 부터 읽어들인 값이 left일경우 ->이벤트 실행함.
 				{
 					PressLeft();
-					strcpy(buff,"0");
+					strcpy(buff,"0"); //인벤트 발생후에 다음 키이벤트를 받아들이기 위해 버퍼를 0 으로만듦.
 				}
 				else
 				{
-					continue;
+					continue;        //좌우 이벤트가 들어오지 않으면 받을 때까지 대기상태가 되도록함.
 				}
 			}
-			com1.Close();
 		}
 
 namespace Prezentainer {
@@ -156,13 +152,13 @@ namespace Prezentainer {
 			// label1
 			// 
 			this->label1->AccessibleName = L"";
-			this->label1->Font = (gcnew System::Drawing::Font(L"굴림", 9, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)), 
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(129)));
+			this->label1->Font = (gcnew System::Drawing::Font(L"맑은 고딕", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(129)));
 			this->label1->Location = System::Drawing::Point(3, 15);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(109, 23);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"Port_number";
+			this->label1->Text = L"Port Number";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label1->Click += gcnew System::EventHandler(this, &Form1::label1_Click);
 			// 
@@ -211,12 +207,14 @@ namespace Prezentainer {
 			// linkLabel1
 			// 
 			this->linkLabel1->AutoSize = true;
-			this->linkLabel1->Location = System::Drawing::Point(12, 41);
+			this->linkLabel1->Font = (gcnew System::Drawing::Font(L"맑은 고딕", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(129)));
+			this->linkLabel1->Location = System::Drawing::Point(12, 53);
 			this->linkLabel1->Name = L"linkLabel1";
-			this->linkLabel1->Size = System::Drawing::Size(41, 12);
+			this->linkLabel1->Size = System::Drawing::Size(55, 15);
 			this->linkLabel1->TabIndex = 6;
 			this->linkLabel1->TabStop = true;
-			this->linkLabel1->Text = L"도움말";
+			this->linkLabel1->Text = L"사용방법";
 			this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Form1::linkLabel1_LinkClicked);
 			// 
 			// Form1
@@ -241,18 +239,16 @@ namespace Prezentainer {
 
 		}
 
-
+		
 #pragma endregion
 
 
 		String^  firstName;
 
-		private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-					 // CSerialPort com1;
-					 // char name[20]="\\\\.\\COM";
+		private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) { //텍스트를 입력받은후 실행버튼을 눌렀을 때 동작함.
 					 firstName = textBox1->Text;
 					 msclr::interop::marshal_context context;
-					 std::string num = context.marshal_as<std::string>(firstName); 
+					 std::string num = context.marshal_as<std::string>(firstName);  //edit_Text에 입력받은 글자를 String^에 저장함.
 
 
 					 if(strcmp(num.c_str(),"")==0)                    //입력하지 않았을경우
@@ -261,13 +257,13 @@ namespace Prezentainer {
 					 }
 					 else                                             //입력했을 경우
 					 {
-						 if(isStringDouble(num.c_str()))      //숫자라면
+						 if(isStringDouble(num.c_str()))      //숫자라면 해당포트 Open시키는 부분임.
 						 {
 							 strcat(name, num.c_str());
 							 button2->Enabled = false;
 							 button2->Text="실행중";
 							 label2->Text = "Port :"+firstName+"접속!";
-							 boost::thread t(&run_program);
+							 boost::thread t(&run_program);     //Ui가 멎지 않기 위해 boost thread를 생성해 run_program()함수를 실행시킴.
 							 textBox1->Enabled = false;
 
 						 }
@@ -287,7 +283,7 @@ private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e)
 
 
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
-			 WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW); //블루투스 port번호를 확인할 수 있는 process를 띄워줌 
+			 WinExec("C:/Windows/System32/rundll32.exe shell32.dll,Control_RunDLL bthprops.cpl,,2",SW_SHOW); //블루투스 port번호를 확인할 수 있는 process를 띄워줌.
 		 }
 private: System::Void textBox1_MouseHover(System::Object^  sender, System::EventArgs^  e) {
 			 toolTip1->SetToolTip(textBox1,"Enter only Port Number!");
@@ -296,7 +292,7 @@ private: System::Void textBox1_TextChanged(System::Object^  sender, System::Even
 			 button2->Enabled = true;
 		 }
 private: System::Void linkLabel1_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
-			  WinExec("C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE http://google.com",SW_SHOW);  //도움말 버튼, 어플 사용설명페이지로 이동
+			  WinExec("C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE http://cyh1704.dothome.co.kr/ex/#pc",SW_SHOW);  //도움말 버튼, 어플 사용설명페이지로 이동함.
 
 		 }
 };

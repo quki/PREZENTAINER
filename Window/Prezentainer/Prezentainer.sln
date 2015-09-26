@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prezentainer", "Prezentainer\Prezentainer.vcxproj", "{F26B515A-2AB1-4575-872B-D8A8643A2B74}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{3F6F05EC-985B-496E-85FB-ACF8D3DE54C9}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PrezentainerSetup", "PrezentainerSetup\PrezentainerSetup.vdproj", "{3B324DB1-0A1A-46F5-8D9D-22C196093BF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +15,8 @@ Global
 		{F26B515A-2AB1-4575-872B-D8A8643A2B74}.Debug|Win32.Build.0 = Debug|Win32
 		{F26B515A-2AB1-4575-872B-D8A8643A2B74}.Release|Win32.ActiveCfg = Release|Win32
 		{F26B515A-2AB1-4575-872B-D8A8643A2B74}.Release|Win32.Build.0 = Release|Win32
-		{3F6F05EC-985B-496E-85FB-ACF8D3DE54C9}.Debug|Win32.ActiveCfg = Debug
-		{3F6F05EC-985B-496E-85FB-ACF8D3DE54C9}.Release|Win32.ActiveCfg = Release
+		{3B324DB1-0A1A-46F5-8D9D-22C196093BF0}.Debug|Win32.ActiveCfg = Debug
+		{3B324DB1-0A1A-46F5-8D9D-22C196093BF0}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
