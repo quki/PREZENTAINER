@@ -359,7 +359,7 @@ public class AccessoryService extends SAAgent {
         }
     }
     
-    // Send Timer data to gear by JSON
+    // Send Alarm Time data to gear by JSON
     public void sendDataToGear(String mData) {
         final String message = new String(mData);
         if(mConnectionHandler!= null){
@@ -382,7 +382,7 @@ public class AccessoryService extends SAAgent {
         }
     }
 
-
+	// request Service Connection to PeerAgent found
     public boolean establishConnection(SAPeerAgent peerAgent) {
         if (peerAgent != null) {
             // Request Service Connection
