@@ -9,12 +9,11 @@
 
 char name[20]="\\\\.\\COM";
 
-int isStringDouble(const char *s) { //입력받은 string이 숫자인지를 체크하는 함수임.
+int isString(const char *s) { //입력받은 string이 숫자인지를 체크하는 함수임.
   size_t size = strlen(s);
   if (size == 0) return 0; // 0바이트 문자열은 숫자가 아님.
 
   for (int i = 0; i < (int) size; i++) {
-    if (s[i] == '.' || s[i] == '-' || s[i] == '+') continue;
     if (s[i] < '0' || s[i] > '9') return 0; // 알파벳 등이 있으면 숫자 아님.
   }
 
@@ -257,7 +256,7 @@ namespace Prezentainer {
 					 }
 					 else                                             //입력했을 경우
 					 {
-						 if(isStringDouble(num.c_str()))      //숫자라면 해당포트 Open시키는 부분임.
+						 if(isString(num.c_str()))      //숫자라면 해당포트 Open시키는 부분임.
 						 {
 							 strcat(name, num.c_str());
 							 button2->Enabled = false;
