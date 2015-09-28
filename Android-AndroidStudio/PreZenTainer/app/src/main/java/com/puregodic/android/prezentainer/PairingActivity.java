@@ -32,7 +32,7 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
     private BluetoothAdapter mBluetoothAdapter;
     private final int REQUEST_DISCOVERABLE = 3;
     private RippleBackground rippleBackground;
-    BroadcastReceiver mBroadcastReceiver;
+    private BroadcastReceiver mBroadcastReceiver;
 
     private CheckedTextView checkedTextView;
 
@@ -59,11 +59,11 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
         });
         rippleBackground = (RippleBackground) findViewById(R.id.content);
         checkedTextView = (CheckedTextView) findViewById(R.id.checkedTextView);
-        ImageView button = (ImageView) findViewById(R.id.centerImage);
+        ImageView centerIcon = (ImageView) findViewById(R.id.centerImage);
 
         isEnabledAdapter();
 
-        button.setOnClickListener(new View.OnClickListener() {
+        centerIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -245,9 +245,9 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
         if (requestCode == BluetoothConfig.REQUEST_ENABLE_BT) {
 
             if (resultCode == RESULT_OK) {
-                Toast.makeText(PairingActivity.this, "블루투스를 켰습니다\n작업을 시작하세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PairingActivity.this, "블루투스를 켰습니다\n검색을 시작하세요", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "블루투스를 반드시 켜야만 해요.",
+                Toast.makeText(this, "블루투스를 반드시 켜야만 해요",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -276,6 +276,7 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
         super.onDestroy();
 
     }
+    // 사용자에게 Bluetooth 연결 허용을 물어보는 dialog띄움
     @Override
     public void isEnabledAdapter() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -286,7 +287,7 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
         }
     }
 
-    // 이미 기기가 Pairing되어있는지 확인하는 함수
+    // 이미 기기가 Pairing 되어있는지 확인하는 함수
     private boolean isPaired(BluetoothDevice deviceFound){
 
         boolean isPaired= false;

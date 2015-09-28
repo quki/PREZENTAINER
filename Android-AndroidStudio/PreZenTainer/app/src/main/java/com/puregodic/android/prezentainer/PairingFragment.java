@@ -42,6 +42,8 @@ public class PairingFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_paired, container, false);
         return rootView;
     }
+
+    // 새롭게 찾은 주변의 Device(블루투스 페어링이 가능한)를 Icon, device name, adress와 함께 배치함.
     public void setDeviceIconFound(BluetoothDevice device){
 
         String name = device.getName();
@@ -173,6 +175,8 @@ public class PairingFragment extends Fragment {
         animatorSet.start();
     }
 
+
+    // Image를 device type에 따라 나누어 각각 다른 drawable image로 뿌려줌
     private void setIconImage(ImageView i , int type){
 
         switch(type){
