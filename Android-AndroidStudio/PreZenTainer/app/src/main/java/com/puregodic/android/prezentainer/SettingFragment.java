@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.dd.CircularProgressButton;
 import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
 import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
 import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.bluetooth.ConnectionActionPc;
@@ -234,9 +235,9 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                 // 현재 상태가 Idle 상태일때
                 if (connectToPcBtn.getProgress() == BUTTON_STATE_IDLE) {
 
-                    // SettingBluetoothActivity에 PC device name 요청
+                    // SettingBluetoothActivity(sub Activity)에 PC device name 요청
                     Intent requestDeviceNameIntent = new Intent(getActivity(), SettingBluetoothActivity.class);
-                    startActivityForResult(requestDeviceNameIntent, REQUEST_DEVICENAME);
+                    startActivityForResult(requestDeviceNameIntent, BluetoothConfig.REQUEST_DEVICENAME);
 
 
                 // 현재 상태가 Complete 상태일때
@@ -292,7 +293,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         // 블루투스 승인 dialog를 요청함
-        if (requestCode == REQUEST_ENABLE_BT) {
+        if (requestCode == BluetoothConfig.REQUEST_ENABLE_BT) {
 
             // 블루투스 연결 허락을 사용자에게 물어본 이후 동작임
             if (resultCode == getActivity().RESULT_OK) {
@@ -302,7 +303,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
             }
 
         // SettingBluetoothActivity에 PPT를 실행할 PC이름을 요청함
-        } else if (requestCode == REQUEST_DEVICENAME) {
+        } else if (requestCode == BluetoothConfig.REQUEST_DEVICENAME) {
             mDeviceName = intent.getStringExtra("deviceName");
             if(mDeviceName != null){
                 new Thread(new Runnable() {
@@ -386,7 +387,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            startActivityForResult(enableBtIntent, BluetoothConfig.REQUEST_ENABLE_BT);
         }
     }
 

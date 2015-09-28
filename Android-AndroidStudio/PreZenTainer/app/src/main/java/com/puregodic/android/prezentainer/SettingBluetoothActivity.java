@@ -3,7 +3,6 @@ package com.puregodic.android.prezentainer;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,17 +32,13 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
     private BluetoothAdapter mBluetoothAdapter;
 
-    private BroadcastReceiver mBroadcastReceiver;
-
     private ListView listViewPaired;
-    
 
     private String mDeviceName;
 
-    Intent returnDeviceNameIntent;
+    private Intent returnDeviceNameIntent;
 
     private Toolbar mToolbar;
-    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,27 +59,26 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
             }
         });
 
+        // 사용자가 반드시 Bluetooth연결을 허용해야함
         isEnabledAdapter();
 
+        // SettingFragment에 반드시 Device Name(PC)를 전달해야함.
         returnDeviceNameIntent = new Intent();
         returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
-        setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
+        setResult(BluetoothConfig.REQUEST_DEVICENAME, returnDeviceNameIntent);
 
         listViewPaired = (ListView)findViewById(R.id.listViewPaired);
 
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-
-
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
     protected void onResume() {
 
+        // 현재 페어링된 PC를 list화 함
         listPairedDevices();
+
+
+        // FloatingActionButton
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_list);
          fab.attachToListView(listViewPaired);
 
@@ -104,14 +98,14 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, SettingFragment.REQUEST_ENABLE_BT);
+            startActivityForResult(enableBtIntent, BluetoothConfig.REQUEST_ENABLE_BT);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        if (requestCode == REQUEST_ENABLE_BT) {
+        if (requestCode == BluetoothConfig.REQUEST_ENABLE_BT) {
 
             // OK 버튼을 눌렀을때
             if (resultCode == RESULT_OK) {
@@ -167,7 +161,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 returnDeviceNameIntent.putExtra("deviceName", mDeviceName);
-                                setResult(REQUEST_DEVICENAME, returnDeviceNameIntent);
+                                setResult(BluetoothConfig.REQUEST_DEVICENAME, returnDeviceNameIntent);
                                 finish();
                             }
                         }).setNegativeButton("아닙니다", new DialogInterface.OnClickListener() {

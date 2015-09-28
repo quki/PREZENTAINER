@@ -1,15 +1,15 @@
 
 package com.puregodic.android.prezentainer.bluetooth;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.Set;
-import java.util.UUID;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Set;
+import java.util.UUID;
 
 public class ConnecToPcHelper {
     
@@ -31,9 +31,9 @@ public class ConnecToPcHelper {
     }
 
     /*
-     * PC이름으로 패어링된 PC측에 프로그램이 잘 실행되었는지 확인한다.
-     * PC측에 별다른 이벤트는 동작하지 않는다.
-     * 연결 여부를 ConnectionActionPc Interface를 이용하여 Button UI를 갱신해준다.
+     * PC이름으로 패어링된 PC측에 프로그램이 잘 실행되었는지 확인함
+     * PC측에 별다른 이벤트는 동작하지 않음.
+     * 연결 여부를 ConnectionActionPc Interface를 이용하여 Button UI를 갱신해줌.
      * 
      * */
     public void connectWithPc(String mDeviceName){
@@ -92,10 +92,10 @@ public class ConnecToPcHelper {
     
     
     /*
-     * PC이름으로 패어링된 PC에 Event를 전달한다.
+     * PC이름으로 패어링된 PC에 Event를 전달함
      * 이때 두가지의 Event(왼쪽,오른쪽)이 있는데,
      * 이는 기어를 통해서 direction을 String을 전달 받고
-     * 그대로 PC측 프로그램에 write하여,PC프로그램에서 Event를 구분한다
+     * 그대로 PC측 프로그램에 write하여,PC프로그램에서 Event를 구분함
      * 
      * */
     public void transferToPc(String mDeviceName, String direction) {
@@ -122,16 +122,16 @@ public class ConnecToPcHelper {
         } catch (IOException e) {
             e.printStackTrace();
             return;
-        }
+    }
 
-        // Connect to the PC and Android
-        try {
-            mBluetoothSocket.connect();
-        } catch (IOException e) {
-            Log.e(TAG, "Unable to connect with the device");
-            e.printStackTrace();
-            return;
-        }
+    // Connect to the PC and Android
+    try {
+        mBluetoothSocket.connect();
+    } catch (IOException e) {
+        Log.e(TAG, "Unable to connect with the device");
+        e.printStackTrace();
+        return;
+    }
 
         // Write the data by using OutputStreamWriter
         try {

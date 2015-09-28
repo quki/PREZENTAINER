@@ -11,4 +11,8 @@ public class BluetoothConfig {
     public static final int AUDIO_VIDEO = 1024;
     public static final int UNCATEGORIZED = 7936;
 
+    public static final String TAG_BT = "==BLUETOOTH HELPER==";
+    public static final int REQUEST_ENABLE_BT = 1;
+    public static final int REQUEST_DEVICENAME = 2;
+
 }

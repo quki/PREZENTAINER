@@ -19,17 +19,18 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
+import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
 import com.skyfishjy.library.RippleBackground;
 
 import java.lang.reflect.Method;
 import java.util.Set;
 
-public class PairingActivity extends AppCompatActivity {
+public class PairingActivity extends AppCompatActivity implements BluetoothHelper{
 
 
-    BluetoothAdapter mBluetoothAdapter;
-    private final int REQUEST_ENABLE_BT = 1; // intent의 구분자 값으로써 데이터 전달의 1대1대응을 위함.
-    private final int REQUEST_DISCOVERABLE = 2;
+    private BluetoothAdapter mBluetoothAdapter;
+    private final int REQUEST_DISCOVERABLE = 3;
     private RippleBackground rippleBackground;
     BroadcastReceiver mBroadcastReceiver;
 
@@ -58,15 +59,9 @@ public class PairingActivity extends AppCompatActivity {
         });
         rippleBackground = (RippleBackground) findViewById(R.id.content);
         checkedTextView = (CheckedTextView) findViewById(R.id.checkedTextView);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        // 만일 하드웨어에 블루투스가 없다면 null을 return 한다.
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(getApplicationContext(), "블루투스를 지원하지 않는 단말입니다.", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-
         ImageView button = (ImageView) findViewById(R.id.centerImage);
+
+        isEnabledAdapter();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,19 +173,6 @@ public class PairingActivity extends AppCompatActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
 
-        if (!mBluetoothAdapter.isEnabled()) {
-
-            Toast.makeText(getApplicationContext(), "블루투스를 켜주세요.",
-                    Toast.LENGTH_SHORT).show();
-
-            Intent enableBtIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            // 시스템에 블루투스 켤 수있는 Alert메시지 요청
-        }
-
-
         mBroadcastReceiver = new BroadcastReceiver() {
 
             @Override
@@ -260,7 +242,7 @@ public class PairingActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_ENABLE_BT) {
+        if (requestCode == BluetoothConfig.REQUEST_ENABLE_BT) {
 
             if (resultCode == RESULT_OK) {
                 Toast.makeText(PairingActivity.this, "블루투스를 켰습니다\n작업을 시작하세요", Toast.LENGTH_SHORT).show();
@@ -284,6 +266,8 @@ public class PairingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+
     @Override
     protected void onDestroy() {
 
@@ -292,7 +276,15 @@ public class PairingActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+    @Override
+    public void isEnabledAdapter() {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, BluetoothConfig.REQUEST_ENABLE_BT);
+        }
+    }
     private boolean isPaired(BluetoothDevice deviceFound){
 
         boolean isPaired= false;
