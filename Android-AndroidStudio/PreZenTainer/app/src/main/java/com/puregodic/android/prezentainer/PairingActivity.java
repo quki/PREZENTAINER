@@ -285,6 +285,8 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
             startActivityForResult(enableBtIntent, BluetoothConfig.REQUEST_ENABLE_BT);
         }
     }
+
+    // 이미 기기가 Pairing되어있는지 확인하는 함수
     private boolean isPaired(BluetoothDevice deviceFound){
 
         boolean isPaired= false;
