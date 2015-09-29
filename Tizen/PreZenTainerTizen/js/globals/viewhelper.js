@@ -10,27 +10,6 @@
 var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
 var isConnect = false;
-//페이지 전환 변수
-var mainPage = $('#main');
-var startPage = $('#start');
-var motionSettingPage = $('#motionSetting');
-var enrollMotionPage = $('#enrollMotion');
-
-//모션세팅에서 메인으로 페이지 전환
-enrollMotionPage.on("swipedown", function() {
-	is_motion(); //모션이 setting되어있는지 확인
-	tau.changePage(mainPage);
-	});
-
-//스타트페이지에서 메인으로 페이지 전환
-startPage.on("swipedown", function() {
-	main_to_back(); 
-	tau.changePage(mainPage);
-	});
-
-motionSettingPage.on("swipedown", function() {
-	tau.changePage(startPage);
-	});
 
 // 화면구성변화
 function updateConnection() {
@@ -56,13 +35,11 @@ function updateAfterStart(){
     $('#pceventbtn_left').removeAttr('disabled');
     $('#stopbtn').removeAttr('disabled');
     $('#stopbtn').attr('type','button');
-    $('#motionbtn').removeAttr('disabled');
-    
+    $('#motionbtn_toggle').removeAttr('disabled');
   }else{
     toastAlert('연결을 확인하세요.');
   }
   changeButtonStart();
-  changeButtonMotionSetting();
 }
 //stop button 클릭 이후
 function updateAfterStop(){
@@ -75,37 +52,12 @@ function updateAfterStop(){
     
     check = 0;
 	document.getElementById("enable_motion").innerHTML="Off";
-    $('#motionbtn').attr('disabled','disabled');
-    $('#right_motion_btn').attr('disabled','disabled');
-	$('#left_motion_btn').attr('disabled','disabled');
-	
-	document.getElementById("right_motion").innerHTML="Off";
-	right_motion_enable=0;
-	
-	document.getElementById("left_motion").innerHTML="Off";
-	left_motion_enable=0;
+    $('#motionbtn_toggle').attr('disabled','disabled');
+
   }
   
-  changeButtonMotionSetting();
   changeButtonStart();
 }
-
-//Popup toast of TAU
-function toastAlert(msg) {
-  var toastMsg = document.getElementById("popupToastMsg");
-  toastMsg.innerHTML = msg;
-  tau.openPopup('#popupToast');
-  console.log(msg);
-}
-// Show popup toast at 'main'
-function showMain(message) {
-  tau.changePage('#main');
-  if (message != undefined) {
-    toastAlert(message);
-  }
-  transferId = 0;
-}
-
 
 
 /*
@@ -139,17 +91,17 @@ function mainSettingButtonClickEffect() {
 
 //start page에 setting버튼
 function startSettingButtonClickEffect() {
-   $('#startSettingButton').ready(function() {
+   $('#motionbtn_toggle').ready(function() {
          $('.settingButtonStart').on('touchstart', function(event){
-            $(this).addClass('active');
+           document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_disable.png)"
           });
          $('.settingButtonStart').on('touchend', function(event){
-            $(this).removeClass('active');
+           document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_white.png)"
           });
       });
 }
 //start page에 start버튼
-function startStartButtonClickEffect() {
+/*function startStartButtonClickEffect() {
    $('#startbtn').ready(function() {
          $('.startButton').on('touchstart', function(event){
             document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
@@ -158,9 +110,9 @@ function startStartButtonClickEffect() {
             document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
           });
       });
-}
+}*/
 //start page에 stopt버튼
-function startStopButtonClickEffect(){
+/*function startStopButtonClickEffect(){
    $('#stopbtn').ready(function() {
          $('.stopButton').on('touchstart', function(event){
             document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
@@ -169,8 +121,8 @@ function startStopButtonClickEffect(){
             document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
           });
       });
-}
-//start page에 prevt버튼
+}*/
+//start page에 left버튼
 function startLeftButtonClickEffect() {
    $('#pceventbtn_left').ready(function() {
          $('.prevButton').on('touchstart', function(event){
@@ -181,7 +133,7 @@ function startLeftButtonClickEffect() {
           });
       });
 }
-//start page에 next버튼
+//start page에 right버튼
 function startRightButtonClickEffect() {
    $('#pceventbtn_right').ready(function() {
          $('.nextButton').on('touchstart', function(event){
@@ -194,17 +146,20 @@ function startRightButtonClickEffect() {
 }
 
 
-//Handler for flick down gesture
-function backkeyhandler(e) {
-if (e.keyName == "back") {
- var page = document.getElementsByClassName('ui-page-active')[0], 
-               pageid = page? page.id : " ";
- if (pageid === "main") {
-   tizen.application.getCurrentApplication().exit();
- } else {
-   window.history.back();
- }
+//Popup toast of TAU
+function toastAlert(msg) {
+  var toastMsg = document.getElementById("popupToastMsg");
+  toastMsg.innerHTML = msg;
+  tau.openPopup('#popupToast');
+  console.log(msg);
 }
+// Show popup toast at 'main'
+function showMain(message) {
+  tau.changePage('#main');
+  if (message != undefined) {
+    toastAlert(message);
+  }
+  transferId = 0;
 }
 
 (function() {
@@ -214,7 +169,7 @@ sendPage.addEventListener('pagehide', function() {
  progressBarWidget.destroy();
 });
 
-window.addEventListener('tizenhwkey', backkeyhandler);
+
 window.addEventListener('load', function(ev) {
  
  

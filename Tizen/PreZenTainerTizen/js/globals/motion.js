@@ -62,7 +62,7 @@
      if(averageX != 0 && averageY != 0 && averageZ != 0 && motion_test==1) {    //test할때 작동하는 코드
      	test_motionSensor();
      }
-
+     
  }
 
  function buttonPush() {
@@ -140,15 +140,13 @@
 
  	if (Math.abs(averageX)-5 < Math.abs(accelX) &&  //오른쪽 이벤트
  		Math.abs(averageY)-5 < Math.abs(accelY) &&
- 		Math.abs(averageZ)-5 < Math.abs(accelZ))
+ 		Math.abs(averageZ)-5 < Math.abs(accelZ) )
  	{
  		if(checkDirection()== Direction){
  			console.log('Direction:'+Direction);
  			navigator.vibrate(2000);
  		}
- 		else{
- 			console.log('error NO');
- 		}
+
 
  	}
  	accelX = 0;
@@ -204,7 +202,7 @@
  	if( 0 > accelX && 0 > accelY &&  0 > accelZ){
  		direction=7;
  	}
- 	console.log(direction);
+
  	return direction;
  }
 
@@ -259,32 +257,19 @@
  	else {
  		document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
  	}
+ 	/*
+     * motion toggle button
+     * */
+ 	if(document.getElementById('motionbtn_toggle').disabled == true) {
+ 		document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_disable.png)"
+ 	}
+ 	else {
+ 		document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_white.png)"
+ 	}
 
  }
 
- function changeButtonMotionSetting() {
- 	if(document.getElementById('motionbtn').disabled == true) {
- 		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Gray.png)"
- 	}
- 	else {
- 		document.getElementById('motionbtn').style.backgroundImage= "url(./img/button/Brown.png)"
- 	}
-
- 	if(document.getElementById('right_motion_btn').disabled == true) {
- 		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
- 	}
- 	else {
- 		document.getElementById('right_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
- 	}
-
- 	if(document.getElementById('left_motion_btn').disabled == true) {
- 		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Gray.png)"
- 	}
- 	else {
- 		document.getElementById('left_motion_btn').style.backgroundImage= "url(./img/button/Orange.png)"
- 	}
-
- }
+ 
  // enrollmotion page
  function changeButtonEnrollMotion() {
 
@@ -296,24 +281,6 @@
  	}
  	else {
  		document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test.png)"
- 	}
- 	/*
-    * test button right
-    * */
- 	if(document.getElementById('test_right_motion_btn').disabled == true) {
- 		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/ic_test_right_disable.png)"
- 	}
- 	else {
- 		document.getElementById('test_right_motion_btn').style.backgroundImage= "url(./img/button/ic_test_right.png)"
- 	}
- 	/*
-    * test button left
-    * */
- 	if(document.getElementById('test_left_motion_btn').disabled == true) {
- 		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/ic_test_left_disable.png)"
- 	}
- 	else {
- 		document.getElementById('test_left_motion_btn').style.backgroundImage= "url(./img/button/ic_test_left.png)"
  	}
 
  	/*
@@ -352,7 +319,7 @@
  	alert('모션이 일정하지 않습니다.! 다시입력!');
  	$('#ok_button').attr('disabled','disabled');
  	arrayIndex=0;
- 	accelX = 0;
+ 	 accelX = 0;
      accelY = 0;
      accelZ = 0;
  }
@@ -363,14 +330,12 @@
  	console.log(averageZ);
  	console.log(arrayIndex);
  	save_setLocalStorage();
- 	document.getElementById("ok_button").value="완료";
  	$('#ok_button').attr('disabled','disabled');
  	$('#reset_button').removeAttr('disabled');
  	$('#motion_test_button').removeAttr('disabled');
  }
  function modify_motionSetting() {
  	alert('오른쪽 넘김을 위한 같은동작을' + userInputIndex + '번 해주세요!');
- 	document.getElementById("ok_button").value="확인";
  	$('#ok_button').attr('disabled','disabled');
  	$('#reset_button').attr('disabled','disabled');
  	$('#motion_test_button').attr('disabled','disabled');
@@ -391,29 +356,11 @@
  	save_setLocalStorage();
  	changeButtonEnrollMotion();
  }
- function is_motion() {   //back버튼 눌렀을 때
- 	if(averageX != 0 && averageY != 0 && averageZ != 0) {
- 		document.getElementById("motion_state").innerHTML="Modify";
-     }
- 	else
- 	{
- 		document.getElementById("motion_state").innerHTML="Enroll";
- 		arrayIndex=0;
- 		accelX = 0;
- 	    accelY = 0;
- 	    accelZ = 0;
 
- 	}
- 	motion_test=0;  //설정화면에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
- 	document.getElementById("test_motion").innerHTML="Off";
-
-
- }
  function main_to_back(){
  	check=0;   //메인화면 에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
  	document.getElementById("enable_motion").innerHTML="Off";
  	changeButtonStart();
- 	changeButtonMotionSetting();
  	changeButtonEnrollMotion();
  }
 
@@ -423,23 +370,25 @@
 
  		if(check==0)
  		{
+ 		  startSettingButtonClickEffect();
  			document.getElementById("enable_motion").innerHTML="On";
+ 			accelX = 0;
+      accelY = 0;
+      accelZ = 0;
  			check=1;
- 			$('#motionbtn').removeAttr('disabled');
  		}
  		else
  		{
+ 		  startSettingButtonClickEffect();
  			document.getElementById("enable_motion").innerHTML="Off";
  			check=0;
  		}
 
  	}
  	else{
- 		$('#motionbtn').attr('disabled','disabled');
  		alert('Motion 등록을 먼저해주세요!');
  	}
 
- 	changeButtonMotionSetting();
  }
  function load_setLocalStorage(){
  	if(window.localStorage['averageX'] == null &&

@@ -23,8 +23,17 @@ define({
       if (keyName === 'back') {
         if (pageid === 'main') {
           app.exit();
-        } else {
-          history.back();
+        } 
+        else if(pageid === 'enrollMotion')
+        {
+        	motion_test=0;  //설정화면에서 나가면 저장된 모션을 동작하지 않도록 하기 위함
+         	document.getElementById("test_motion").innerHTML="Off";
+         	history.back();
+        }
+        else if(pageid === 'start')
+        {
+        	main_to_back(); 
+        	history.back();
         }
       }
     }
@@ -34,6 +43,7 @@ define({
      */
     function bindEvents() {
       document.addEventListener('tizenhwkey', onHardwareKeysTap);
+    	
     }
 
     /**

@@ -53,10 +53,10 @@
 
     <div class="start_buttonSet1">
       <div class="start_buttonSet1_1 startButton">
-        <input type="button" id="startbtn" onclick="startStartButtonClickEffect();" disabled="disabled">
+        <input type="button" id="startbtn" disabled="disabled">
       </div>
       <div class="start_buttonSet1_2 stopButton">
-        <input type="hidden" src="./img/button/ic_stop.png" id="stopbtn" onclick="startStopButtonClickEffect();" disabled="disabled">
+        <input type="hidden" src="./img/button/ic_stop.png" id="stopbtn"  disabled="disabled">
       </div>
     </div>
 
@@ -69,19 +69,10 @@
       </div>
 
       <div class="start_buttonSet2_3 settingButtonStart">
-        <a href="#motionSetting" id="startSettingButton" onclick="startSettingButtonClickEffect();" data-role="button" data-theme="c"></a>
+        <input type="button" id="motionbtn_toggle" disabled="disabled" onclick="enable_motion();">
+        <span id="enable_motion">Off</span>
       </div>
     </div>
-  </div>
-
-  <!-- MotionSetting Page-->
-  <div data-role="page" id="motionSetting">
-    <ul class="ui-listview">
-      <li class="MotionSetting_toggle">
-          <input type="button" class="motionButton" id="motionbtn" value="모션" disabled="disabled" onClick="enable_motion()">
-          <span id="enable_motion">Off</span>
-
-    </ul>
   </div>
 
   <!-- EnrollMotion Page -->
@@ -90,13 +81,13 @@
 
       <div class="enrollMotion_buttonSet2">
         <div class="confirm">
-          <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()"> <span id="count">모션등록 0/5</span>
+          <input type="button" class="confirmButton" id="ok_button" disabled="disabled" onClick="buttonPush()"> <span style="line-height: 200%;" id="count"></span>
         </div>
         <div class="test">
-          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> <span id="test_motion">테스트 Off</span>
+          <input type="button" class="testButton" id="motion_test_button" disabled="disabled" onClick="test_motion_on_off()"> <span style="line-height: 200%;" id="test_motion">Off</span>
         </div>
         <div class="resetting">
-          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()"> <span>재설정</span>
+          <input type="button" class="resettingButton" id="reset_button" disabled="disabled" onClick="modify_motionSetting()"> <span style="line-height: 220%; font-size: 30px;">Resetting</span>
         </div>
       </div>
     </div>

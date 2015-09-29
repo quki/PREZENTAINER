@@ -104,8 +104,8 @@ body {
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
 	color: white;
-	width: 50px;
-	height: 50px;
+	width: 70px;
+	height: 70px;
 	border: none;
 }
 
@@ -115,30 +115,8 @@ body {
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-Color: rgba(255, 255, 255, 0);
-	width: 50px;
-	height: 50px;
-	border: none;
-}
-
-/* test_right버튼 이미지 */
-.rightButton {
-	background-image: url(../img/button/ic_test_right_disable.png);
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	background-Color: rgba(255, 255, 255, 0);
-	width: 50px;
-	height: 50px;
-	border: none;
-}
-/*  test_left버튼 이미지 */
-.leftButton {
-	border: none;
-	background-image: url(../img/button/ic_test_left_disable.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	background-Color: rgba(255, 255, 255, 0);
-	width: 50px;
-	height: 50px;
+	width: 70px;
+	height: 70px;
 	border: none;
 }
 
@@ -148,8 +126,8 @@ body {
 	background-image: url(../img/button/ic_resetting.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	width: 50px;
-	height: 50px;
+	width: 70px;
+	height: 70px;
 	border: none;
 }
 
@@ -162,50 +140,33 @@ body {
 
 .enrollMotion_buttonSet2 .confirm input{
 	position: absolute;
-	right:5px;
-	top: 5px;
+	right:15%;
+	top: 10%;
 }
 .enrollMotion_buttonSet2 .confirm span{
 	position: absolute;
-	top: 5px;
-	left: 5px;
+	left: 15%;
+	top: 10%;
 }
 .enrollMotion_buttonSet2 .test input{
 	position: absolute;
-	top: calc(25% -     25px);
+	right:15%;
+	top: 40%;
 }
 .enrollMotion_buttonSet2 .test span{
 	position: absolute;
-	top: calc(25% -     25px);
-	right: 5px;
-}
-.enrollMotion_buttonSet2 .left input{
-	position: absolute;
-	top: calc(50% -     50px);
-}
-.enrollMotion_buttonSet2 .left span{
-	position: absolute;
-	top: calc(50% -     50px);
-	right: 5px;
-}
-.enrollMotion_buttonSet2 .right input{
-	position: absolute;
-	top: calc(75% -     50px);
-}
-.enrollMotion_buttonSet2 .right span{
-	position: absolute;
-	top: calc(75% -     50px);
-	right: 5px;
+	left: 15%;
+	top: 40%;
 }
 .enrollMotion_buttonSet2 .resetting input{
 	position: absolute;
-	bottom: 5px;
-	right: 5px;
+	bottom: 10%;
+	right: 15%;
 }
 .enrollMotion_buttonSet2 .resetting span{
 	position: absolute;
-	bottom: 5px;
-	left: 5px;
+	bottom: 10%;
+	left: 15%;
 }
 
 
@@ -260,14 +221,22 @@ body {
 	border: none;
 }
 
-/* start화면 setting 버튼 이미지 */
-.settingButtonStart a {
-	display:block;
+/* start화면 motion setting toggle 버튼 이미지 */
+.settingButtonStart input {
 	width:50px;
 	height:50px;
-	background-image: url(../img/button/ic_settings_white.png);
+	border: none;
+	background-image: url(../img/button/ic_settings_disable.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
+	background-Color: rgba(255, 255, 255, 0);
+}
+/* start화면 setting 버튼 아래 on/off 텍스트*/
+.settingButtonStart span {
+   font-size: 25px;
+   text-align: center;
+   display: block;
+   line-height: 0.8em;
 }
 
 /* ----------------------------
@@ -302,13 +271,14 @@ body {
 	top: calc(50% -     50px);
 	margin-top: 10px;
 }
-/* start 페이지에 setting 버튼 위치 */
-.start_buttonSet2_3 {
+/* start 페이지에  motion setting toggle버튼, on/off text 위치 */
+.start_buttonSet2_3{
 	position: absolute;
 	left: calc(50% -     25px);
 	right: calc(50% -     25px);
-	bottom: 5%;
+	bottom: 2%;
 }
+
 
 .start_bottom_section {
 	width: device-width;
@@ -318,62 +288,6 @@ body {
 	padding-bottom: 10px;
 	background-color: rgba(34, 86, 134, 0.5);
 }
-
-/* ----------------------------
-    MotionSetting page
------------------------------*/
-
-/* 모션 toggle 버튼 이미지 */
-.motionButton {
-	
-	padding: 8.5px;
-	width:100px;
-	height:50px;
-	background-image: url(../img/button/Gray.png);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	background-Color: rgba(255, 255, 255, 0);
-	color: white;
-	font-size: 25px;
-	font-weight:bold;
-	border: none;
-}
-	/* 
-		MotionSetting Page에 있는
-		모든 버튼 및 value(off) 위치
-		차례로,toggle-right-left(각각 input, span 순)
-	 */
-.MotionSetting_toggle input{
-	
-	position:absolute;
-	left: 25%;
-}
-.MotionSetting_toggle span{
-	position:absolute;
-	right: 25%;
-	font-size: 25px;
-}
-
-.motionSetting_right input{
-	position:absolute;
-	left: 25%;
-}
-.motionSetting_right span{
-	position:absolute;
-	right: 25%;
-	font-size: 25px;
-}
-.motionSetting_left input{
-	position:absolute;
-	left: 25%;
-}
-.motionSetting_left span{
-	position:absolute;
-	right: 25%;
-	font-size: 25px;
-}
-
-
 /* ----------------------------
     StopWatch part
 -----------------------------*/
@@ -509,17 +423,4 @@ body {
 /* main화면 setting 버튼 클릭 이미지*/
 .settingButtonMain a:active {
 	background-image: url(../img/button/ic_settings_disable.png);
-}
-/* start페이지에 start button 클릭 이미지 */
-.startButton input:active {
-	background-image: url(../img/button/ic_start_disable.png);
-}
-
-/* start페이지에 stop button click 이미지 */
-.stopButton input:active {
-	background-image: url(../img/button/ic_stop_disable.png);
-}
-/* start화면 setting 버튼 클릭 이미지 */
-.settingButtonStart a:active {
-	background-image: url(../img/button/ic_settings_dark.png);
 }
