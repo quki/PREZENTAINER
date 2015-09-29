@@ -133,7 +133,7 @@ public class ResultActivity extends AppCompatActivity {
         private boolean hasYaxis = true;
         private ValueShape shape = ValueShape.CIRCLE;
         
-        // Viewport는 쉽게 말해 화면 (View)라고 생각하면 된다. 주로 보여지는 범위를 지정할 때 주로 사용된다.
+        // Viewport는 쉽게 말해 화면 (View)라고 생각하면 된다. 주로 보여지는 범위를 지정할 때 주로 사용함.
         private Viewport maxViewport,currentViewport;
         
         public final Handler timeHandler = new TimeHandler(this);
@@ -257,7 +257,7 @@ public class ResultActivity extends AppCompatActivity {
                         }
                         chart.setLineChartData(data);
 
-                        // user가 클릭할 경우 해당 position으로 progressbar이동
+                        // user가 클릭할 경우 해당 position으로 progressbar이동함.
                         if (fromUser)
                             audio.seekTo(progress);
                     }
@@ -296,7 +296,7 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onDestroy() {
+        public void onDestroy() {  //Activity가 종료 될 때 audio를 중지시키고 Activity를 finish시키는 역할을 함.
             if(audio!=null){
                 audio.stop();
                 finish();
@@ -358,7 +358,6 @@ public class ResultActivity extends AppCompatActivity {
                      msg.what = SEND_THREAD_INFOMATION; // 핸들러에 보내기 위한 식별 Id
                      msg.arg1 = Integer.valueOf(audio.getCurrentPosition()); // 핸들러에 보내는 인자 값 Integer
                      timeHandler.sendMessage(msg);
-
                  }
              }
          };
@@ -389,7 +388,7 @@ public class ResultActivity extends AppCompatActivity {
                       stringTime = changeTimeForHuman(msg.arg1);
                       stringHR = heartCalcultor.currentHeartRateValue(msg.arg1);
 
-                      activity.heartRate.setText(stringHR);                                // 현재 심박수
+                      activity.heartRate.setText(stringHR);                   // 현재 심박수
                       activity.runningTime.setText(stringTime);  // 현재시간 / 총 오디오 길이
 
                       break;
@@ -421,14 +420,19 @@ public class ResultActivity extends AppCompatActivity {
               
               return stringTime;
           }
-          // 최초에에 chart에 뿌려 줄 data 생성 
+          // 최초에 chart에 뿌려 줄 data 생성
           private void generateData() {
 
-              List<Line> lines = new ArrayList<Line>();
+              List<Line> lines = new ArrayList<Line>();            //보여질 데이터를 위한 List
               List<Line> linesForPreData = new ArrayList<Line>();  //미리보기 데이터를 위한 List
-              List<String> slideNum = new ArrayList<String>();
+              List<String> slideNum = new ArrayList<String>();    //slide가 넘어간 시간
 
 
+
+            /* 슬라이드 넘버를 표시해주기 위한 알고리즘 부분 시작 -------------------------
+             *how? 이전으로 넘어간 슬라이드에 대해서는 시간체크를 하지않고
+             *     최종적으로 해당페이지가 넘어간 시간을 체크하여 그래프에 나타내줌.
+             */
               for (int i = 0; i < leftEventTimeList.size(); i++) {
                   for (int j = 0; j < rightEventTimeList.size(); j++) {
                       if (leftEventTimeList.get(i) < rightEventTimeList.get(j)) {
@@ -444,6 +448,10 @@ public class ResultActivity extends AppCompatActivity {
                       rightEventTimeList.remove(rightEventTimeList.size() - 1);
                   }
               }
+              //끝-------------------------------------
+
+
+
               // 축 값 설정 (슬라이드 번호)
               List<AxisValue> axisXvalue = new ArrayList<AxisValue>();
               for (int j = 0; j < rightEventTimeList.size(); ++j) {
@@ -460,8 +468,8 @@ public class ResultActivity extends AppCompatActivity {
 
                   for (int j = 0; j < heartRateList.size(); ++j) {
 
-                      if (i == 1 && j == 0) {
-                          values.add(new PointValue(j, lines.get(0).getValues().get(0).getY()));
+                      if (i == 1 && j == 0) {   //i==1일 떄 2번째 그래프이고 2번째 그래프는 1개의 좌표를 가지는 그래프임.(progress를 따라 움직이는 Point역할을 위함.)
+                          values.add(new PointValue(j, lines.get(0).getValues().get(0).getY())); //심박수 데이터 배열의 첫번째 값을 초기값으로 설정함.
                           break;
                       } else {
                           values.add(new PointValue(j * 5, heartRateList.get(j))); //adding point to the first line

@@ -13,7 +13,7 @@ public class HeartRateCalculator {
         this.heartRateList=heartRateList;
     }
 
-    // 최고 심박수의 평균 값 구하기
+    // 최고 심박수 값 구하기
     public String HighHeartRateValue() {
         float  HighHeartRateValue= 0;
         String result = null;
@@ -28,7 +28,7 @@ public class HeartRateCalculator {
         return result;
     }
 
-    // 최저 심박수의 평균 값 구하기
+    // 최저 심박수 값 구하기
     public String LowHeartRateValue() {
         float  LowHeartRateValue= 0;
         String result = null;
