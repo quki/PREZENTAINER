@@ -74,8 +74,6 @@ public class LoadFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -121,6 +119,7 @@ public class LoadFragment extends Fragment {
 
             }
 
+            // Click시 계정정보, PPT Title, date 값을 ResultActivity에 인텐트 및 전달
             @Override
             public void onClick(View view, int position) {
 
@@ -200,7 +199,6 @@ public class LoadFragment extends Fragment {
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
             // TODO Auto-generated method stub
-            
         }
 
         @Override
@@ -289,16 +287,16 @@ public class LoadFragment extends Fragment {
 
                     }
                 }) {
-
+            // POST방식으로 Parmaeter를 URL에 전달, 계정정보만 전달
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url
+
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 return params;
             }
 
-            // Setting Encoding at Volley
+            // UTF-8로 Encoding하는 작업
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 try {
@@ -315,7 +313,7 @@ public class LoadFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq);
 
     }
-    // 해당 계정 & PT 제목 & PT 저장 날짜 일치하는 data 삭제
+    // 해당 계정 & PT 제목 & PT 저장 날짜 일치하는 data(ROW OF DB TABLE) 삭제
     private void deleteDataByVolley(final String title, final String date){
 
         mDialogHelper.showPdialog("데이터를 삭제 중 입니다...", true);
@@ -328,6 +326,8 @@ public class LoadFragment extends Fragment {
 
                         mDialogHelper.hidePdialog();
                         Toast.makeText(getActivity(),"삭제 완료", Toast.LENGTH_SHORT).show();
+
+                        // View갱신을 위해
                         fetchDataByVolley();
                     }
                 }, new Response.ErrorListener() {
@@ -339,10 +339,9 @@ public class LoadFragment extends Fragment {
                 Toast.makeText(getActivity(),title + "\n삭제 실패", Toast.LENGTH_SHORT).show();
             }
         }) {
-
+            // POST방식으로 Parmaeter를 URL에 전달, 계정정보,PPT title, date 전달
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("yourId", yourId);
                 params.put("title", title);
@@ -350,7 +349,7 @@ public class LoadFragment extends Fragment {
                 return params;
             }
 
-            // Setting Encoding at Volley
+            // UTF-8로 Encoding하는 작업
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 try {

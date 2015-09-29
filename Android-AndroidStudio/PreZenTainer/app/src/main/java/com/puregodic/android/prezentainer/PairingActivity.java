@@ -219,7 +219,6 @@ public class PairingActivity extends AppCompatActivity implements BluetoothHelpe
 
             }
         };
-        // BroadCastReceiver를 당연히 먼저 선언해주어야한다.
         // IntentFilter 이벤트를 모니터링 할 수 있다.
         IntentFilter deviceFoundFilter = new IntentFilter(
                 BluetoothDevice.ACTION_FOUND); // 새로운 기기를 찾았을 때

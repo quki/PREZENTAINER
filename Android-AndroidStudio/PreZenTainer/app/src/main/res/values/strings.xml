@@ -10,8 +10,6 @@
     <string name="title_activity_load">불러오기</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
-    <string name="title_activity_test">TestActivity</string>
-    <string name="title_activity_card_view">CardViewActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_result">ResultActivity</string>
 

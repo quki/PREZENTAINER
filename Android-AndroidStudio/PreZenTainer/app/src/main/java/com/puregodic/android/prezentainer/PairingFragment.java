@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
 
@@ -51,7 +51,7 @@ public class PairingFragment extends Fragment {
             name = "이름없음";
         }
         int type = device.getBluetoothClass().getMajorDeviceClass();
-        Toast.makeText(getActivity(), "name : " + name + "\ntype : " + type, Toast.LENGTH_SHORT).show();
+        Log.d("DeviceFound", "name : " + name + "\ntype : " + type);
         deviceCount++;
 
         switch(deviceCount){

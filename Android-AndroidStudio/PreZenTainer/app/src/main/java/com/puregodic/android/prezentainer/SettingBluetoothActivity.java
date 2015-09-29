@@ -91,6 +91,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
         super.onResume();
     }
 
+    // Bluetooth 연결 권한에 접근하여 허용을 요청
     @Override
     public void isEnabledAdapter() {
 
@@ -107,7 +108,7 @@ public class SettingBluetoothActivity extends AppCompatActivity implements Bluet
 
         if (requestCode == BluetoothConfig.REQUEST_ENABLE_BT) {
 
-            // OK 버튼을 눌렀을때
+            // Bluetooth 연결 권한 허용에서 OK 버튼을 눌렀을때
             if (resultCode == RESULT_OK) {
                 Toast.makeText(SettingBluetoothActivity.this, "블루투스를 켰습니다", Toast.LENGTH_SHORT).show();
                 listPairedDevices();
