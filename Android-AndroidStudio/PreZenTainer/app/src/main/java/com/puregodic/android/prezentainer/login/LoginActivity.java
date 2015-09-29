@@ -134,11 +134,10 @@ public class LoginActivity extends AppCompatActivity {
      * function to verify login details in mysql db
      * */
     private void checkLogin(final String email, final String password) {
-        // Tag used to cancel the request
+
         String tag_string_req = "req_login";
  
         mDialogHelper.showPdialog("잠시만 기다려주세요...", false);
-        
         
         
         StringRequest strReq = new StringRequest(Method.POST,
@@ -153,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
  
-                            // Check for error node in json
+                            // 로그인 에러 체크
                             if (!error) {
                                 // user successfully logged in
                                 // Create login session

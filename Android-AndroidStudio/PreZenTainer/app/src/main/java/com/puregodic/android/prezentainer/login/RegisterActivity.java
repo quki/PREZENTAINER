@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
 
    // 서버에 회원 정보 insert
     private void registerUser(final String email, final String password) {
-        // Tag used to cancel the request
+
         String tag_string_req = "req_register";
 
         mDialogHelper.showPdialog("회원정보 등록 중 ...", false);
@@ -132,10 +132,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
-                             if (!error) {
-                                 // User successfully stored in MySQL
 
-                            
+                            // User가 성공적으로 계정정보를 MySQL로 TABLE에 저장한 경우
+                             if (!error) {
                             // Launch login activity
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             intent.putExtra("email",email );
@@ -146,9 +145,9 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "회원가입이 완료되었습니다!",
                                     Toast.LENGTH_LONG).show();
 
+                           // 계정정보 TABLE에 저장 실패
                            } else{
-                               // Error occurred in registration. Get the error message
-                               
+
                                String errorMsg = jObj.getString("error_msg");
                                if(errorMsg.equals("User already existed")){
                                    Toast.makeText(RegisterActivity.this,
@@ -157,7 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
                                    Toast.makeText(RegisterActivity.this,
                                            errorMsg, Toast.LENGTH_LONG).show();
                                }
-                               
                            }
 
                         } catch (JSONException e) {
