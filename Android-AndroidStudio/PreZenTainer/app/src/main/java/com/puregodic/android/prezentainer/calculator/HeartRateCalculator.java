@@ -14,7 +14,7 @@ public class HeartRateCalculator {
     }
 
     // 최고 심박수 값 구하기
-    public String HighHeartRateValue() {
+    public String HighHeartRateValue() { //배열의 값을 모두 검사해 최고값을 찾는 역할을 함.
         float  HighHeartRateValue= 0;
         String result = null;
         HighHeartRateValue=heartRateList.get(0);
@@ -29,7 +29,7 @@ public class HeartRateCalculator {
     }
 
     // 최저 심박수 값 구하기
-    public String LowHeartRateValue() {
+    public String LowHeartRateValue() { //배열의 값을 모두 검사해 최저값을 찾는 역할을 함.
         float  LowHeartRateValue= 0;
         String result = null;
         LowHeartRateValue=heartRateList.get(0);
@@ -56,7 +56,7 @@ public class HeartRateCalculator {
         return ((int)(heartRateSum / heartRateList.size()));
     }
 
-    //표준편차를 이용한 ppt점수
+    //표준편차를 이용한 프레젠테이션 점수
     public String standardDeviation() {
         int offset = 3;
         float sum=0;
@@ -66,13 +66,13 @@ public class HeartRateCalculator {
 
         for (int i = 0; i < heartRateList.size(); i++ )
         {
-            sum += (heartRateList.get(i) - average) * (heartRateList.get(i) - average);
+            sum += (heartRateList.get(i) - average) * (heartRateList.get(i) - average); //편차의 제곱의 합을 구함.
         }
 
 
-        standardDeviationValue = Math.sqrt((double)sum/heartRateList.size());
+        standardDeviationValue = Math.sqrt((double)sum/heartRateList.size());  //편차의 제곱의 합값에 루트연산을 통해 표준편차를 구함.
 
-        result = Integer.valueOf(100-(int)standardDeviationValue*offset).toString();
+        result = Integer.valueOf(100-(int)standardDeviationValue*offset).toString(); //100에서 표준편차의 값을 빼서 프레젠테이션의 점수를 도출해냄.
         return result;
     }
 
