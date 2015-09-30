@@ -99,7 +99,6 @@ public class ResultActivity extends AppCompatActivity {
 
         fetchDataByVolley();
 
-        
     }
     
     /* Fragment
@@ -173,12 +172,15 @@ public class ResultActivity extends AppCompatActivity {
             maxViewport = new Viewport(chart.getMaximumViewport());
             currentViewport = new Viewport(chart.getCurrentViewport());
 
-
-
-
             //아래부터 Audio 및 SeekBar작업
             Uri audioPath = Uri.parse(mFilePath);
-            audio = MediaPlayer.create(getApplicationContext(), audioPath);
+
+            // bmac전용 sample
+            if(date.equals("2015년 9월 30일 15시 30분")){
+                audio = MediaPlayer.create(getApplicationContext(), R.raw.sample);
+            }else{
+                audio = MediaPlayer.create(getApplicationContext(), audioPath);
+            }
 
             if(audio != null){
 

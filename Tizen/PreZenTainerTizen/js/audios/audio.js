@@ -12,7 +12,6 @@ define({
         'helpers/date'
     ],
     def: function modelsAudio(req) {
-        /*jshint maxstatements:42*/
         'use strict';
 
         var e = req.core.event,
@@ -28,10 +27,10 @@ define({
             audioLengthCheckInterval = null,
             audioRecordingStartTime = null,
             audioRecordingTime = 0,
-            busy = false,  //busy가 뭘까
+            busy = false, 
             stopRequested = false;
         
-        // sendFile
+        // SA File Transfer를 이용해 안드로이드로 Audio File을 보냄
         function sendFile(path) {
           ftSend(path, function(id) {
             console.log('Succeed to send file');
@@ -45,28 +44,19 @@ define({
           });
         }
 
-        /**
-         * Executes when audio control is created from stream.
-         * @param {audioControl} control
-         */
+        // 준비된 Stream으로 부터 AudioControl 객체를 얻음
         function onAudioControlCreated(control) {
             audioControl = control;
             e.fire('ready');
         }
 
-        /**
-         * Executes on audio control creation error
-         * @param {object} error
-         */
+        // AudioControl 객체 생성 실패
         function onAudioControlError(error) {
             console.error(error);
             e.fire('error', {error: error});
         }
 
-        /**
-         * Registers stream that audio controls.
-         * @param {LocalMediaStream} mediaStream
-         */
+        // Stream Register - > Audio Control 객체 생성
         function registerStream(mediaStream) {
             navigator.tizCamera.createCameraControl(
                 mediaStream,
@@ -75,26 +65,18 @@ define({
             );
         }
 
-        /**
-         * Checks if audio length is greater then MAX_RECORDING_TIME.
-         * If it does, recording will be stopped.
-         */
+         // audio length가 MAX_RECORDING_TIME큰지 체크
         function checkAudioLength() {
             var currentTime = new Date();
 
             audioRecordingTime = currentTime - audioRecordingStartTime;
             
-            //길이가 끝나면 종료.
             if (audioRecordingTime > MAX_RECORDING_TIME) {
                 stopRecording();
             }
         }
 
-        /**
-         * Starts tracing audio length.
-         * When audio length reaches MAX_RECORDING_TIME, recording
-         * will be stopped automatically.
-         */
+        // audio length 측정 MAX_RECORDING_TIME에 도달하면 stop됨
         function startTracingAudioLength() {
             audioRecordingStartTime = new Date();
             audioLengthCheckInterval = window.setInterval(
@@ -103,34 +85,26 @@ define({
             );
         }
 
-        /**
-         * Stops tracing audio length.
-         */
+        
+        //audio length 측정 중지
         function stopTracingAudioLength() {
             window.clearInterval(audioLengthCheckInterval);
             audioLengthCheckInterval = null;
         }
 
-        /**
-         * Executes when recording starts successfully.
-         */
+        // audio start가 성공했을 때
         function onRecordingStartSuccess() {
             startTracingAudioLength();
             e.fire('recording.start');
         }
 
-        /**
-         * Executes when error occurs during recording start.
-         * @param {object} error
-         */
+        // audio start에 실패했을 때
         function onRecordingStartError(error) {
             busy = false;
             e.fire('recording.error', {error: error});
         }
 
-        /**
-         * Executes when audio settings are applied.
-         */
+        // start 성공 뒤, audio 설정 성공
         function onAudioSettingsApplied() {
             if (!stopRequested) {
                 audioControl.recorder.start(
@@ -143,28 +117,19 @@ define({
 
         }
 
-        /**
-         * Executes when error occurs during applying audio settings
-         * @param {object} error
-         */
+        // audio setting 설정 실패
         function onAudioSettingsError(error) {
             console.error('settings.error');
             busy = false;
             e.fire('recording.error', {error: error});
         }
 
-        /**
-         * Returns recording format
-         * @return {string}
-         */
+        // 오디오 파일형식
         function getRecordingFormat() {
             return 'amr';
         }
 
-        /**
-         * Creates filename for new audio.
-         * @return {string}
-         */
+        // 오디오 파일 이름 생성
         function createAudioFileName() {
             var currentDate = new Date(),
                 extension = getRecordingFormat(),
@@ -177,11 +142,10 @@ define({
         }
 
         /**
-         * Starts audio recording.
-         * When recording is started successfully, audio.recording.start event
-         * is fired. If error occurs, audio.recording.error event is fired.
-         * @return {boolean} If process starts true is returned,
-         * false otherwise (audio other operation is in progress).
+         * audio recording 시작, applySettings을 통해 recording관련 설정을 하고
+         * start가 성공하면 onAudioSettingsApplied 호출,
+         * 실패하면, onAudioSettingsError 호출됨
+         * 정상적으로 start되면 true return, 진행중이여서 start를 못하게 되면 false return.
          */
         function startRecording() {
           
@@ -199,7 +163,15 @@ define({
             mPath = 'file:///opt/usr/media/Sounds/'+fileName;
             settings.fileName = fileName;
             settings.recordingFormat = getRecordingFormat();
-
+            
+            /* ex ) 
+             * 
+             *      settings = { 'filename' : '20151003_164332.amr',
+             *                    'recordingFormat' : 'amr' }
+             *              
+             */
+            
+            // audio 관련 setting
             audioControl.recorder.applySettings(
                 settings,
                 onAudioSettingsApplied,
@@ -209,9 +181,7 @@ define({
             return true;
         }
 
-        /**
-         * Executes when audio recording stops successfully.
-         */
+        // 녹음 중지에 성공했을 때
         function onAudioRecordingStopSuccess() {
             busy = false;
             e.fire('recording.done', {path: audioPath});
@@ -220,10 +190,7 @@ define({
             sendFile(mPath);
         }
 
-        /**
-         * Executes when audio recording stop fails.
-         * @param {object} error
-         */
+        // 오디오 중지 실패
         function onAudioRecordingStopError(error) {
             busy = false;
             e.fire('recording.error', {error: error});
@@ -231,11 +198,9 @@ define({
         }
 
         /**
-         * Stop audio recording.
-         * When recording is stopped, audio.recording.done event is fired
-         * with file path as a data.
-         * If error occurs audio.recording error is fired.
-         * Recording will stop also if MAX_RECORDING_TIME will be reached.
+         * audio recording 중지, 
+         * stop이 성공하면 onAudioRecordingStopSuccess 호출,
+         * 실패하면, onAudioRecordingStopError 호출됨
          */
         function stopRecording() {
             stopRequested = true;
@@ -251,17 +216,12 @@ define({
 
         }
 
-        /**
-         * Returns current recording time in milliseconds.
-         * @return {number}
-         */
+        // 현재 오디오 시간 return (ms)
         function getRecordingTime() {
             return audioRecordingTime;
         }
 
-        /**
-         * Releases audio.
-         */
+        // 일지중지
         function release() {
             if (busy) {
                 stopRecording();
@@ -274,20 +234,12 @@ define({
             }
         }
 
-        /**
-         * Returns true if audio is ready to work,
-         * false otherwise.
-         * @return {boolean}
-         */
+        // 녹음이 준비되면 true, 그렇지 않으면 false return
         function isReady() {
             return audioControl !== null;
         }
 
-        /**
-         * Returns true if audio is recording,
-         * false otherwise.
-         * @return {boolean}
-         */
+        // 녹음 중이면 true, 그렇지 않으면 false return
         function isRecording() {
             return !!audioLengthCheckInterval;
         }

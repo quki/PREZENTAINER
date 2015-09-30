@@ -19,6 +19,9 @@ var mSAAgent,
 var mTimeInterval = null;
 
 
+/* ----------------------------
+    SA File Transfer 관련 함수
+-----------------------------*/
 
 // Initialize File Transfer 
 function ftInit(successCb, errorCb) {
@@ -30,7 +33,7 @@ function ftInit(successCb, errorCb) {
     return;
   }
 
-  // file send event callback definition
+  // 파일 전송 event Listener의 call back함수 정의 
   var filesendcallback = {
     onprogress : successCb.onsendprogress,
     oncomplete : successCb.onsendcomplete,
@@ -51,7 +54,7 @@ function ftInit(successCb, errorCb) {
     }, 0);
   }
 }
-// Send File by given path
+// 파일 전송
 function ftSend(path, successCb, errorCb) {
   if (mSAAgent === null || mSAFiletransfer === null || mSARemotePeerAgent === null) {
     errorCb({
@@ -76,7 +79,7 @@ function ftSend(path, successCb, errorCb) {
   }
 }
 
-// Cancel sending File
+// 파일 전송 취소
 function ftCancel(id, successCb, errorCb) {
   if (mSAAgent === null || mSAFiletransfer === null || mSARemotePeerAgent === null) {
     errorCb({
@@ -100,7 +103,7 @@ function ftCancel(id, successCb, errorCb) {
   }
   
 }
-
+// 파일 전송 취소
 function cancelFile() {
   ftCancel(transferId, function() {
     console.log('Succeed to cancel file');
@@ -110,7 +113,7 @@ function cancelFile() {
   });
 }
 
-// Define File Transfer Success Call Back
+// File Transfer Success Call Back 정의
 var ftSuccessCb = {
   onsendprogress: function(id, progress) {
     console.log('onprogress id : ' + id + ' progress : ' + progress);
@@ -118,13 +121,15 @@ var ftSuccessCb = {
   },
   onsendcomplete: function(id, localPath) {
     progressBarWidget.value('100');
-    showMain('send Completed!! id : ' + id + ' localPath :' + localPath);
+    showMain('SEND COMPLETED');
   },
   onsenderror: function(errCode, id) {
     showMain('Failed to send File. id : ' + id + ' errorCode :' + errCode);
   }
 };
-
+/* ----------------------------
+  Samsung Accessory Protocol 관련 함수
+-----------------------------*/
 
 function disconnectSAP(){
   if(mSASocket !== null){
@@ -148,26 +153,28 @@ function disconnectSAP(){
  * Initialize Socket
  */
 
-//Service Connection Handler
+// Service Connection Handler
 connectionListener = {
-        //Remote peer agent (Consumer) requests a service (Provider) connection
+        //Remote peer agent (Consumer, Android)가 Service Connection을 요청했을 때
          onrequest: function (peerAgent) {
-                 mSAAgent.acceptServiceConnectionRequest(peerAgent);
-                 mSARemotePeerAgent = peerAgent;
-                 toastAlert('ACCEPT!');
+                 
+                 mSAAgent.acceptServiceConnectionRequest(peerAgent);  // Service Connection 허락
+                 mSARemotePeerAgent = peerAgent;  // PeerAgent(Android)로 초기화
+                 toastAlert('CONNECTED');
                  
                  // Initialize File transfer
                  ftInit(ftSuccessCb, function(err) {
                    toastAlert('Failed to initialize the File Transfer');
                  });
          },
-         // Connection between Provider and Consumer is established
+         // Service Connection이 연결되었을 때, socket생성
          onconnect: function (socket) {
              isConnect = true;
-             updateConnection();
+             updateConnection(); // viewhelper.js 참조
              var onConnectionLost,
                  dataOnReceive;
              
+             // socket 초기화
              mSASocket = socket;
              console.log('SASocket is initialized');
              
@@ -204,11 +211,10 @@ connectionListener = {
            console.log(errorCode);
          }
 };
-
-//onServiceConnectionRequested Success Call Back
+// SAAgent객체 생성, 역할은 provider
 function onSAAgentRequested (agents) {
   var i = 0;
-  console.log('===my SAAgent===');
+  console.log('Enable to use SAAgent');
   for (i; i < agents.length; i += 1) {
       if (agents[i].role === "PROVIDER") { 
           mSAAgent = agents[i]; // get the SAAgent 
@@ -218,11 +224,10 @@ function onSAAgentRequested (agents) {
   
   mSAAgent.setServiceConnectionListener(connectionListener);
 }
-
-//onServiceConnectionRequested Error Call Back
+// SAAgent객체생성 실패
 function onRequestedError (e) {
   console.log('requestOnError '+ e);
 }
 
-//Requested the SAAgent specified in the Accessory Service Profile
+// Accessory Service Profile을 이용하기 위한 SAAgent를 요청함. 
 webapis.sa.requestSAAgent(onSAAgentRequested, onRequestedError);

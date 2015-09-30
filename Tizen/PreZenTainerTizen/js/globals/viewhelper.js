@@ -11,7 +11,7 @@ var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
 var isConnect = false;
 
-// 화면구성변화
+// Service Connection 이후 화면 구성 변화 (button 활성화 비활성화)
 function updateConnection() {
   if(!isConnect){
 	    $('#startbtn').attr('disabled', 'disabled');

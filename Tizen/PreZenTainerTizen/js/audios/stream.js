@@ -1,8 +1,6 @@
-/*global define, console, window, navigator*/
-/*jslint plusplus: true*/
 
 /**
- * Month module
+ * Get Stream module
  */
 
 define({
@@ -18,9 +16,8 @@ define({
 
             initAttemtps = 0;
 
-        /**
-         * Gets media stream.
-         */
+        
+        // webkitGetUserMedia를 통해 Stream 얻음, audio만 capture함
         function getStream() {
             initAttemtps += 1;
             navigator.webkitGetUserMedia(
@@ -33,22 +30,15 @@ define({
             );
         }
 
-        /**
-         * Fires models.stream.ready event onGetUserMediaSuccess.
-         * @param {LocalMediaStream} stream
-         */
+        // Stream을 정상적으로 얻었을때 stream ready!
         function onUserMediaSuccess(stream) {
             initAttemtps = 0;
             e.fire('ready', {stream: stream});
         }
 
-        /**
-         * Fires models.stream.cannot.access.audio event on onGetUserMediaError.
-         */
+        // Stream을 얻는 것을 실패 했을 때 3번 시도함
         function onUserMediaError() {
             if (initAttemtps < INIT_MAX_ATTEMPTS) {
-                //application tries to obtain audio stream up to 3 times
-                //because other application may not release it yet
                 window.setTimeout(getStream,
                     INIT_ATTEMPT_TIMEOUT);
             } else {
