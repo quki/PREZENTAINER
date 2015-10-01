@@ -1,6 +1,6 @@
 /*
  * 
- * SAP 관련함수
+ * SAP/SA File Transfer 관련모듈
  * 
  * */
 

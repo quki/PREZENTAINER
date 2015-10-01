@@ -34,8 +34,6 @@ define({
 
     
     stream = null,
-    //RECORDING_INTERVAL_STEP = 100,
-    //recordingInterval = null, recordingTime = 0,
     
     isRecording = false,  exitInProgress = false;
 
