@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/PreZenTainerTizen" version="1.0.0" viewmodes="maximized">
+    <tizen:application id="0suqMXMQal.PreZenTainerTizen" package="0suqMXMQal" required_version="2.2"/>
+    <content src="index.html"/>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <icon src="logo.png"/>
+    <tizen:metadata key="AccessoryServicesLocation" value="res/xml/serviceprofile.xml"/>
+	<tizen:metadata key="master_app_name" value="PreZenTainer"/> 
+    <tizen:metadata key="master_app_packagename" value="com.puregodic.android.prezentainer"/>
+    <tizen:metadata key="master_app_playstore_deeplink" value="http://play.google.com/store/apps/details?id=com.puregodic.android.prezentainer"/>
+    <tizen:metadata key="master_app_auto_uninstallation" value="yes"/>
+    <name>PreZenTainerTizen</name>
+    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+    <tizen:privilege name="http://tizen.org/privilege/content.read"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/accessoryprotocol"/>
+    <tizen:privilege name="http://tizen.org/privilege/mediacapture"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/healthinfo"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/medicalinfo"/>
+    <tizen:privilege name="http://tizen.org/privilege/camera"/>
+    <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
+</widget>

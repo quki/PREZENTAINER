@@ -1,0 +1,426 @@
+* {
+	font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
+}
+
+@font-face{
+    font-family: "MyFont";
+    src: url('../res/font/NanumGothic.ttf'),
+}
+
+/* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
+h5 input {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(34, 86, 134, 0.5);
+}
+
+body {
+	font-family: MyFont !important;
+	margin: 0px auto;
+	background-color: rgba(152,192,228,1);
+}
+
+/* li tag*/
+.ui-listview li{
+	list-style-position: inside;
+	border-bottom:solid 1px;
+    border-bottom-color: #fff ;
+}
+
+.ui-content {
+	margin: 0px auto;
+	padding-top: none;
+	padding-bottom: none;
+	margin-top: 0px;
+}
+
+.ui-content div {
+	margin: 0px auto;
+}
+
+.content-padding {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.content_text {
+	font-weight: bold;
+	font-size: 5em;
+	color: #fff;
+}
+
+.text-centered {
+	text-align: center;
+}
+
+/* ----------------------------
+    Main page
+-----------------------------*/
+
+/* setting 버튼 이미지*/
+.settingButtonMain a {
+	display: block;
+	width: 128px;
+	height: 128px;
+	background-image: url(../img/button/ic_settings.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+/* main화면에 start button 이미지 */
+.startButtonMain a {
+	display: block;
+	width: 128px;
+	height: 128px;
+	background-image: url(../img/button/ic_presentation_play.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+/* main화면에 setting 버튼에 대한 위치 */
+.main_buttonSet2 {
+	position: absolute;
+	left: 5%;
+	bottom: 5%;
+}
+
+/* main화면에 start 버튼에 대한 위치 */
+.main_buttonSet1 {
+	position: absolute;
+	right: 5%;
+	bottom: 5%;
+}
+
+/* ----------------------------
+    EnrollMotion page
+-----------------------------*/
+
+/*  check(확인)버튼 이미지*/
+.confirmButton {
+	background-image: url(../img/button/ic_check_disable.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	color: white;
+	width: 70px;
+	height: 70px;
+	border: none;
+}
+
+/* test버튼 이미지 */
+.testButton {
+	background-image: url(../img/button/ic_test.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 70px;
+	height: 70px;
+	border: none;
+}
+
+/* resetting(재설정)버튼 이미지*/
+.resettingButton {
+	background-Color: rgba(255, 255, 255, 0);
+	background-image: url(../img/button/ic_resetting.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 70px;
+	height: 70px;
+	border: none;
+}
+
+	/* 
+		EnrollMotion Page에 있는
+		모든 버튼 및 value(0/5, off 등) 위치
+		차례로, cofirm-test-left-right-resetting (각각 input, span 순)
+		
+	 */
+
+.enrollMotion_buttonSet2 .confirm input{
+	position: absolute;
+	right:15%;
+	top: 10%;
+}
+.enrollMotion_buttonSet2 .confirm span{
+	position: absolute;
+	left: 15%;
+	top: 10%;
+}
+.enrollMotion_buttonSet2 .test input{
+	position: absolute;
+	right:15%;
+	top: 40%;
+}
+.enrollMotion_buttonSet2 .test span{
+	position: absolute;
+	left: 15%;
+	top: 40%;
+}
+.enrollMotion_buttonSet2 .resetting input{
+	position: absolute;
+	bottom: 10%;
+	right: 15%;
+}
+.enrollMotion_buttonSet2 .resetting span{
+	position: absolute;
+	bottom: 10%;
+	left: 15%;
+}
+
+
+/* ----------------------------
+    Start page
+-----------------------------*/
+
+/* ----------------------------
+    	image관리
+-----------------------------*/
+
+/* start페이지에 start button 이미지 */
+.startButton input {
+	background-image: url(../img/button/ic_start_disable.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 150px;
+	height: 150px;
+	border: none;
+}
+
+/* start페이지 stop button 이미지 */
+.stopButton input {
+	background-image: url(../img/button/ic_stop_disable.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 150px;
+	height: 150px;
+	border: none;
+}
+
+/* start페이지에 left button 이미지 */
+.prevButton input {
+	background-image: url(../img/button/ic_left_disable.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 100px;
+	height: 100px;
+	border: none;
+}
+/* start페이지에 right button 이미지 */
+.nextButton input {
+	background-image: url(../img/button/ic_right_disable.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-Color: rgba(255, 255, 255, 0);
+	width: 100px;
+	height: 100px;
+	border: none;
+}
+
+/* start화면 motion setting toggle 버튼 이미지 */
+.settingButtonStart input {
+	width:50px;
+	height:50px;
+	border: none;
+	background-image: url(../img/button/ic_settings_disable.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-Color: rgba(255, 255, 255, 0);
+}
+/* start화면 setting 버튼 아래 on/off 텍스트*/
+.settingButtonStart span {
+   font-size: 25px;
+   text-align: center;
+   display: block;
+   line-height: 0.8em;
+}
+
+/* ----------------------------
+    	위치 관리
+-----------------------------*/
+
+/* start 페이지에서 start button 위치*/
+.start_buttonSet1_1 {
+	position: absolute;
+	left: calc(50% -     75px);
+	right: calc(50% -     75px);
+	top: calc(50% -     75px);
+}
+/* start 페이지에서 stop button 위치*/
+.start_buttonSet1_2 {
+	position: absolute;
+	left: calc(50% -     75px);
+	right: calc(50% -     75px);
+	top: calc(50% -     75px);
+}
+/* start 페이지에 left 버튼 위치 */
+.start_buttonSet2_1 {
+	position: absolute;
+	left: 1%;
+	top: calc(50% -     50px);
+	margin-top: 10px;
+}
+/* start 페이지에 right 버튼 위치 */
+.start_buttonSet2_2 {
+	position: absolute;
+	right: 1%;
+	top: calc(50% -     50px);
+	margin-top: 10px;
+}
+/* start 페이지에  motion setting toggle버튼, on/off text 위치 */
+.start_buttonSet2_3{
+	position: absolute;
+	left: calc(50% -     25px);
+	right: calc(50% -     25px);
+	bottom: 2%;
+}
+
+
+.start_bottom_section {
+	width: device-width;
+	height: 30%;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: rgba(34, 86, 134, 0.5);
+}
+/* ----------------------------
+    StopWatch part
+-----------------------------*/
+#stopwatch-wrapper {
+	overflow: hidden;
+	padding-bottom: 15px;
+	margin: 0px auto;
+}
+
+#stopwatch-content-timer {
+	height: 80px !important;
+	overflow: hidden !important;
+	padding-top: none;
+	padding-bottom: none;
+	margin: 0px auto;
+	margin-top: 0px;
+	margin-left: calc(50% -     75px);
+}
+
+.hidden {
+	display: none;
+}
+
+/* Digits */
+.digit {
+	width: 34px;
+	height: 51px;
+	float: left;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+.digit.small {
+	width: 10px;
+	height: 15px;
+	margin-top: 36px;
+}
+
+.colon {
+	background-image: url(../img/stopwatch/new/34x51/colon.png);
+	width: 14px;
+	height: 58px;
+}
+
+.d0 {
+	background-image: url(../img/stopwatch/new/34x51/0.png);
+}
+
+.d1 {
+	background-image: url(../img/stopwatch/new/34x51/1.png);
+}
+
+.d2 {
+	background-image: url(../img/stopwatch/new/34x51/2.png);
+}
+
+.d3 {
+	background-image: url(../img/stopwatch/new/34x51/3.png);
+}
+
+.d4 {
+	background-image: url(../img/stopwatch/new/34x51/4.png);
+}
+
+.d5 {
+	background-image: url(../img/stopwatch/new/34x51/5.png);
+}
+
+.d6 {
+	background-image: url(../img/stopwatch/new/34x51/6.png);
+}
+
+.d7 {
+	background-image: url(../img/stopwatch/new/34x51/7.png);
+}
+
+.d8 {
+	background-image: url(../img/stopwatch/new/34x51/8.png);
+}
+
+.d9 {
+	background-image: url(../img/stopwatch/new/34x51/9.png);
+}
+
+.small.d0 {
+	background-image: url(../img/stopwatch/new/34x51/0.png);
+}
+
+.small.d1 {
+	background-image: url(../img/stopwatch/new/34x51/1.png);
+}
+
+.small.d2 {
+	background-image: url(../img/stopwatch/new/34x51/2.png);
+}
+
+.small.d3 {
+	background-image: url(../img/stopwatch/new/34x51/3.png);
+}
+
+.small.d4 {
+	background-image: url(../img/stopwatch/new/34x51/4.png);
+}
+
+.small.d5 {
+	background-image: url(../img/stopwatch/new/34x51/5.png);
+}
+
+.small.d6 {
+	background-image: url(../img/stopwatch/new/34x51/6.png);
+}
+
+.small.d7 {
+	background-image: url(../img/stopwatch/new/34x51/7.png);
+}
+
+.small.d8 {
+	background-image: url(../img/stopwatch/new/34x51/8.png);
+}
+
+.small.d9 {
+	background-image: url(../img/stopwatch/new/34x51/9.png);
+}
+
+/* ----------------------------
+     버튼 click 효과 이미지 - (a tag)
+-----------------------------*/
+
+/* main화면에 start button 눌렀을 때 이미지 */
+.startButtonMain a:active {
+	background-image: url(../img/button/ic_presentation_play_disable.png);
+}
+/* main화면 setting 버튼 클릭 이미지*/
+.settingButtonMain a:active {
+	background-image: url(../img/button/ic_settings_disable.png);
+}
