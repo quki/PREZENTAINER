@@ -297,6 +297,7 @@ define({
       startTimeWatch();
       updateAfterStart();
       setStart();
+      document.addEventListener("rotarydetent",test_control,true);
       // pointer로 pushEventTimeToArray함수 메모리 공간 참조
       p_pushEventTimeToArray = pushEventTimeToArray; 
     }
@@ -305,7 +306,10 @@ define({
       stopTimeWatch();
       setStop();
       updateAfterStop();
+      document.removeEventListener("rotarydetent", test_control, true);
       $('#startbtn').attr('type','button');
+      $('#pceventbtn_left').attr('disabled', 'disabled');
+      $('#pceventbtn_right').attr('disabled', 'disabled');
     }
     
     function onPcEventBtnClickRight(){

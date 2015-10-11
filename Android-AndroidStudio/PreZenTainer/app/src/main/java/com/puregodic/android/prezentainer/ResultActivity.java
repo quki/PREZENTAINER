@@ -115,16 +115,12 @@ public class ResultActivity extends AppCompatActivity {
         private LineChartData previewData;
         private HeartRateCalculator heartCalcultor;
 
-        Button buttonPlay;
-        Button buttonStop;
-        SeekBar seekbar;
-        MediaPlayer audio;
-        TextView heartRate;
-        TextView highHeartrate;
-        TextView lowHeartrate;
-        TextView averageHeartrate;
-        TextView runningTime,wholeTime;
-        TextView score;
+        private Button buttonPlay,buttonStop;
+        private SeekBar seekbar;
+        private  MediaPlayer audio;
+        private TextView heartRate,maxHeartrate,minHeartrate,averageHeartrate;
+        private TextView runningTime,wholeTime;
+        private TextView score;
 
         int audioSize;
         private int numberOfLines = 2;
@@ -134,7 +130,7 @@ public class ResultActivity extends AppCompatActivity {
         
         // Viewport는 쉽게 말해 화면 (View)라고 생각하면 된다. 주로 보여지는 범위를 지정할 때 주로 사용함.
         private Viewport maxViewport,currentViewport;
-        
+        private int maxValue, minValue;
         public final Handler timeHandler = new TimeHandler(this);
         
         public PlaceHolderFragment() {
@@ -158,8 +154,8 @@ public class ResultActivity extends AppCompatActivity {
             chart.setOnValueTouchListener(new ValueTouchListener());
 
             heartRate = (TextView) findViewById(R.id.heartRate);
-            highHeartrate = (TextView) findViewById(R.id.highHeartrate);
-            lowHeartrate = (TextView) findViewById(R.id.lowHeartrate);
+            maxHeartrate = (TextView) findViewById(R.id.highHeartrate);
+            minHeartrate = (TextView) findViewById(R.id.lowHeartrate);
             averageHeartrate = (TextView) findViewById(R.id.averageHeartrate);
             runningTime = (TextView) findViewById(R.id.runningTime);
             wholeTime = (TextView) findViewById(R.id.wholeTime);
@@ -191,11 +187,6 @@ public class ResultActivity extends AppCompatActivity {
                 audioSize = audio.getDuration();
                 seekbar.incrementProgressBy(1);
                 seekbar.setMax(audioSize);
-                // 최초에에 chart에 뿌려 줄 data 생성
-                generateData();
-
-                // 자동으로 chart가 계산 되는 것 방지
-                chart.setViewportCalculationEnabled(false);
 
 
                 /**
@@ -283,11 +274,25 @@ public class ResultActivity extends AppCompatActivity {
 
                 //heartRate정보 출력
                 heartCalcultor = new HeartRateCalculator(heartRateList);
+                String maxHeartrateValue = heartCalcultor.HighHeartRateValue();
+                String minHeartrateValue = heartCalcultor.LowHeartRateValue();
+                // 최대 최소 심박수 값을 int형 변환(그래프 viewport부분에서 사용)
+                maxValue = Integer.parseInt(maxHeartrateValue);
+                minValue = Integer.parseInt(minHeartrateValue);
                 averageHeartrate.setText("" + heartCalcultor.meanHeartRateValue());// 평균 심박수
-                highHeartrate.setText(heartCalcultor.HighHeartRateValue());        // 최고 심박수
-                lowHeartrate.setText(heartCalcultor.LowHeartRateValue());          // 최저 심박수
+                maxHeartrate.setText(maxHeartrateValue);        // 최고 심박수
+                minHeartrate.setText(maxHeartrateValue);          // 최저 심박수
                 score.setText(heartCalcultor.standardDeviation());                 // 점수
                 wholeTime.setText(" / "+changeTimeForHuman(audio.getDuration()));    // 오디오 총 길이
+
+
+                // chart draw !!
+                // 최초에에 chart에 뿌려 줄 data 생성
+                generateData();
+                // 자동으로 chart가 계산 되는 것 방지
+                chart.setViewportCalculationEnabled(false);
+
+
             }else{
                 // 사용자가 녹음파일을 폰에서 삭제한 경우 강제 종료
                 Toast.makeText(ResultActivity.this, "녹음파일이 없네요", Toast.LENGTH_SHORT).show();
@@ -524,7 +529,6 @@ public class ResultActivity extends AppCompatActivity {
                   data.setAxisYLeft(null);
               }
                   data.setBaseValue(Float.NEGATIVE_INFINITY);
-
                   chart.setLineChartData(data);
                   chart.setZoomEnabled(false);
                   chart.setScrollEnabled(false);
@@ -536,27 +540,26 @@ public class ResultActivity extends AppCompatActivity {
                   previewChart.setViewportChangeListener(new ViewportListener());
                   previewChart.setZoomType(ZoomType.HORIZONTAL); // X축 방향으로만 움직임
 
-                  maxViewport();
-                  currentViewport();
+                  setMaxViewport();
+                  setCurrentViewport();
 
           }
           // 최대 Viewport 값 지정
-          private void maxViewport(){
-              
-              maxViewport.top = 120;
-              maxViewport.bottom = 45;
+          private void setMaxViewport(){
+              maxViewport.top = maxValue+30;
+              maxViewport.bottom = minValue-10;
               maxViewport.left=0;
               maxViewport.right = audioSize/1000;
               chart.setMaximumViewport(maxViewport);
               previewChart.setMaximumViewport(maxViewport);
-              
+
           }
           // 현재 보여질 Viewport 값 지정
-          private void currentViewport(){
+          private void setCurrentViewport(){
 
+              currentViewport.top=maxValue+30;
+              currentViewport.bottom=minValue-10;
               currentViewport.left=0;
-              currentViewport.bottom=45;
-              currentViewport.top=120;
               currentViewport.right = maxViewport.width() / 3;
               previewChart.setCurrentViewportWithAnimation(currentViewport);
               chart.setCurrentViewportWithAnimation(currentViewport);

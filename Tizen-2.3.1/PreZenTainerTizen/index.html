@@ -8,34 +8,33 @@
 <title>PREZENTAINER</title>
 
 <link rel="stylesheet" href="lib/tau/wearable/theme/default/tau.min.css">
-<link rel="stylesheet" href="lib/jquery/jquery.mobile-1.2.0.min.css" />
 <link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)" href="lib/tau/wearable/theme/default/tau.circle.min.css">
 <link rel="stylesheet" href="css/style.css" />
 
 </head>
 <body>
-  <!-- 'Main' Page -->
-  <div data-role="page" class="ui-page ui-page-active" id="main">
-    <div>
-      <h5>
-        <input type="image" src="./img/f_prezentainer.png">
-      </h5>
-    </div>
-    <div data-role="content" class="main_buttonSet">
-      <div class="main_buttonSet1 startButtonMain">
-        <a href="#start" id="mainStartButton" onclick="mainStartButtonClickEffect();" data-role="button" data-theme="c"></a>
-      </div>
-      <div class="main_buttonSet2 settingButtonMain">
-        <a id="mainSettingButton" href="#enrollMotion" onClick="ready_motionSetting();mainSettingButtonClickEffect();" data-role="button" data-theme="a"></a>
-      </div>
-    </div>
-  </div>
+	<!-- 'Main' Page -->
+	<div class="ui-page ui-page-active" id="main">
+	
+		<input class="Logo" type="image" src="./img/f_prezentainer.png">
+		
+		<div class="ui-content main_buttonSet">
+			<div class="main_buttonSet1 startButtonMain">
+				<input type="button" id="mainStartButton"
+					onclick="mainStartButtonClickEffect();goStartPage();"></input>
+			</div>
+			<div class="main_buttonSet2 settingButtonMain">
+				<input type="button" id="mainSettingButton"
+					onClick="ready_motionSetting();mainSettingButtonClickEffect();goEnrollMotionPage();"></input>
+			</div>
+		</div>
+	</div>
 
-  <!-- 'Start' PPT Page -->
-  <div data-role="page" id="start">
+	<!-- 'Start' PPT Page -->
+  <div class="ui-page" id="start">
     <div>
       <section id="stopwatch-content-timer">
-        <div>
+        <div class="stopwatchLocation">
           <div id="stopwatch-wrapper">
             <div id="d0"></div>
             <div id="d1"></div>
@@ -67,7 +66,6 @@
       <div class="start_buttonSet2_2 nextButton">
         <input type="button" id="pceventbtn_right" onclick="startRightButtonClickEffect();" disabled="disabled" style="float: left">
       </div>
-
       <div class="start_buttonSet2_3 settingButtonStart">
         <input type="button" id="motionbtn_toggle" disabled="disabled" onclick="enable_motion();">
         <span id="enable_motion">Off</span>
@@ -76,7 +74,7 @@
   </div>
 
   <!-- EnrollMotion Page -->
-  <div data-role="page" id="enrollMotion">
+  <div class="ui-page" id="enrollMotion">
     <div data-role="content">
 
       <div class="enrollMotion_buttonSet2">
@@ -102,7 +100,7 @@
       <progress class="ui-circle-progress" id="circleprogress" max="100" value="0"></progress>
     </div>
     <footer class="ui-footer ui-bottom-butt
-		on">
+      on">
       <button class="ui-btn" onclick="cancelFile();">Cancel</button>
     </footer>
   </div>

@@ -5,7 +5,7 @@
  * 
  * */
 
-// TEST
+
 
 var progressBarWidget,
     progressBar = document.getElementById("circleprogress");
@@ -184,3 +184,12 @@ toastPopup.addEventListener('popupshow', function(ev) {
  }, 2000);
 }, false);
 })(window.tau);
+
+
+//추가
+function goStartPage(){
+	   tau.changePage("#start");
+	}
+function goEnrollMotionPage(){
+	tau.changePage("#enrollMotion");
+}
