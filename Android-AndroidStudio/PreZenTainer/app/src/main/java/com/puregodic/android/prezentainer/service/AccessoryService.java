@@ -49,7 +49,8 @@ public class AccessoryService extends SAAgent {
 	private String jsonHR,jsonET;
 	private StringBuffer date ;
 	private Boolean isGearConnected =false;
-	
+	private Boolean isSAPInitializeError =false;
+
 	public AccessoryService() {
 		super("AccessoryService", AccessoryServiceConnection.class);
 	}
@@ -61,6 +62,7 @@ public class AccessoryService extends SAAgent {
     // ConnectionAction (Gear) Interface Initailize함
     public void registerConnectionAction(ConnectionActionGear mConnectionActionGear){
         this.mConnectionActionGear = mConnectionActionGear;
+		mConnectionActionGear.onErrorSAPFramework(isSAPInitializeError);
     }
 	
 
@@ -68,25 +70,27 @@ public class AccessoryService extends SAAgent {
 	public void onCreate() {
 		super.onCreate();
 		mContext = getApplicationContext();
-		
 		// Initialize Accessory and catch the error
 		SA sa = new SA();
 		try {
+			isSAPInitializeError = false;
 			sa.initialize(this);
 		} catch (SsdkUnsupportedException e) {
 			if (e.getType() == SsdkUnsupportedException.DEVICE_NOT_SUPPORTED) {
 				Toast.makeText(getBaseContext(),
 						"SAP를 지원하지 않는 단말입니다",
 						Toast.LENGTH_SHORT).show();
+
 			} else if (e.getType() == SsdkUnsupportedException.LIBRARY_NOT_INSTALLED) {
+				isSAPInitializeError = true;
 				Toast.makeText(getBaseContext(),
 						"삼성기어 펌웨어 설치 및 업데이트를 반드시 해주세요",
 						Toast.LENGTH_SHORT).show();
 				Intent forUpdate = new Intent(
 						Intent.ACTION_VIEW,
 						Uri.parse("http://www.samsungapps.com/appquery/appDetail.as?appId=com.samsung.android.app.watchmanager&cntyTxt=450&equipID=SM-G928K"));
+				forUpdate.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(forUpdate);
-
 			} else {
 				Toast.makeText(getBaseContext(), "SAP통신에 오류가 있습니다",
 						Toast.LENGTH_SHORT).show();

@@ -284,8 +284,11 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     }
     @Override
     public void onDestroy() {
-        if(mAccessoryService != null)
+        if(mAccessoryService != null){
             mAccessoryService.closeConnection();
+            mAccessoryService.stopSelf();
+        }
+
         super.onDestroy();
     }
 
@@ -395,7 +398,23 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     // ConnectionActionGear Interface 정의(AccessoryService와의 Interface)
     private ConnectionActionGear getConnectionActionGear(){
         return new ConnectionActionGear() {
+            @Override
+            public void onErrorSAPFramework(final Boolean isError) {
+                getActivity().runOnUiThread(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        if(isError){
+                            errorMessageGear.setText("삼성기어 펌웨어 설치 및 업데이트를 반드시 해주세요");
+                            errorMessageGear.setVisibility(View.VISIBLE);
+                        }else{
+                            errorMessageGear.setText(null);
+                            errorMessageGear.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
+                });
+            }
 
             // PeerAgent 찾는 중일 때
             @Override
