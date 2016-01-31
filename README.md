@@ -9,7 +9,7 @@ You can also see the **Window side code**, [Window](https://github.com/quki/PREZ
 ![](https://cloud.githubusercontent.com/assets/12330436/12700234/1de0118c-c81e-11e5-99e3-19f2fea64456.gif)  
 
 ####Mobile (Android) 
-
+![](screenshots/AC_[20151002-225720].gif)
  
 ### Developers
 >Team : Prezentainer  
