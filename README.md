@@ -1,6 +1,6 @@
 #PREZENTAINER  
 Train your Presentation!, Be awesome speaker!
-
+![](http://postfiles15.naver.net/20160131_62/quki09_1454213918942o2M2D_GIF/AC_20151003-062626.gif?type=w2)
 You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android).  
 You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).  
 You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).  
