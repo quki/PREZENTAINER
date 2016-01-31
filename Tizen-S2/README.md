@@ -1,5 +1,4 @@
 ﻿#PREZENTAINER Tizen Side Code
-***  
 You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android).  
 You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).
 ### Development Description
