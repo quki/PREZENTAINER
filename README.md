@@ -2,9 +2,9 @@
 ***  
 Train your Presentation !
 An Application helping you present  
-You can also see the **Android side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Android).
-You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).
-You can also see the **Window side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Window).
+You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android).  
+You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).  
+You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).  
 ## Usage
 1. Pairing a PC by Serial Port Profile(SPP)-Bluetooth Serial Communication. 
 2. Requesting a Service Connction to Peer Agent(Gear Device).
