@@ -6,7 +6,7 @@ You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZEN
 You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).  
 ### Description
 ####Wearable Devices (Tizen)  
-![](http://postfiles15.naver.net/20160131_62/quki09_1454213918942o2M2D_GIF/AC_20151003-062626.gif?type=w2)  
+![](https://cloud.githubusercontent.com/assets/12330436/12700234/1de0118c-c81e-11e5-99e3-19f2fea64456.gif)  
 
 ####Mobile (Android) 
 
