@@ -9,7 +9,7 @@ You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZEN
 4. Making some Threads in order to reload UI and communicate with server to transfer the data such as user info, Heart rate data.
 5. Drawing graphs.
  
-## Developer
+## Developers
 >Team : Prezentainer  
 Members : Hyeong gon Kim, Seung ho Oh, Byung geun Lee, Yohan Choi  
 Contact : quki09@gmail.com
