@@ -1,6 +1,6 @@
 ﻿#PREZENTAINER Window Side Code
 ***  
-You can also see the **Android side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Android).
+You can also see the **Android side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Android).  
 You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).
 ## Usage
 1. Pairing a PC by Serial Port Profile(SPP)-Bluetooth Serial Communication. 
