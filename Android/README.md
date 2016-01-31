@@ -1,7 +1,7 @@
 ﻿#PREZENTAINER Android Side Code
 ***  
-*You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).  
-*You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).
+You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).  
+You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).
 ## Usage
 1. Pairing a PC(Window) by Serial Port Profile(SPP)-Bluetooth Serial Communication. 
 2. Pairing a Wearable devices(Tizen) by Samsung Accessory Protocol and Accessory File Transfer.
