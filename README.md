@@ -17,7 +17,7 @@ You can also see the **Window side code**, [Window](https://github.com/quki/PREZ
 Members : Hyeong gon Kim, Seung ho Oh, Byung geun Lee, Yohan Choi  
 Contact : quki09@gmail.com
 
-### License
+### Licenses
 ```
 The MIT License (MIT)
 
@@ -42,6 +42,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 ```
+Apache License V2
+
 Copyright (c) 2015 Byung geun Lee., Ltd. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
