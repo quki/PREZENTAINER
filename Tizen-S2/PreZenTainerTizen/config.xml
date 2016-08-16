@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/PreZenTainerTizen" version="1.0.0" viewmodes="maximized">
-    <tizen:application id="0suqMXMQal.PreZenTainerTizen" package="0suqMXMQal" required_version="2.3"/>
+    <tizen:application id="0suqMXMQal.PreZenTainerTizen" package="0suqMXMQal" required_version="2.3.1"/>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="logo.png"/>
@@ -17,6 +17,7 @@
     <tizen:privilege name="http://developer.samsung.com/privilege/healthinfo"/>
     <tizen:privilege name="http://developer.samsung.com/privilege/medicalinfo"/>
     <tizen:privilege name="http://tizen.org/privilege/camera"/>
-    <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
+    <tizen:privilege name="http://tizen.org/privilege/power"/>
     <tizen:profile name="wearable"/>
+    <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
 </widget>

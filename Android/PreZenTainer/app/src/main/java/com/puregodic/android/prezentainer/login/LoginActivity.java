@@ -33,30 +33,22 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     
- // LogCat tag
-    private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button btnLogin;
-    private TextView btnLinkToRegister;
-    private EditText inputEmail;
-    private EditText inputPassword;
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private DialogHelper mDialogHelper;
     private SessionManager mSessionManager;
-    private LinearLayout rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
-        
-        
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLinkToRegister = (TextView) findViewById(R.id.btnLinkToRegisterScreen);
-        rootView = (LinearLayout)findViewById(R.id.loginActivityView);
-        
-        // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
+
+        final EditText inputUserId = (EditText) findViewById(R.id.userId);
+        final EditText inputPassword = (EditText) findViewById(R.id.password);
+        final Button btnLogin = (Button) findViewById(R.id.btnLogin);
+        final TextView btnLinkToRegister = (TextView) findViewById(R.id.btnLinkToRegisterScreen);
+        final LinearLayout rootView = (LinearLayout)findViewById(R.id.loginActivityView);
+
+        // Hide keyboard when user touch the display
         rootView.setOnTouchListener(new View.OnTouchListener() {
             
             @Override
@@ -67,13 +59,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         
-        // RegisterActivity이후에 빈칸에 세팅
+        // Set userId and password at the edit text from RegisterActivity
         Intent fromRegisterIntent = getIntent();
-        String fromRegisterEmail = fromRegisterIntent.getStringExtra("email");
+        String fromRegisterUserId = fromRegisterIntent.getStringExtra("userId");
         String fromRegisterPwd = fromRegisterIntent.getStringExtra("password");
         
-        if(fromRegisterEmail !=null && fromRegisterPwd != null){
-            inputEmail.setText(fromRegisterEmail);
+        if(fromRegisterUserId !=null && fromRegisterPwd != null){
+            inputUserId.setText(fromRegisterUserId);
             inputPassword.setText(fromRegisterPwd);
         }
         
@@ -83,31 +75,31 @@ public class LoginActivity extends AppCompatActivity {
         
         // Session manager
         mSessionManager = new SessionManager(getApplicationContext());
-        
-        // 로그인 한지 안한지 체크
+
+        // User login session check
         if (mSessionManager.isLoggedIn()) {
             
-            // get user data from session
+            // Get user account info from session
             HashMap<String, String> user = mSessionManager.getUserDetails();
-            String yourEmail  = user.get(SessionManager.KEY_YOUR_EMAIL);
-            // 이미 로그인이 되어있으면 HomeActivity로
+            String userId  = user.get(SessionManager.KEY_USER_ID);
+            // Already logged in -> HomeActivity
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.putExtra("yourId",yourEmail);
+            intent.putExtra("userId",userId);
             startActivity(intent);
             finish();
         }
  
-        // Login button Click Event
+        // Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
  
             public void onClick(View view) {
-                String email = inputEmail.getText().toString();
+                String userId = inputUserId.getText().toString();
                 String password = inputPassword.getText().toString();
  
                 // Check for empty data in the form
-                if (email.trim().length() > 0 && password.trim().length() > 0) {
+                if (userId.trim().length() > 0 && password.trim().length() > 0) {
                     // login user
-                    checkLogin(email, password);
+                    checkLogin(userId, password);
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(LoginActivity.this,
@@ -118,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
  
         });
  
-        // Link to Register Screen
+        // Link to RegisterActivity
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
  
             public void onClick(View view) {
@@ -129,19 +121,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    
-    /**
-     * function to verify login details in mysql db
-     * */
-    private void checkLogin(final String email, final String password) {
 
-        String tag_string_req = "req_login";
- 
+    /**
+     * Verify user account in DB by php [POST]
+     * @param userId
+     * @param password
+     */
+    private void checkLogin(final String userId, final String password) {
+
+
         mDialogHelper.showPdialog("잠시만 기다려주세요...", false);
         
         
         StringRequest strReq = new StringRequest(Method.POST,
-                NetworkConfig.URL_REGISTER, new Response.Listener<String>() {
+                NetworkConfig.URL_ACCOUNT, new Response.Listener<String>() {
  
                     @Override
                     public void onResponse(String response) {
@@ -152,16 +145,15 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
  
-                            // 로그인 에러 체크
                             if (!error) {
-                                // user successfully logged in
+                                // User successfully logged in
                                 // Create login session
-                                mSessionManager.setLogin(true,email);
+                                mSessionManager.setLogin(true,userId);
                                 
-                                // Launch main activity
+                                // Launch Homeactivity
                                 Intent intent = new Intent(LoginActivity.this,
                                         HomeActivity.class);
-                                intent.putExtra("yourId", email);
+                                intent.putExtra("userId", userId);
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -172,7 +164,6 @@ public class LoginActivity extends AppCompatActivity {
                                         , Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            // JSON error
                             e.printStackTrace();
                         }
  
@@ -190,18 +181,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("tag", "login");
-                params.put("email", email);
+                params.put("user_id", userId);
                 params.put("password", password);
- 
                 return params;
             }
  
         };
  
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, TAG);
     }
     
 

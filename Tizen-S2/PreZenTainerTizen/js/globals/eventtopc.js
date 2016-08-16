@@ -16,12 +16,14 @@ function eventtopc(direction) {
   {
     p_pushEventTimeToArray(direction); // event time을 "Right" Array에 Push
     mSASocket.sendData(CHANNELID_EVENT,direction);
+    navigator.vibrate(400);
     console.log("sendData(RIGHT)");
   }
   else if(direction === "leftt")//왼쪽 이벤트 발생시!
   {
     p_pushEventTimeToArray(direction); // event time을 "Left" Array에 Push
     mSASocket.sendData(CHANNELID_EVENT, direction);
+    navigator.vibrate(400);
     console.log("sendData(LEFT)");
   }
 

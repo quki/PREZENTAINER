@@ -1,4 +1,4 @@
-/*global require, define, console, $*/
+/*global require, define, console,*/
 
 /**
  * App module

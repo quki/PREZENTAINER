@@ -26,7 +26,7 @@
             android:src="@drawable/f_prezentainer" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/userId"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="20dp"
@@ -73,7 +73,7 @@
             android:text="@string/btn_link_to_register"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="@dimen/text_size_default" />
 
 
     </LinearLayout>

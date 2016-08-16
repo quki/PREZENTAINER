@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
-import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
 import com.puregodic.android.prezentainer.bluetooth.BluetoothConfig;
 import com.puregodic.android.prezentainer.bluetooth.BluetoothHelper;
@@ -40,6 +39,8 @@ import com.puregodic.android.prezentainer.bluetooth.ConnecToPcHelper;
 import com.puregodic.android.prezentainer.bluetooth.ConnectionActionPc;
 import com.puregodic.android.prezentainer.service.AccessoryService;
 import com.puregodic.android.prezentainer.service.ConnectionActionGear;
+
+import org.json.JSONArray;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -71,10 +72,9 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
     // 수정 - 타이머 설정값 저장하는 배열
     private ArrayList<String> timeInterval;
     // ArrayList To JSON
-    private Gson gson = new Gson();
     private String alarmTime;
     private String alarmTimeForHuman;
-    private String yourId;
+    private String userId;
 
     public SettingFragment() {
     }
@@ -93,7 +93,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
         // 계정정보를 LoginActivity로 부터 전달 받음
         Intent intent = getActivity().getIntent();
-        yourId = intent.getStringExtra("yourId");
+        userId = intent.getStringExtra("userId");
 
         // AccessoryService와 SettingFragment를 bind함
         doBindService();
@@ -151,13 +151,13 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
                                         mAccessoryService.mDeviceName = mDeviceName;
                                         mAccessoryService.mPtTitle = mPtTitle;
                                         mAccessoryService.alarmTimeForHuman = alarmTimeForHuman;
-                                        mAccessoryService.yourId = yourId;
+                                        mAccessoryService.userId = userId;
 
 
                                         // Alarm 시간을 JSON array로 만든 뒤, Service에 전달함
                                         if (timeInterval != null) {
                                             // timeInterval(ArrayList) -> JSONArray -> String ex) "["2"]"
-                                            String timeJson = gson.toJson(timeInterval);
+                                            String timeJson = new JSONArray(timeInterval).toString();
                                             sendDataToService(timeJson);
                                             alarmTime = alarmTimeForHuman;
 
@@ -169,7 +169,7 @@ public class SettingFragment extends Fragment implements BluetoothHelper{
 
                                         // StartActivity로 나의 id와 PT 제목, alarm시간을 넘겨줌
                                         startActivity(new Intent(getActivity(), FileTransferRequestedActivity.class)
-                                                .putExtra("yourId", yourId)
+                                                .putExtra("userId", userId)
                                                 .putExtra("title", mPtTitle)
                                                 .putExtra("alarmTime",alarmTime));
 

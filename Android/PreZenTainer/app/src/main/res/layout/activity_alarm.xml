@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_transparent"
     android:gravity="center"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/black_transparent"
     tools:context="com.puregodic.android.prezentainer.AlarmActivity">
 
     <LinearLayout
@@ -16,7 +16,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <NumberPicker
+        <com.puregodic.android.prezentainer.custom.MyNumberPicker
             android:id="@+id/minutePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -24,10 +24,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="분"
             android:textColor="@color/white"
-            android:text="분" />
+            android:textSize="@dimen/text_size_default" />
 
-        <NumberPicker
+        <com.puregodic.android.prezentainer.custom.MyNumberPicker
             android:id="@+id/secondPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,16 +37,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="초 마다"
             android:textColor="@color/white"
-            android:text="초 마다" />
+            android:textSize="@dimen/text_size_default" />
+
         <TextView
             android:id="@+id/settingAlarm"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:gravity="center"
-            android:clickable="true"
-            android:textColor="@color/white"
             android:background="@drawable/textview_alarm"
-            android:text=" 알려주세요" />
+            android:clickable="true"
+            android:gravity="center"
+            android:text=" 알려주세요"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_default" />
     </LinearLayout>
 </RelativeLayout>

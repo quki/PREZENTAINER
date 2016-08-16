@@ -37,24 +37,22 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
 
     public int mTransId;
     private String mDate;
-    public static final String DIR_PATH = "/sdcard/prezentainer/";
+    public static String DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath(); // /storage/emulated/0
     private Context mCtxt;
 
     private String mFileExtension;
     private TextView fileTransferStatus,alarmInfo,ptTitle;
     private Button showBtn;
-    private String title,yourId,alarmTime;
+    private String title,userId;
     private AccessoryService mAccessoryService;
     private ProgressDialog mProgressDialog;
-    private Toolbar mToolbar;
-
+    String mDirPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_transfer_requested);
 
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_transparent);
+       final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_transparent);
         setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
         Drawable backArrow =  ContextCompat.getDrawable(this,R.drawable.ic_arrow_left);
@@ -91,8 +89,8 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
         mProgressDialog.setMessage("녹음파일 전송중...");
        
         title = getIntent().getStringExtra("title");
-        yourId = getIntent().getStringExtra("yourId");
-        alarmTime = getIntent().getStringExtra("alarmTime");
+        userId = getIntent().getStringExtra("userId");
+        String alarmTime = getIntent().getStringExtra("alarmTime");
         isUp = true;
         mCtxt = getApplicationContext();
 
@@ -105,20 +103,16 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
         ptTitle.setText(title);
         alarmInfo.setText(alarmTime);
 
-        // SD카드 존재유무 확인
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(mCtxt, "저장할 수 있는 곳이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            File file = new File(DIR_PATH);
-            
-            // 최초 디렉토리 생성
-            if (!file.exists()) {
-                file.mkdirs();
+            File file = new File(DIR_PATH, "Prezentainer");
+            Log.e("==FILE PATH TEST==",file.getAbsolutePath());
+            if (file.mkdirs()) {
                 Toast.makeText(mCtxt, "폴더를 생성합니다 : "+DIR_PATH, Toast.LENGTH_SHORT).show();
             }
         }
-        
         // Bind Service ( this and AccessoryService )
         mCtxt.bindService(new Intent(mCtxt, AccessoryService.class), this.mServiceConnection,
                 Context.BIND_AUTO_CREATE);
@@ -134,7 +128,7 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 .setClass(FileTransferRequestedActivity.this, ResultActivity.class)
                 .putExtra("title", title)
                 .putExtra("date", mDate)
-                .putExtra("yourId", yourId));
+                .putExtra("userId", userId));
                
                 finish();
                 
@@ -203,7 +197,9 @@ public class FileTransferRequestedActivity extends AppCompatActivity {
                 mDate = date;
                 mFileExtension = ".amr";
                 String mFileName = title + mDate + mFileExtension;
-                mAccessoryService.receiveFile(mTransId, DIR_PATH + mFileName, true);
+                String dirPath = DIR_PATH + File.separator+"Prezentainer"+File.separator;
+                //mAccessoryService.receiveFile(mTransId, mDirPath + mFileName, true);
+                mAccessoryService.receiveFile(mTransId, dirPath + mFileName, true);
                 Log.i(TAG, "Transfer accepted");
 
                 runOnUiThread(new Runnable() {

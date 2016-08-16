@@ -24,60 +24,56 @@ import com.puregodic.android.prezentainer.login.SessionManager;
 
 public class HomeActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
-    private FragmentDrawer drawerFragment;
-    private Fragment fragment = null;
-
-    private String yourId;
-
-    private SessionManager session;
-    
-    private Toolbar mToolbar;
-
-    private boolean isTwo = false;
+    private Fragment fragment;
+    private String userId;
+    private SessionManager mSessionManager;
+    private boolean isTwice = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        drawerFragment = (FragmentDrawer)getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        final FragmentDrawer drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
         Intent intent = getIntent();
-        yourId = intent.getStringExtra("yourId");
+        userId = intent.getStringExtra("userId");
 
-        if (yourId != null){
+        if (userId != null) {
             fragment = new SettingFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();               // set the toolbar title
-            setTitle(yourId+" 님");
-        }
-
-        else {
+            setTitle(userId + " 님");
+        } else {
             Toast.makeText(this, "다시 로그인 해주세요", Toast.LENGTH_SHORT).show();
-            setTitle("계정 오류");
-            logoutUser();
+            Intent back = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(back);
+            finish();
         }
 
         // Session Manager
-        session = new SessionManager(getApplicationContext());
+        mSessionManager = new SessionManager(getApplicationContext());
 
-        if (!session.isLoggedIn()) {
+        if (!mSessionManager.isLoggedIn()) {
             logoutUser();
         }
 
     }
 
+    /**
+     * Logout
+     * Back to LoginActivity
+     */
     private void logoutUser() {
-        session.setLogin(false,yourId);
-        // Launching the login activity
+        mSessionManager.setLogin(false, userId);
         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -85,16 +81,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         if (id == R.id.logOut) {
 
@@ -102,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
             AlertDialog.Builder mAlertBuilder = new AlertDialog.Builder(
                     HomeActivity.this);
             mAlertBuilder.setTitle("로그아웃")
-                    .setMessage(yourId+" 님\n정말로 로그아웃 하시겠습니까?")
+                    .setMessage(userId + " 님\n정말로 로그아웃 하시겠습니까?")
                     .setCancelable(false)
                     .setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
 
@@ -124,7 +117,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
             dialog.show();
 
 
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -141,15 +133,16 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (position) {
             case 0:
                 fragment = new SettingFragment();
-                title = getString(R.string.title_activity_setting);
+                title = getString(R.string.nav_item_setting);
                 break;
             case 1:
                 fragment = new LoadFragment();
-                title = getString(R.string.title_activity_load);
+                title = getString(R.string.nav_item_load);
                 break;
             case 2:
+
                 fragment = new WebFragment();
-                title = "홈페이지";
+                title = getString(R.string.nav_item_homePage);
                 break;
             default:
                 break;
@@ -163,18 +156,17 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
-    // back button 눌러서 종료
-
+    // When back button pressed twice, finish
     @Override
     public void onBackPressed() {
 
-        if(!isTwo){
+        if (!isTwice) {
             Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT)
                     .show();
-            MyKillTimer mKillTimer = new MyKillTimer(2000,1);
+            MyKillTimer mKillTimer = new MyKillTimer(2000, 1);
             mKillTimer.start();
 
-        }else{
+        } else {
             //android.os.Process.killProcess(android.os.Process.myPid());
             finish();
         }
@@ -185,17 +177,16 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         public MyKillTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
-            isTwo = true;
+            isTwice = true;
         }
 
         @Override
         public void onFinish() {
-            isTwo = false;
+            isTwice = false;
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            Log.i("Test", "isTwo" + isTwo);
         }
 
     }

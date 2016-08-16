@@ -2,11 +2,6 @@
    font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
 }
 
-@font-face{
-    font-family: "MyFont";
-    src: url('../res/font/NanumGothic.ttf'),
-}
-
 /* 'Prezentainer-최고의 발표를 위해' 폰트로고 */
 .Logo {
    position:absolute;
@@ -18,7 +13,6 @@
 }
 
 body {
-   font-family: MyFont !important;
    margin: 0px auto;
    background-color: rgba(8,8,8,1);
 }

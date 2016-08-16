@@ -8,58 +8,52 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class SessionManager {
-    // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
+    private SharedPreferences pref;
  
-    // Shared Preferences
-    SharedPreferences pref;
- 
-    Editor editor;
-    Context _context;
- 
+    private Editor editor; // to edit value in SharedPreferences
+
     // Shared pref mode
     int PRIVATE_MODE = 0;
  
     // Shared preferences file name
-    private static final String PREF_NAME = "Prezentainer_Login";
+    private static final String PREF_NAME = "LoginSession";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
-    public static final String KEY_YOUR_EMAIL = "yourEmail";
- 
+    public static final String KEY_USER_ID = "userId";
+
+    // Initialize SessionManager
     public SessionManager(Context context) {
-        this._context = context;
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-        editor = pref.edit();
+        pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+
     }
- 
-    // Log in 상태를 저장 ( 당신의 Log in된 email을 갖고 있다. )
-    public void setLogin(boolean isLoggedIn,String email) {
- 
+
+    /**
+     * Set Login status
+     * @param isLoggedIn
+     * @param userId
+     */
+    public void setLogin(boolean isLoggedIn, String userId) {
+        editor = pref.edit();
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
-        editor.putString(KEY_YOUR_EMAIL,email);
+        editor.putString(KEY_USER_ID,userId);
         // commit changes
-        editor.commit();
+        editor.apply();
         Log.d(TAG, "User login session modified!");
     }
      
     public boolean isLoggedIn(){
-        return pref.getBoolean(KEY_IS_LOGGEDIN, false);
+        return pref.getBoolean(KEY_IS_LOGGEDIN, false); // default: false
     }
     
     
     /* *
      * 
-     *  ex) ["yourEmail","quki09@naver.com"]
+     *  ex) "userId" : "test1"
      *    
      * */
     public HashMap<String,String> getUserDetails(){
-        HashMap<String,String> user = new HashMap<String,String>();
-         
-        // user email id
-        user.put(KEY_YOUR_EMAIL, pref.getString(KEY_YOUR_EMAIL, null));
-         
-        // return user
+        HashMap<String,String> user = new HashMap<>();
+        user.put(KEY_USER_ID, pref.getString(KEY_USER_ID, null));
         return user;
     }
-    
-        
 }

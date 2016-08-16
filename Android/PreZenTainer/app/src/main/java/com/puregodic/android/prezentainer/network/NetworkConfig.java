@@ -1,25 +1,33 @@
 package com.puregodic.android.prezentainer.network;
 
 public class NetworkConfig {
-    // Server user login url
-    public static String URL_LOGIN = "http://54.64.87.31/logregi/index.php";
 
-    // Server user register url
-    public static String URL_REGISTER = "http://cyh1704.dothome.co.kr/prezentainer/logregi/index.php";
+    public static final String ROOT_URL = "http://www.qukihub.com:8080/prezentainer-server/";
+    /***********
+     * USER ACCOUNT
+     *************/
+    public static String URL_ACCOUNT = ROOT_URL + "account/index.php";
 
-    // Server insert data to DB url
-    //public static String URL_INSERT = "http://54.64.87.31/tizen/inserting.php";
-    public static String URL_INSERT = "http://cyh1704.dothome.co.kr/prezentainer/insert.php";
+    /***********
+     * PRESENTATION INFO
+     *************/
+    public static String URL_INSERT = ROOT_URL + "presentation/insert.php";
+
+    public static String URL_FETCH_LIST = ROOT_URL + "presentation/select.php";
+
+    public static String URL_FETCH_GRAPH = ROOT_URL + "presentation/select_this_pt.php";
+
+    public static String URL_DELETE = ROOT_URL + "presentation/delete.php";
 
 
-    // Server fetch data from DB url
-    //public static String URL_FETCH = "http://54.64.87.31/tizen/select.php";
-    public static String URL_FETCH ="http://cyh1704.dothome.co.kr/prezentainer/select.php";
+    /**
+     * 요한이 서버
+     * http://cyh1704.dothome.co.kr/prezentainer/select.php
+     * http://cyh1704.dothome.co.kr/prezentainer/insert.php
+     * http://cyh1704.dothome.co.kr/prezentainer/delete.php
+     * http://cyh1704.dothome.co.kr/prezentainer/second_select.php
+     * http://cyh1704.dothome.co.kr/prezentainer/logregi/index.php
+     */
 
-   // public static String URL_FETCH_GRAPH = "http://54.64.87.31/tizen/second_select.php";
-    public static String URL_FETCH_GRAPH = "http://cyh1704.dothome.co.kr/prezentainer/second_select.php";
-   // public static String URL_DELETE = "http://54.64.87.31/tizen/delete.php";
-
-    public static String URL_DELETE = "http://cyh1704.dothome.co.kr/prezentainer/delete.php";
 
 }

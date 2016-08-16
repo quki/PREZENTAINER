@@ -145,6 +145,88 @@ function startRightButtonClickEffect() {
       });
 }
 
+/*
+ * changeButton
+ * 버튼의 활성화, 비활성화 효과 관리
+ *
+ *  */
+//start page
+function changeButtonStart() {
+
+   /*
+    * start button
+    * */
+   if(document.getElementById('startbtn').disabled == true) {
+      document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
+   }
+   else {
+      document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
+   }
+
+
+    /*
+   * stop button
+   * */
+   if(document.getElementById('stopbtn').disabled == true) {
+      document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
+   }
+   else {
+      document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
+   }
+
+   /*
+   * right button
+   * */
+   if(document.getElementById('pceventbtn_right').disabled == true) {
+      document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
+   }
+   else {
+      document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right.png)"
+   }
+   /*
+   * left button
+   * */
+   if(document.getElementById('pceventbtn_left').disabled == true) {
+      document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
+   }
+   else {
+      document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
+   }
+   /*
+    * motion toggle button
+    * */
+   if(document.getElementById('motionbtn_toggle').disabled == true) {
+      document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_disable.png)"
+   }
+   else {
+      document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_white.png)"
+   }
+
+}
+
+// enrollmotion page
+function changeButtonEnrollMotion() {
+
+  /*
+   * test button
+   * */
+   if(document.getElementById('motion_test_button').disabled == true) {
+      document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test_disable.png)"
+   }
+   else {
+      document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test.png)"
+   }
+
+   /*
+   * resetting button
+   * */
+   if(document.getElementById('reset_button').disabled == true) {
+      document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting_disable.png)"
+   }
+   else {
+      document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting.png)"
+   }
+}
 
 //Popup toast of TAU
 function toastAlert(msg) {
@@ -184,12 +266,3 @@ toastPopup.addEventListener('popupshow', function(ev) {
  }, 2000);
 }, false);
 })(window.tau);
-
-
-//추가
-function goStartPage(){
-	   tau.changePage("#start");
-	}
-function goEnrollMotionPage(){
-	tau.changePage("#enrollMotion");
-}

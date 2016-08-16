@@ -31,32 +31,26 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import lecho.lib.hellocharts.model.Line;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
-
-    private Button btnRegister;
-    private TextView btnLinkToLogin;
-
-    private EditText inputEmail,inputPassword,inputPasswordCheck;
-    private LinearLayout rootView;
     private DialogHelper mDialogHelper;
-
-    private SessionManager mSessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        inputEmail = (EditText)findViewById(R.id.email);
-        inputPassword = (EditText)findViewById(R.id.password);
-        inputPasswordCheck = (EditText)findViewById(R.id.password_check);
-        btnRegister = (Button)findViewById(R.id.btnRegister);
-        btnLinkToLogin = (TextView)findViewById(R.id.btnLinkToLoginScreen);
-        rootView = (LinearLayout)findViewById(R.id.registerActivityView);
+        final EditText inputUserId = (EditText)findViewById(R.id.userId);
+        final EditText inputPassword = (EditText)findViewById(R.id.password);
+        final EditText inputPasswordCheck = (EditText)findViewById(R.id.password_check);
+        final Button btnRegister = (Button)findViewById(R.id.btnRegister);
+        final TextView btnLinkToLogin = (TextView)findViewById(R.id.btnLinkToLoginScreen);
+        final LinearLayout rootView = (LinearLayout)findViewById(R.id.registerActivityView);
         
-        // 공백을 클릭시 EditText의 focus와 자판이 사라지게 하기
+        // Hide keyboard when user touch the display
         rootView.setOnTouchListener(new View.OnTouchListener() {
             
             @Override
@@ -70,28 +64,17 @@ public class RegisterActivity extends AppCompatActivity {
         // Progress dialog
         mDialogHelper = new DialogHelper(this);
 
-        // Session manager
-        mSessionManager = new SessionManager(getApplicationContext());
-
-        // 유저가 한번 로그인 했었는지 체크
-        if (mSessionManager.isLoggedIn()) {
-            // 유저가 이미 로그인 했었을 때...
-            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        // Register Button Click event
+        // Register user account
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String email = inputEmail.getText().toString();
-                String password = inputPassword.getText().toString();
-                String passwordCheck = inputPasswordCheck.getText().toString();
+                final String userId = inputUserId.getText().toString();
+                final String password = inputPassword.getText().toString();
+                final String passwordCheck = inputPasswordCheck.getText().toString();
 
-                if (email.trim().length() > 0 && password.trim().length() > 0 && passwordCheck.trim().length()>0) {
+                if (userId.trim().length() > 0 && password.trim().length() > 0 && passwordCheck.trim().length()>0) {
                     
                     if(password.equals(passwordCheck)){
-                        registerUser(email, password);
+                        registerUser(userId, password);
                     }else{
                         Toast.makeText(RegisterActivity.this, "비밀번호가 서로 다릅니다", Toast.LENGTH_LONG).show();
                         inputPassword.requestFocus();
@@ -102,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // Link to Login Screen
+        // Launch to Login activity
         btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -113,14 +96,16 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-   // 서버에 회원 정보 insert
-    private void registerUser(final String email, final String password) {
-
-        String tag_string_req = "req_register";
+    /**
+     * Insert user account into DB by php [POST]
+     * @param userId
+     * @param password
+     */
+    private void registerUser(final String userId, final String password) {
 
         mDialogHelper.showPdialog("회원정보 등록 중 ...", false);
 
-        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_REGISTER,
+        StringRequest strReq = new StringRequest(Method.POST, NetworkConfig.URL_ACCOUNT,
                 new Response.Listener<String>() {
 
                     @Override
@@ -132,12 +117,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
-
-                            // User가 성공적으로 계정정보를 MySQL로 TABLE에 저장한 경우
+                            // Success to insert into DB
                              if (!error) {
                             // Launch login activity
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            intent.putExtra("email",email );
+                            intent.putExtra("userId",userId );
                             intent.putExtra("password",password );
                             startActivity(intent);
                             finish();
@@ -145,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "회원가입이 완료되었습니다!",
                                     Toast.LENGTH_LONG).show();
 
-                           // 계정정보 TABLE에 저장 실패
+                           // Fail to insert into DB
                            } else{
 
                                String errorMsg = jObj.getString("error_msg");
@@ -178,17 +162,16 @@ public class RegisterActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", "user");
-                params.put("email", email);
-                params.put("password", password);
                 params.put("tag", "register");
+                params.put("user_id", userId);
+                params.put("password", password);
                 return params;
             }
 
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, TAG);
 
     }
 

@@ -23,7 +23,8 @@ public class WebFragment extends Fragment {
         WebView webView = (WebView)rootView.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("http://cyh1704.dothome.co.kr/ex");
+        //webView.loadUrl("http://cyh1704.dothome.co.kr/ex");
+        webView.loadUrl("http://www.qukihub.com");
         return rootView;
     }
 }

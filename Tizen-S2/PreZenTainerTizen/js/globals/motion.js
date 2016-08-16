@@ -4,7 +4,6 @@
  *
  * */
 
-
  //실시간 가속도 값
  var accelX = 0, accelY = 0, accelZ = 0;
 
@@ -217,94 +216,6 @@
     return direction;
  }
 
-
-
- /*
-  * changeButton
-  * 버튼의 활성화, 비활성화 효과 관리
-  *
-  *  */
-
-
- // start page
- function changeButtonStart() {
-
-    /*
-     * start button
-     * */
-    if(document.getElementById('startbtn').disabled == true) {
-       document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start_disable.png)"
-    }
-    else {
-       document.getElementById('startbtn').style.backgroundImage= "url(./img/button/ic_start.png)"
-    }
-
-
-     /*
-    * stop button
-    * */
-    if(document.getElementById('stopbtn').disabled == true) {
-       document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop_disable.png)"
-    }
-    else {
-       document.getElementById('stopbtn').style.backgroundImage= "url(./img/button/ic_stop.png)"
-    }
-
-    /*
-    * right button
-    * */
-    if(document.getElementById('pceventbtn_right').disabled == true) {
-       document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right_disable.png)"
-    }
-    else {
-       document.getElementById('pceventbtn_right').style.backgroundImage= "url(./img/button/ic_right.png)"
-    }
-    /*
-    * left button
-    * */
-    if(document.getElementById('pceventbtn_left').disabled == true) {
-       document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left_disable.png)"
-    }
-    else {
-       document.getElementById('pceventbtn_left').style.backgroundImage= "url(./img/button/ic_left.png)"
-    }
-    /*
-     * motion toggle button
-     * */
-    if(document.getElementById('motionbtn_toggle').disabled == true) {
-       document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_disable.png)"
-    }
-    else {
-       document.getElementById('motionbtn_toggle').style.backgroundImage= "url(./img/button/ic_settings_white.png)"
-    }
-
- }
-
- 
- // enrollmotion page
- function changeButtonEnrollMotion() {
-
-   /*
-    * test button
-    * */
-    if(document.getElementById('motion_test_button').disabled == true) {
-       document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test_disable.png)"
-    }
-    else {
-       document.getElementById('motion_test_button').style.backgroundImage= "url(./img/button/ic_test.png)"
-    }
-
-    /*
-    * resetting button
-    * */
-    if(document.getElementById('reset_button').disabled == true) {
-       document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting_disable.png)"
-    }
-    else {
-       document.getElementById('reset_button').style.backgroundImage= "url(./img/button/ic_resetting.png)"
-    }
- }
-
  function ready_motionSetting() {
     if(averageX != 0 && averageY != 0 && averageZ != 0 ){
        //모션이 저장되어있을 경우 해당페이지로 바로이동
@@ -467,32 +378,12 @@
     changeButtonEnrollMotion();
  }
  
- function test_control(ev){
-      var direction = ev.detail.direction;
-      if (direction == "CW")
-      {
-    	  navigator.vibrate(400);
-    	  eventtopc('right');
-         /* Add behavior for clockwise rotation */
-         console.log("right");
-      }
-      else if (direction == "CCW")
-      {
-    	  navigator.vibrate(400);
-    	  eventtopc('leftt');
-         /* Add behavior for counter-clockwise rotation */
-         console.log("left");
-      }
-}
-   
- 
- 
  //Initialize function
  window.onload = function () {
-     // TODO:: Do your initialization job
     window.addEventListener("devicemotion", onDeviceMotion, true);
     
 
-    load_setLocalStorage();
+    // load_setLocalStorage();
      console.log("init() called");
  };
+ 
