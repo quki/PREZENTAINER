@@ -5,7 +5,7 @@ You can also see the **Android side code**, [Android](https://github.com/quki/PR
 You can also see the **Tizen side code**, [Tizen](https://github.com/quki/PREZENTAINER/tree/master/Tizen-S2).  
 You can also see the **Window side code**, [Window](https://github.com/quki/PREZENTAINER/tree/master/Window).  
 #### Demo video
-https://youtu.be/uz2IsTbpFWo
+https://youtu.be/ZVvggUQCrkY
 ####Wearable Devices (Tizen)  
 ![](http://d2ylz7oz0qe74q.cloudfront.net/prezentainer/gif/gear_static2.png)
 
