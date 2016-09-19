@@ -1,4 +1,4 @@
-#PREZENTAINER: Presentation training app.  
+#PREZENTAINER: Presentation training app
 ####Practice your presentation! Be awesome speaker!
 
 You can also see the **Android side code**, [Android](https://github.com/quki/PREZENTAINER/tree/master/Android).  
