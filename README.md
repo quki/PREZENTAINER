@@ -7,7 +7,7 @@ You can also see the **Windows side code**, [Windows](https://github.com/quki/PR
 #### Demo video
 https://youtu.be/ZVvggUQCrkY
 ####Wearable (Tizen)  
-![](http://d2ylz7oz0qe74q.cloudfront.net/prezentainer/gif/gear_dynamilc.gif)
+![](https://cloud.githubusercontent.com/assets/12330436/12700234/1de0118c-c81e-11e5-99e3-19f2fea64456.gif)
 
 ####Mobile (Android) 
 ![](http://d2ylz7oz0qe74q.cloudfront.net/prezentainer/gif/connect2.gif)     ![](http://d2ylz7oz0qe74q.cloudfront.net/prezentainer/gif/graph2.gif)
